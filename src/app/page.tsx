@@ -1,19 +1,25 @@
-import GradientBg from '@/components/GradientBg';
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="h-screen flex items-center justify-center">
-      <GradientBg />
-      <div>
-        <div className="card bg-base-100 w-96">
-          <div className="card-body">
-            <p className="text-lg">Claim your link</p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary">Learn now!</button>
-            </div>
+    <div>
+      <article className="prose">
+        <div className="h-screen w-screen flex flex-col items-center justify-center px-2">
+          <h2 className="text-center">twillink</h2>
+          <h1 className="text-center">
+            Your exceptional Link in Bio
+            <br />
+            <span className="text-lg text-slate-700">
+              Claim your username now
+            </span>
+          </h1>
+          <div className="card-actions justify-end">
+            <Link href="/signup" passHref legacyBehavior>
+              <button className="btn btn-primary">Get Started!</button>
+            </Link>
           </div>
         </div>
-      </div>
+      </article>
     </div>
   );
 }
