@@ -1,12 +1,14 @@
 'use client';
+import Button from '@/components/Button';
 /* eslint-disable react-hooks/rules-of-hooks */
 import GradientBg from '@/components/GradientBg';
 import {motion, AnimatePresence} from 'framer-motion';
+import Link from 'next/link';
 import {useState} from 'react';
 
 interface Item {
   title: string;
-  btnLable: string;
+  btnLabel: string;
   key: number;
   children: any;
 }
@@ -15,9 +17,9 @@ const dataMock: Item[] = [
   {
     key: 1,
     title: 'Claim your link',
-    btnLable: 'Grab My Link',
+    btnLabel: 'Grab My Link',
     children: (
-      <label className="input input-bordered flex items-center gap-2">
+      <label className="input input-bordered flex items-center gap-2 text-primary">
         twilink.com/
         <input type="text" className="grow" placeholder="username" />
       </label>
@@ -26,13 +28,13 @@ const dataMock: Item[] = [
   {
     key: 2,
     title: 'Your email and password...',
-    btnLable: 'Send',
+    btnLabel: 'Send',
     children: (
       <div className="space-y-5">
         <input
           type="text"
           className="input input-bordered w-full"
-          placeholder="yourmail"
+          placeholder="your mail"
         />
         <input
           type="text"
@@ -45,8 +47,8 @@ const dataMock: Item[] = [
   {
     key: 3,
     title: 'Please input code that already sent to your email',
-    btnLable: '',
-    children: <p>Token Input Here</p>,
+    btnLabel: 'Start Now',
+    children: <p className="text-primary">Token Input Here</p>,
   },
 ];
 
@@ -65,13 +67,12 @@ const page = () => {
       const newArr = filtered.concat(cards);
       setCards(newArr);
     }
-    // setCards();
   };
 
   const CARD_OFFSET = -20;
   const SCALE_FACTOR = 0.06;
   return (
-    <div>
+    <div data-theme="skinLight">
       <GradientBg />
       <article className="prose">
         <div className="h-screen w-screen flex flex-col items-center justify-center px-1 md-0">
@@ -80,7 +81,7 @@ const page = () => {
               {cards.map((item, index) => {
                 return (
                   <motion.div
-                    className="card bg-white text-primary-content shadow-sm "
+                    className="card bg-contras-high text-primary-content shadow-sm "
                     key={`card_${item.key}`}
                     initial={{y: 0}}
                     animate={{
@@ -118,30 +119,37 @@ const page = () => {
                             </svg>
                           </button>
                         )}
-                        <h3 className="card-title">{item.title}</h3>
+                        <h3 className="card-title text-primary">
+                          {item.title}
+                        </h3>
                         {index === 0 && item.children}
-                        {item.btnLable && (
+                        {item.btnLabel && (
                           <div className="card-actions justify-end">
-                            <button
-                              className="btn btn-primary"
-                              onClick={() => moveToEnd()}>
-                              {item.btnLable}
-                              {item.key === dataMock[0].key && (
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  strokeWidth={1.5}
-                                  stroke="currentColor"
-                                  className="size-5">
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="m4.5 12.75 6 6 9-13.5"
-                                  />
-                                </svg>
-                              )}
-                            </button>
+                            {item.key === dataMock[2].key ? (
+                              <Link href={'/admin'}>
+                                <Button title={item.btnLabel} />
+                              </Link>
+                            ) : (
+                              <Button
+                                title={item.btnLabel}
+                                onClick={() => moveToEnd()}
+                                icon={
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    strokeWidth={1.5}
+                                    stroke="currentColor"
+                                    className="size-5">
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      d="m4.5 12.75 6 6 9-13.5"
+                                    />
+                                  </svg>
+                                }
+                              />
+                            )}
                           </div>
                         )}
                       </div>
