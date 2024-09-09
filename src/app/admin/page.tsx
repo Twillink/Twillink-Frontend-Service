@@ -5,7 +5,6 @@ import Link from 'next/link';
 import TwillinkLogo from '@/assets/svg/twillink-logo.svg';
 import TwillinkWhiteLogo from '@/assets/svg/twillink-logo-white.svg';
 import {usePathname} from 'next/navigation';
-import Button from '@/components/Button';
 
 export default function Home() {
   const pathname = usePathname();
@@ -20,26 +19,18 @@ export default function Home() {
             <div className="mockup-phone">
               <div className="camera"></div>
               <div className="display">
-                <div data-theme="skinLight">
+                <div data-theme="light">
                   <div className="artboard artboard-demo bg-base-100 phone-1">
                     <h3>Content page here.</h3>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="p-2 space-x-1">
-              <Button title="Tiny" size="xs" />
-              <Button title="Small" size="sm" />
-              <Button title="Large" size="lg" />
-              <Button title="Default" />
-              <Button title="Success" type="success" />
-              <Button title="Error" type="error" />
-            </div>
           </div>
           <div className="drawer-side py-6 px-6">
             <ul className="menu bg-contras-high min-h-full w-80 m-0 rounded-3xl shadow-md">
-              <div className="flex justify-center align-middle p-3">
-                <div data-theme="skinLight" className="bg-transparent p-3">
+              <div className="flex justify-center align-middle p-6">
+                <div data-theme="skinLight" className="bg-transparent">
                   <Image
                     className="[[data-theme=skinDark]_&]:hidden"
                     src={TwillinkLogo}

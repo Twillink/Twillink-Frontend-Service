@@ -9,6 +9,7 @@ interface IButton {
   loading?: boolean;
   type?: 'primary' | 'error' | 'success';
   size?: 'lg' | 'md' | 'sm' | 'xs';
+  outline?: boolean;
 }
 
 const colorVariants = {
@@ -34,12 +35,13 @@ export default function Button(props: IButton) {
     loading = false,
     type = 'primary',
     size = 'md',
+    outline = false,
     ...restProps
   } = props;
 
   return (
     <button
-      className={`btn font-normal text-base ${colorVariants[type]} ${sizeVariants[size]} hover:outline hover:outline-1 hover:outline-offset-2`}
+      className={`btn font-normal text-base ${outline && 'btn-outline'} ${colorVariants[type]} ${sizeVariants[size]} hover:outline hover:outline-1 hover:outline-offset-2`}
       onClick={onClick}
       disabled={disabled}
       {...restProps}>

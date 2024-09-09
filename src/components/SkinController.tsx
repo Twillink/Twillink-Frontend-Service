@@ -1,5 +1,5 @@
 'use client';
-import {SkinContext} from '@/providers/SkinContext';
+import {SkinContext, SkinType} from '@/providers/SkinContext';
 import React, {useContext} from 'react';
 import Sun from '@/assets/svg/sun.svg';
 import Moon from '@/assets/svg/moon.svg';
@@ -15,7 +15,7 @@ export default function SkinController() {
           name="theme-dropdown"
           className="toggle theme-controller bg-primary-content col-span-2 col-start-1 row-start-1 h-8 w-60px border-base-200 border-2 [--tglbg:theme(colors.base-200)] toggle-custom"
           onChange={changeSkin}
-          checked={skin === 'skinLight' ? false : true}
+          checked={skin === SkinType.LIGHT ? false : true}
         />
         <Image
           className="col-start-2 row-start-1 [[data-theme=skinDark]_&]:hidden m-1"
