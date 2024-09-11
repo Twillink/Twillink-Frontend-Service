@@ -59,7 +59,7 @@ export default function Button(props: IButton) {
 interface ILinkButtonProps {
   title: string;
   onClick?: () => void;
-  icon?: object;
+  icon?: string;
   iconPosition?: 'left' | 'right';
   disabled?: boolean;
   loading?: boolean;
@@ -79,7 +79,7 @@ export function LinkButton(props: ILinkButtonProps) {
   } = props;
   return (
     <button
-      className={`font-normal btn-link  `}
+      className={`font-normal btn-link group gap-4`}
       onClick={onClick}
       disabled={disabled}
       {...restProps}>

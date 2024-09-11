@@ -1,14 +1,14 @@
 'use client';
 import {SkinContext, SkinType} from '@/providers/SkinContext';
 import React, {useContext} from 'react';
-import Sun from '@/assets/svg/sun.svg';
-import Moon from '@/assets/svg/moon.svg';
+import Sun from '@/assets/svg/Sun-2.svg';
+import Moon from '@/assets/svg/Moon-1.svg';
 import Image from 'next/image';
 
 export default function SkinController() {
   const {skin, changeSkin} = useContext(SkinContext);
   return (
-    <div className="absolute right-10 top-10 z-50">
+    <div>
       <label className="grid cursor-pointer place-items-center">
         <input
           type="checkbox"

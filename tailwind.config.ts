@@ -29,6 +29,9 @@ const config: Config = {
         'contras-high': 'var(--contras-high)',
         'contras-med': 'var(--contras-med)',
         'contras-low': 'var(--contras-low)',
+        'general-high': 'var(--general-high)',
+        'general-med': 'var(--general-med)',
+        'general-low': 'var(--general-low)',
       },
       height: {
         13: '52px',
@@ -88,6 +91,9 @@ const config: Config = {
           '--contras-high': '#FFFFFF',
           '--contras-med': '#F6F7F9',
           '--contras-low': '#ECEDF2',
+          '--general-high': '#16171D',
+          '--general-med': '#888FA8',
+          '--general-low': '#D6D8E1',
         },
       },
       {
@@ -107,6 +113,9 @@ const config: Config = {
           '--contras-high': '#16171D',
           '--contras-med': '#212431',
           '--contras-low': '#3B3F51',
+          '--general-high': '#FFFFFF',
+          '--general-med': '#B2B6C7',
+          '--general-low': '#545B75',
         },
       },
       {
