@@ -1,6 +1,7 @@
 import type {Config} from 'tailwindcss';
 import plugin from 'tailwindcss/plugin';
 import daisyui from 'daisyui';
+import daisyuiTheme from 'daisyui/src/theming/themes';
 
 const config: Config = {
   content: [
@@ -108,8 +109,17 @@ const config: Config = {
           '--contras-low': '#3B3F51',
         },
       },
-      'dark',
-      'retro',
+      {
+        light: {
+          ...daisyuiTheme.light,
+          primary: '#353845',
+          'primary-content': '#FFFFFF',
+          secondary: '#3690FB',
+          'secondary-content': '#FFFFFF',
+          'base-100': '#F6F7F9',
+          'base-200': '#ECEDF2',
+        },
+      },
     ],
   },
 };
