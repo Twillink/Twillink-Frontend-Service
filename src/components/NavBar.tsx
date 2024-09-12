@@ -1,7 +1,6 @@
 import React from 'react';
 import SkinController from './SkinController';
-import BurgerIcon from '@/assets/svg/Burger-Menu-1.svg';
-import Image from 'next/image';
+import SvgBurgerMenu from '@/assets/svgComponents/SvgBurgerMenu';
 
 interface INavBar {
   title?: string;
@@ -15,7 +14,7 @@ export default function NavBar(props: INavBar) {
         <label
           htmlFor="my-drawer"
           className="btn drawer-button bg-transparent shadow-none border-none p-2 h-auto min-h-fit">
-          <Image src={BurgerIcon} alt="burger-icon" />
+          <SvgBurgerMenu className="stroke-primary" />
         </label>
       </div>
       <div className="flex-1">

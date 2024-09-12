@@ -1,38 +1,55 @@
 'use client';
 import NavBar from '@/components/NavBar';
 import Sidebar, {Menu} from '@/components/Sidebar';
-import LinkIcon from '@/assets/svg/Link-1.svg';
-import AnalyticIcon from '@/assets/svg/Chart-Square-2.svg';
-import TwilmeetIcon from '@/assets/svg/twilmeet-icon.svg';
-import AccountIcon from '@/assets/svg/User-4.svg';
 import {usePathname} from 'next/navigation';
 import {useEffect, useState} from 'react';
+import SvgChartSquare from '@/assets/svgComponents/SvgChartSquare';
+import SvgLink from '@/assets/svgComponents/SvgLink';
+import SvgTwilmeetIcon from '@/assets/svgComponents/SvgTwilmeetIcon';
+import SvgUser from '@/assets/svgComponents/SvgUser';
 
 export const sidebarMenu: Array<Menu> = [
-  {title: 'My Twillink', path: '/admin', icon: LinkIcon},
-  {title: 'Analytic', path: '/admin/analytic', icon: AnalyticIcon},
+  {
+    title: 'My Twillink',
+    path: '/admin',
+    icon: <SvgLink className="stroke-primary" />,
+  },
+  {
+    title: 'Analytic',
+    path: '/admin/analytic',
+    icon: <SvgChartSquare className="stroke-primary" />,
+    disabled: true,
+  },
   {
     title: 'Twilmeet',
+    icon: <SvgTwilmeetIcon />,
     disabled: true,
     menuChild: [
-      {title: 'Calendar', path: '/admin/twilmeet/calendar', icon: LinkIcon},
+      {
+        title: 'Calendar',
+        path: '/admin/twilmeet/calendar',
+      },
       {
         title: 'Webinar / Class',
         path: '/admin/twilmeet/webinar',
-        icon: LinkIcon,
       },
-      {title: 'Revenue', path: '/admin/twilmeet/revenue', icon: LinkIcon},
+      {
+        title: 'Revenue',
+        path: '/admin/twilmeet/revenue',
+      },
     ],
-    icon: TwilmeetIcon,
   },
-  {title: 'Account', path: '/admin/account', icon: AccountIcon},
+  {
+    title: 'Account',
+    path: '/admin/account',
+    icon: <SvgUser className="stroke-primary" />,
+  },
 ];
 
 export default function AdminLayout({children}: {children: React.ReactNode}) {
   const pathname = usePathname();
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState('My Twillink');
   useEffect(() => {
-    console.log('+++ pathname', pathname);
     if (pathname) {
       const findPath = sidebarMenu.find(({path}) => path === pathname);
       if (findPath) {

@@ -1,8 +1,8 @@
 'use client';
 import React from 'react';
-import Image from 'next/image';
 import {usePathname, useRouter} from 'next/navigation';
-import SvgTwillinkLogo from '@/assets/svg/SvgTwillinkLogo';
+import SvgTwillinkLogo from '@/assets/svgComponents/SvgTwillinkLogo';
+import ComingSoon from './ComingSoon';
 
 export interface ISidebar {
   menus?: Array<Menu>;
@@ -11,14 +11,14 @@ export type Menu = {
   title: string;
   path?: string;
   menuChild?: Array<MenuChild>;
-  icon?: string;
+  icon?: any;
   disabled?: boolean;
 };
 
 export type MenuChild = {
   title: string;
   path: string;
-  icon?: string;
+  icon?: any;
 };
 
 export default function Sidebar(props: ISidebar) {
@@ -32,9 +32,9 @@ export default function Sidebar(props: ISidebar) {
         aria-label="close sidebar"
         className="drawer-overlay"></label>
       <div className="h-full p:0 md:p-6">
-        <div className="bg-contras-high h-full w-72 shadow-contras-low shadow-md rounded-r-3xl md:rounded-3xl">
+        <div className="bg-contras-high h-full w-72 rounded-r-3xl md:rounded-3xl  shadow-[rgba(59,63,81,0.12)_0px_8px_16px_0px]">
           <div className="flex justify-center align-middle p-6">
-            <SvgTwillinkLogo />
+            <SvgTwillinkLogo className="fill-primary" width={70} />
           </div>
           <ul className="menu gap-3 text-sm font-semibold">
             {menus?.map((item, index) => {
@@ -47,17 +47,9 @@ export default function Sidebar(props: ISidebar) {
                       type="button"
                       onClick={() => router.push(item.path || '')}
                       className="group gap-4">
-                      {item.icon && (
-                        <span>
-                          <Image
-                            src={item.icon}
-                            alt={`icn-menu-${index}`}
-                            className="stroke-red-700"
-                            height={16}
-                          />
-                        </span>
-                      )}
+                      {item.icon && <span>{item.icon}</span>}
                       {item.title}
+                      {item.disabled && <ComingSoon className="mr-6" />}
                     </button>
                   )}
                   {item.menuChild && (
@@ -65,15 +57,9 @@ export default function Sidebar(props: ISidebar) {
                       id="disclosure-components"
                       className={`text-general-high ${item.disabled && 'pointer-events-none text-general-med'}`}>
                       <summary className="group gap-4">
-                        {item.icon && (
-                          <span>
-                            <Image src={item.icon} alt={`icn-menu-${index}`} />
-                          </span>
-                        )}
+                        {item.icon && item.icon}
                         {item.title}
-                        <span className="font-normal text-tiny bg-contras-med px-2 rounded-full text-general-med">
-                          Coming Soon
-                        </span>
+                        {item.disabled && <ComingSoon />}
                       </summary>
                       <ul className="before:hidden">
                         {item.menuChild.map((child, idx) => (
@@ -84,14 +70,7 @@ export default function Sidebar(props: ISidebar) {
                               type="button"
                               onClick={() => router.push(child.path)}
                               className="group pl-8 gap-4">
-                              {child.icon && (
-                                <span>
-                                  <Image
-                                    src={child.icon}
-                                    alt={`icn-menu-child-${idx}`}
-                                  />
-                                </span>
-                              )}
+                              {child.icon && child.icon}
                               {child.title}
                             </button>
                           </li>

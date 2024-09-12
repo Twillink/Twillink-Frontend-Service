@@ -5,28 +5,26 @@ export default function page() {
         <div className="camera"></div>
         <div className="display h-full">
           <div data-theme="light" className="h-full">
-            <div className="artboard artboard-demo bg-base-100 h-full">
-              <div className="overflow-auto">
-                <h1>Top Content page here.</h1>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h3>Widget page here.</h3>
-                <h1>Bottom Content page here.</h1>
-              </div>
+            <div className="artboard flex flex-col bg-base-100 h-full overflow-auto">
+              <h1>Top Content page here.</h1>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h3>Widget page here.</h3>
+              <h1>Bottom Content page here.</h1>
             </div>
           </div>
         </div>

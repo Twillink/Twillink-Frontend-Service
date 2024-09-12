@@ -1,9 +1,8 @@
 'use client';
 import {SkinContext, SkinType} from '@/providers/SkinContext';
 import React, {useContext} from 'react';
-import Sun from '@/assets/svg/Sun-2.svg';
-import Moon from '@/assets/svg/Moon-1.svg';
-import Image from 'next/image';
+import SvgSun from '@/assets/svgComponents/SvgSun';
+import SvgMoon from '@/assets/svgComponents/SvgMoon';
 
 export default function SkinController() {
   const {skin, changeSkin} = useContext(SkinContext);
@@ -17,17 +16,13 @@ export default function SkinController() {
           onChange={changeSkin}
           checked={skin === SkinType.LIGHT ? false : true}
         />
-        <Image
-          className="col-start-2 row-start-1 [[data-theme=skinDark]_&]:hidden m-1"
-          src={Sun}
-          alt="button-light"
-          width={20}
+        <SvgSun
+          className="col-start-2 row-start-1 [[data-theme=skinDark]_&]:hidden m-1 stroke-general-med"
+          height={20}
         />
-        <Image
-          className="col-start-1 row-start-1 [[data-theme=skinLight]_&]:hidden m-1"
-          src={Moon}
-          alt="button-dark"
-          width={20}
+        <SvgMoon
+          className="col-start-1 row-start-1 [[data-theme=skinLight]_&]:hidden m-1 stroke-general-med"
+          height={20}
         />
       </label>
     </div>
