@@ -5,10 +5,10 @@ export default function GradientBg() {
     <div className="absolute inset-0 -z-0 ">
       <Image
         src="/images/gradient-bg.png"
-        layout="fill"
-        objectFit="cover"
         quality={100}
         alt="gradient-bg"
+        fill
+        className="object-cover"
       />
     </div>
   );

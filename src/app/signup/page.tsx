@@ -1,151 +1,216 @@
 'use client';
+
 import Button from '@/components/Button';
-/* eslint-disable react-hooks/rules-of-hooks */
 import GradientBg from '@/components/GradientBg';
+import {Form, Formik, FormikErrors} from 'formik';
 import {motion, AnimatePresence} from 'framer-motion';
-import {useRouter} from 'next/navigation';
 import {useState} from 'react';
+import * as Yup from 'yup';
+import FormClaim from './Forms/FormClaim';
+import FormEmail from './Forms/FormEmail';
+import FormVerify from './Forms/FormVerify';
+import {useRouter} from 'next/navigation';
+import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
+import SvgCheck from '@/assets/svgComponents/SvgCheck';
+import ButtonIcon from '@/components/ButtonIcon';
+
+export enum Steps {
+  CLAIM = 'CLAIM',
+  EMAIL = 'EMAIL',
+  VERIFY = 'VERIFY',
+}
 
 interface Item {
   title: string;
   btnLabel: string;
-  key: number;
-  children: any;
+  seq: number;
+  step: Steps;
+  icon?: JSX.Element;
 }
 
-const dataMock: Item[] = [
+const dataSteps: Item[] = [
   {
-    key: 1,
+    seq: 1,
     title: 'Claim your link',
     btnLabel: 'Grab My Link',
-    children: (
-      <label className="input input-bordered flex items-center gap-2 text-primary">
-        twilink.com/
-        <input type="text" className="grow" placeholder="username" />
-      </label>
-    ),
+    step: Steps.CLAIM,
+    icon: <SvgCheck className="stroke-primary-content" />,
   },
   {
-    key: 2,
+    seq: 2,
     title: 'Your email and password...',
     btnLabel: 'Send',
-    children: (
-      <div className="space-y-5">
-        <input
-          type="text"
-          className="input input-bordered w-full"
-          placeholder="your mail"
-        />
-        <input
-          type="text"
-          className="input input-bordered w-full"
-          placeholder="Your Password"
-        />
-      </div>
-    ),
+    step: Steps.EMAIL,
   },
   {
-    key: 3,
+    seq: 3,
     title: 'Please input code that already sent to your email',
     btnLabel: 'Start Now',
-    children: <p className="text-primary">Token Input Here</p>,
+    step: Steps.VERIFY,
   },
 ];
 
-const page = () => {
+type InitialData = {
+  username: string;
+  email: string;
+  password: string;
+  otp: string;
+};
+
+const initialValue: InitialData = {
+  username: '',
+  email: '',
+  password: '',
+  otp: '',
+};
+
+const CARD_OFFSET = -20;
+const SCALE_FACTOR = 0.06;
+
+const SignupPage: React.FC = () => {
   const router = useRouter();
-  const [cards, setCards] = useState(dataMock);
+  const [cards, setCards] = useState<Item[]>(dataSteps);
+  const [currentSeqActive, setCurrentSeqActive] = useState<number>(1);
 
-  const moveToEnd = () => {
-    setCards(cards.slice(1));
-  };
+  const stepSchemas = [
+    Yup.object({
+      username: Yup.string().required('Username is required'),
+    }),
+    Yup.object({
+      email: Yup.string().email('Invalid email').required('Email is required'),
+      password: Yup.string()
+        .required('Password is required')
+        .min(8, 'Password must be at least 8 characters')
+        .max(20, 'Password cannot exceed 20 characters')
+        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+        .matches(/\d/, 'Password must contain at least one number'),
+    }),
+    Yup.object({
+      otp: Yup.string()
+        .required('OTP is required')
+        .length(6, 'OTP must be exactly 6 characters'),
+    }),
+  ];
 
-  const addOneToStart = (key: number) => {
-    const filtered = dataMock.filter(obj => {
-      return obj.key === key;
-    });
-    if (filtered) {
-      const newArr = filtered.concat(cards);
-      setCards(newArr);
+  const handleNext = async (
+    currentSeq: number,
+    validateForm: () => Promise<FormikErrors<InitialData>>,
+  ) => {
+    const errors = await validateForm();
+
+    if (Object.keys(errors).length > 0) {
+      console.log('Validation Errors:', errors);
+      return;
+    }
+
+    if (currentSeq === dataSteps[dataSteps.length - 1].seq) {
+      handleSubmit(initialValue);
+      router.push('/admin');
+    } else {
+      setCards(cards.slice(1));
+      setCurrentSeqActive(
+        dataSteps.find(item => item.seq > currentSeq)?.seq || 1,
+      );
     }
   };
 
-  const CARD_OFFSET = -20;
-  const SCALE_FACTOR = 0.06;
+  const handleBack = (currentSeq: number) => {
+    const targetSeq = currentSeq - 1;
+    const previousCard = dataSteps.find(item => item.seq === targetSeq);
+
+    if (previousCard) {
+      setCards([previousCard, ...cards]);
+      setCurrentSeqActive(targetSeq);
+    }
+  };
+
+  const renderForm = (step: Steps) => {
+    switch (step) {
+      case Steps.CLAIM:
+        return <FormClaim />;
+      case Steps.EMAIL:
+        return <FormEmail />;
+      case Steps.VERIFY:
+        return <FormVerify />;
+      default:
+        return null;
+    }
+  };
+
+  const handleSubmit = (values: InitialData) => {
+    console.log('Form submitted:', values);
+  };
+
   return (
     <div data-theme="skinLight">
       <GradientBg />
       <div className="h-screen w-screen flex flex-col items-center justify-center px-1">
-        <div className="stack">
-          <AnimatePresence>
-            {cards.map((item, index) => {
-              return (
-                <motion.div
-                  className="card bg-contras-high text-primary-content shadow-sm "
-                  key={`card_${item.key}`}
-                  initial={{y: 0}}
-                  animate={{
-                    y: index * 10,
-                    opacity: index === 0 ? 1 : 0.5,
-                    top: index * -CARD_OFFSET,
-                    scale: 1 - index * SCALE_FACTOR,
-                    zIndex: cards.length - index,
-                  }}
-                  exit={{
-                    y: -700,
-                  }}
-                  transition={{
-                    duration: 0.3,
-                    ease: [0, 0.71, 0.2, 1.01],
-                  }}>
-                  <div className="card-body sm:px-24 sm:px-12 py-20 ">
-                    <div className="w-full space-y-5 sm:w-96 sm:w-48">
-                      {item.key !== dataMock[0].key && (
-                        <button
-                          className="btn btn-circle bg-transparent shadow-none border-none"
-                          onClick={() => addOneToStart(item.key - 1)}>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-6">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
-                            />
-                          </svg>
-                        </button>
-                      )}
-                      <h3 className="card-title text-primary">{item.title}</h3>
-                      {index === 0 && item.children}
-                      {item.btnLabel && (
-                        <div className="card-actions justify-end">
-                          {item.key === dataMock[2].key ? (
-                            <Button
-                              title={item.btnLabel}
-                              onClick={() => router.push('/admin')}
-                            />
-                          ) : (
-                            <Button
-                              title={item.btnLabel}
-                              onClick={() => moveToEnd()}
+        <Formik
+          initialValues={initialValue}
+          validateOnChange={true}
+          validateOnBlur={true}
+          onSubmit={handleSubmit}
+          validationSchema={stepSchemas[currentSeqActive - 1]}>
+          {({isValid, validateForm, dirty}) => (
+            <Form>
+              <div className="stack">
+                <AnimatePresence>
+                  {cards.map((item, index) => (
+                    <motion.div
+                      className="card bg-contras-high text-primary-content shadow-sm"
+                      key={`card_${item.seq}`}
+                      initial={{y: 0}}
+                      animate={{
+                        y: index * 10,
+                        opacity: index === 0 ? 1 : 0.5,
+                        top: index * -CARD_OFFSET,
+                        scale: 1 - index * SCALE_FACTOR,
+                        zIndex: cards.length - index,
+                      }}
+                      exit={{y: -700}}
+                      transition={{duration: 0.3, ease: [0, 0.71, 0.2, 1.01]}}>
+                      <div className="card-body px-[99px] py-[90px]">
+                        <div className="flex flex-col gap-6 w-full sm:w-[376px]">
+                          {item.seq !== dataSteps[0].seq && (
+                            <ButtonIcon
+                              icon={
+                                <SvgArrowLeft className="stroke-primary hover:stroke-general-med" />
+                              }
+                              onClick={() => handleBack(item.seq)}
+                              type="button"
+                              className="flex justify-start w-max"
                             />
                           )}
+                          <h3 className="card-title text-primary">
+                            {item.title}
+                          </h3>
+                          {index === 0 && renderForm(item.step)}
+                          <div className="card-actions justify-end">
+                            {item.btnLabel && (
+                              <Button
+                                title={item.btnLabel}
+                                onClick={() =>
+                                  handleNext(item.seq, validateForm)
+                                }
+                                disabled={!isValid || !dirty}
+                                type="button"
+                                icon={item.icon}
+                              />
+                            )}
+                          </div>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );
 };
 
-export default page;
+export default SignupPage;

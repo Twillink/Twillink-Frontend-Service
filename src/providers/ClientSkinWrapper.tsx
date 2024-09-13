@@ -1,8 +1,16 @@
 'use client';
-import {useContext} from 'react';
+
+import React, {ReactNode, useContext} from 'react';
 import {SkinContext} from './SkinContext';
 
-export default function ClientThemeWrapper({children}: any) {
-  const {skin} = useContext(SkinContext);
-  return <div data-theme={skin}>{children}</div>;
+interface ClientThemeWrapperProps {
+  children: ReactNode;
 }
+
+const ClientThemeWrapper: React.FC<ClientThemeWrapperProps> = ({children}) => {
+  const {skin} = useContext(SkinContext);
+
+  return <div data-theme={skin}>{children}</div>;
+};
+
+export default ClientThemeWrapper;

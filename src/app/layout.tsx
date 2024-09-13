@@ -10,16 +10,17 @@ export const metadata: Metadata = {
   title: 'Twillink',
   description: 'Your exceptional Link in Bio',
 };
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1.0,
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) {
+}
+
+export default function RootLayout({children}: RootLayoutProps) {
   return (
     <html lang="en">
       <body className={plusJakarta.className}>

@@ -1,11 +1,15 @@
 'use client';
-import {SkinContext, SkinType} from '@/providers/SkinContext';
+
 import React, {useContext} from 'react';
+import {SkinContext, SkinType} from '@/providers/SkinContext';
 import SvgSun from '@/assets/svgComponents/SvgSun';
 import SvgMoon from '@/assets/svgComponents/SvgMoon';
 
-export default function SkinController() {
+const SkinController: React.FC = () => {
   const {skin, changeSkin} = useContext(SkinContext);
+
+  const isLightMode = skin === SkinType.LIGHT;
+
   return (
     <div>
       <label className="grid cursor-pointer place-items-center">
@@ -14,17 +18,19 @@ export default function SkinController() {
           name="theme-dropdown"
           className="toggle theme-controller bg-primary-content col-span-2 col-start-1 row-start-1 h-8 w-60px border-base-200 border-2 [--tglbg:theme(colors.base-200)] toggle-custom"
           onChange={changeSkin}
-          checked={skin === SkinType.LIGHT ? false : true}
+          checked={!isLightMode}
         />
         <SvgSun
-          className="col-start-2 row-start-1 [[data-theme=skinDark]_&]:hidden m-1 stroke-general-med"
+          className={`col-start-2 row-start-1 m-1 stroke-general-med ${isLightMode ? 'block' : 'hidden'}`}
           height={20}
         />
         <SvgMoon
-          className="col-start-1 row-start-1 [[data-theme=skinLight]_&]:hidden m-1 stroke-general-med"
+          className={`col-start-1 row-start-1 m-1 stroke-general-med ${isLightMode ? 'hidden' : 'block'}`}
           height={20}
         />
       </label>
     </div>
   );
-}
+};
+
+export default SkinController;

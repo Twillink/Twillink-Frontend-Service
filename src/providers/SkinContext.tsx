@@ -1,5 +1,6 @@
 'use client';
-import {createContext, useEffect, useState} from 'react';
+
+import React, {createContext, useEffect, useState, ReactNode} from 'react';
 
 export enum SkinType {
   LIGHT = 'skinLight',
@@ -7,18 +8,26 @@ export enum SkinType {
 }
 
 interface SkinContextType {
-  skin?: SkinType;
-  changeSkin?: () => void;
+  skin: SkinType;
+  changeSkin: () => void;
 }
-export const SkinContext = createContext<SkinContextType>({});
 
-export const SkinProvider = ({children}: any) => {
+export const SkinContext = createContext<SkinContextType>({
+  skin: SkinType.LIGHT,
+  changeSkin: () => {},
+});
+
+interface SkinProviderProps {
+  children: ReactNode;
+}
+
+export const SkinProvider: React.FC<SkinProviderProps> = ({children}) => {
   const [skin, setSkin] = useState<SkinType>(SkinType.LIGHT);
 
   useEffect(() => {
-    const skinLocal: any = localStorage.getItem('data');
-    if (skinLocal) {
-      setSkin(skinLocal);
+    const storedSkin = localStorage.getItem('skin') as SkinType | null;
+    if (storedSkin) {
+      setSkin(storedSkin);
     }
   }, []);
 
@@ -27,7 +36,9 @@ export const SkinProvider = ({children}: any) => {
   }, [skin]);
 
   const changeSkin = () => {
-    setSkin(prev => (prev === SkinType.DARK ? SkinType.LIGHT : SkinType.DARK));
+    setSkin(prevSkin =>
+      prevSkin === SkinType.DARK ? SkinType.LIGHT : SkinType.DARK,
+    );
   };
 
   return (
