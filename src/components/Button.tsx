@@ -1,95 +1,61 @@
 import React from 'react';
-
-interface IButton {
-  title: string;
-  onClick?: () => void;
-  icon?: object;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  title?: string;
+  icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
-  disabled?: boolean;
   loading?: boolean;
-  type?: 'primary' | 'error' | 'success';
+  color?: 'primary' | 'error' | 'success';
   size?: 'lg' | 'md' | 'sm' | 'xs';
   outline?: boolean;
 }
 
-const colorVariants = {
+type ColorVariant = 'primary' | 'error' | 'success';
+type SizeVariant = 'lg' | 'md' | 'sm' | 'xs';
+
+const colorVariants: Record<ColorVariant, string> = {
   primary: 'btn-primary',
   error: 'btn-error',
   success: 'btn-success',
 };
 
-const sizeVariants = {
+const sizeVariants: Record<SizeVariant, string> = {
   lg: 'btn-lg text-xl h-13 p-4 rounded-large',
   md: 'btn-md text-base h-10 p-medium rounded-medium',
   sm: 'btn-sm text-base h-8 p-small rounded-lg',
   xs: 'btn-xs text-xs h-6 px-2 px-1 rounded-lg',
 };
 
-export default function Button(props: IButton) {
-  const {
-    title,
-    onClick,
-    icon,
-    iconPosition = 'right',
-    disabled = false,
-    loading = false,
-    type = 'primary',
-    size = 'md',
-    outline = false,
-    ...restProps
-  } = props;
+const Button: React.FC<ButtonProps> = ({
+  title,
+  icon,
+  iconPosition = 'right',
+  loading = false,
+  color = 'primary',
+  size = 'md',
+  outline = false,
+  disabled = false,
+  ...restProps
+}) => {
+  const baseClasses = 'btn font-normal text-base';
+  const colorClass = colorVariants[color];
+  const sizeClass = sizeVariants[size];
+  const outlineClass = outline ? 'btn-outline' : '';
+  const disabledClass = disabled
+    ? 'disabled:bg-primary-disable disabled:text-primary-content disabled:cursor-not-allowed'
+    : 'hover:outline hover:outline-1 hover:outline-offset-2';
 
   return (
     <button
-      className={`btn font-normal text-base ${outline && 'btn-outline'} ${colorVariants[type]} ${sizeVariants[size]} hover:outline hover:outline-1 hover:outline-offset-2`}
-      onClick={onClick}
+      className={`${baseClasses} ${colorClass} ${sizeClass} ${outlineClass} ${disabledClass}`}
       disabled={disabled}
       {...restProps}>
-      {iconPosition === 'left' && (
-        <>{loading ? <span className="loading loading-spinner" /> : icon}</>
-      )}
+      {iconPosition === 'left' &&
+        (loading ? <span className="loading loading-spinner" /> : icon)}
       {title}
-      {iconPosition === 'right' && (
-        <>{loading ? <span className="loading loading-spinner" /> : icon}</>
-      )}
+      {iconPosition === 'right' &&
+        (loading ? <span className="loading loading-spinner" /> : icon)}
     </button>
   );
-}
+};
 
-interface ILinkButtonProps {
-  title: string;
-  onClick?: () => void;
-  icon?: string;
-  iconPosition?: 'left' | 'right';
-  disabled?: boolean;
-  loading?: boolean;
-  size?: 'xl' | 'base' | 'sm' | 'xs' | 'tiny';
-}
-
-export function LinkButton(props: ILinkButtonProps) {
-  const {
-    title,
-    onClick,
-    icon,
-    iconPosition = 'right',
-    disabled = false,
-    loading = false,
-    size = 'md',
-    ...restProps
-  } = props;
-  return (
-    <button
-      className={`font-normal btn-link group gap-4`}
-      onClick={onClick}
-      disabled={disabled}
-      {...restProps}>
-      {iconPosition === 'left' && (
-        <>{loading ? <span className="loading loading-spinner" /> : icon}</>
-      )}
-      <p className={`text-${size}`}>{title}</p>
-      {iconPosition === 'right' && (
-        <>{loading ? <span className="loading loading-spinner" /> : icon}</>
-      )}
-    </button>
-  );
-}
+export default Button;

@@ -33,6 +33,7 @@ const config: Config = {
         'general-med': 'var(--general-med)',
         'general-low': 'var(--general-low)',
         logo: 'var(--logo)',
+        'primary-disable': 'var(--primary-disabled)',
       },
       height: {
         13: '52px',
@@ -96,6 +97,7 @@ const config: Config = {
           '--general-med': '#888FA8',
           '--general-low': '#D6D8E1',
           '--logo': '#000000',
+          '--primary-disabled': '#B2B6C7',
         },
       },
       {
@@ -119,6 +121,7 @@ const config: Config = {
           '--general-med': '#B2B6C7',
           '--general-low': '#545B75',
           '--logo': '#FFFFFF',
+          '--primary-disabled': '#B2B6C7',
         },
       },
       {
