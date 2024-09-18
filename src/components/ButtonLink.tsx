@@ -9,7 +9,7 @@ interface ButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   size?: 'lg' | 'md' | 'sm' | 'xs';
   outline?: boolean;
   disabled?: boolean;
-  href: string; // Ensure href is required for link buttons
+  href: string;
 }
 
 type ColorVariant = 'primary' | 'error' | 'success';

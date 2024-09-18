@@ -1,4 +1,4 @@
-'use client'; // Indicate that this component is a client component
+'use client';
 
 import React, {useEffect, useRef, useState, useCallback} from 'react';
 
