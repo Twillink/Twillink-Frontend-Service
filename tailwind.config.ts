@@ -134,17 +134,16 @@ const config: Config = {
           'base-content': '#16171D',
         },
       },
-      {
-        dark: {
-          ...daisyuiTheme.dark,
-          'neutral-content': '#D9D9D9',
-          'base-100': '#16171D',
-          'base-200': '#212431',
-          'base-300': '#3B3F51',
-          'base-content': '#FFFFFF',
-        },
-      },
-      'retro',
+      // {
+      //   dark: {
+      //     ...daisyuiTheme.dark,
+      //     'neutral-content': '#D9D9D9',
+      //     'base-100': '#16171D',
+      //     'base-200': '#212431',
+      //     'base-300': '#3B3F51',
+      //     'base-content': '#FFFFFF',
+      //   },
+      // },
     ],
   },
 };

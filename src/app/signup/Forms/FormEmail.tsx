@@ -23,11 +23,10 @@ const FormEmail: React.FC<FormEmailProps> = ({onNext}) => {
     useFormikContext<FormEmailValues>();
 
   const handleGoogleSignUp = async () => {
-    try {
-      console.log('Google sign-up initiated');
-    } catch (error) {
-      console.error('Google sign-up failed:', error);
-    }
+    window.open(
+      `${process.env.NEXT_PUBLIC_API_URL}/user-auth/google`,
+      '_blank',
+    );
   };
 
   return (
