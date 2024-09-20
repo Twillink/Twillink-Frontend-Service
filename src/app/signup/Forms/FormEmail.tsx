@@ -4,18 +4,34 @@ import React from 'react';
 import {useFormikContext} from 'formik';
 import Input from '@/components/Input';
 import ErrorMessageField from '@/components/ErrorMessageField';
+import Button from '@/components/Button';
+import ButtonSocialAuth from '@/components/ButtonSocialAuth';
+import Image from 'next/image';
+import GoogleIcon from '@/assets/svgs/google-icon.svg';
 
 interface FormEmailValues {
   email: string;
   password: string;
 }
 
-export default function FormEmail() {
-  const {values, errors, touched, handleChange, handleBlur} =
+interface FormEmailProps {
+  onNext: () => void;
+}
+
+const FormEmail: React.FC<FormEmailProps> = ({onNext}) => {
+  const {values, errors, touched, handleChange, handleBlur, isValid, dirty} =
     useFormikContext<FormEmailValues>();
 
+  const handleGoogleSignUp = async () => {
+    try {
+      console.log('Google sign-up initiated');
+    } catch (error) {
+      console.error('Google sign-up failed:', error);
+    }
+  };
+
   return (
-    <div className="gap-6 flex flex-col">
+    <div className="flex flex-col gap-6">
       <div>
         <Input
           type="email"
@@ -43,6 +59,30 @@ export default function FormEmail() {
         />
         <ErrorMessageField error={errors.password} touched={touched.password} />
       </div>
+
+      <div className="flex justify-end">
+        <Button
+          onClick={onNext}
+          title="Send"
+          disabled={!isValid || !dirty}
+          type="button"
+          className="px-[42px]"
+        />
+      </div>
+
+      <div className="flex flex-col gap-6">
+        <p className="text-center text-general-med text-base leading-5 font-normal">
+          Or
+        </p>
+        <ButtonSocialAuth
+          title="Register with Google"
+          icon={<Image src={GoogleIcon} alt="Google icon" />}
+          onClick={handleGoogleSignUp}
+          type="button"
+        />
+      </div>
     </div>
   );
-}
+};
+
+export default FormEmail;
