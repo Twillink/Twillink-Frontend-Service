@@ -20,7 +20,7 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
   autoComplete,
   ...rest
 }) => (
-  <label className="input input-bordered rounded-lg p-3 flex items-center gap-1 text-primary w-full bg-contras-high">
+  <label className="input input-bordered pr-0 rounded-lg flex items-center gap-1 text-general-med w-full bg-contras-high">
     {label && <span>{label}</span>}
     <input
       type={type}
@@ -29,7 +29,7 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
       onChange={onChange}
       onBlur={onBlur}
       autoComplete={autoComplete}
-      className="grow text-primary"
+      className="grow text-primary h-full rounded-br-lg rounded-tr-lg px-2 placeholder:text-general-med"
       {...rest}
     />
   </label>

@@ -1,5 +1,7 @@
 'use client';
 
+import SvgCheck from '@/assets/svgComponents/SvgCheck';
+import Button from '@/components/Button';
 import ErrorMessageField from '@/components/ErrorMessageField';
 import InputWithLabel from '@/components/InputWithLabel';
 import {useFormikContext} from 'formik';
@@ -9,23 +11,38 @@ interface FormClaimValues {
   username: string;
 }
 
-const FormClaim: React.FC = () => {
-  const {values, errors, touched, handleChange, handleBlur} =
+interface FormClaimProps {
+  onNext: () => void;
+}
+
+const FormClaim: React.FC<FormClaimProps> = ({onNext}) => {
+  const {values, errors, touched, handleChange, handleBlur, isValid, dirty} =
     useFormikContext<FormClaimValues>();
 
   return (
-    <div>
-      <InputWithLabel
-        label="twilink.com/"
-        type="text"
-        placeholder="username"
-        name="username"
-        id="username"
-        value={values.username}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
-      <ErrorMessageField error={errors.username} touched={touched.username} />
+    <div className="flex flex-col gap-6">
+      <div>
+        <InputWithLabel
+          label="twilink.com/"
+          type="text"
+          placeholder="username"
+          name="username"
+          id="username"
+          value={values.username}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        <ErrorMessageField error={errors.username} touched={touched.username} />
+      </div>
+      <div className="flex justify-end">
+        <Button
+          onClick={onNext}
+          title="Grab My Link"
+          disabled={!isValid || !dirty}
+          type="button"
+          icon={<SvgCheck className="stroke-primary-content" />}
+        />
+      </div>
     </div>
   );
 };

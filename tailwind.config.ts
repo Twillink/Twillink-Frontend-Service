@@ -127,14 +127,23 @@ const config: Config = {
       {
         light: {
           ...daisyuiTheme.light,
-          primary: '#353845',
-          'primary-content': '#FFFFFF',
-          secondary: '#3690FB',
-          'secondary-content': '#FFFFFF',
-          'base-100': '#F6F7F9',
-          'base-200': '#ECEDF2',
+          'neutral-content': '#B2B6C7',
+          'base-100': '#FFFFFF',
+          'base-200': '#F6F7F9',
+          'base-300': '#ECEDF2',
+          'base-content': '#16171D',
         },
       },
+      // {
+      //   dark: {
+      //     ...daisyuiTheme.dark,
+      //     'neutral-content': '#D9D9D9',
+      //     'base-100': '#16171D',
+      //     'base-200': '#212431',
+      //     'base-300': '#3B3F51',
+      //     'base-content': '#FFFFFF',
+      //   },
+      // },
     ],
   },
 };

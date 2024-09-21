@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-interface BoxProps {
+interface WidgetContainerProps {
   boxColor: string;
   boxNumber: string;
   handleDrag: (ev: React.DragEvent<HTMLDivElement>) => void;
@@ -10,7 +10,7 @@ interface BoxProps {
   width: string;
 }
 
-const Box: React.FC<BoxProps> = ({
+const WidgetContainer: React.FC<WidgetContainerProps> = ({
   boxColor,
   boxNumber,
   handleDrag,
@@ -30,20 +30,18 @@ const Box: React.FC<BoxProps> = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: '#fff',
         fontWeight: 'bold',
         cursor: 'move',
         padding: 5,
       }}>
       <div
+        className="border-base-300 border-2 rounded-2xl"
         style={{
-          backgroundColor: boxColor,
           height: '100%',
           width: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: 5,
         }}>
         {boxNumber}
       </div>
@@ -51,4 +49,4 @@ const Box: React.FC<BoxProps> = ({
   );
 };
 
-export default Box;
+export default WidgetContainer;

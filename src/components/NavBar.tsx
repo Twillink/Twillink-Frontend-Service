@@ -1,6 +1,8 @@
 import React from 'react';
 import SkinController from './SkinController';
 import SvgBurgerMenu from '@/assets/svgComponents/SvgBurgerMenu';
+import SvgLink from '@/assets/svgComponents/SvgLink';
+import ButtonLink from './ButtonLink';
 
 interface NavBarProps {
   title?: string;
@@ -19,7 +21,16 @@ const NavBar: React.FC<NavBarProps> = ({title = 'My Twillink'}) => (
       <h2 className="font-bold text-general-high">{title}</h2>
     </div>
     <div className="flex-none">
-      <SkinController />
+      <div className="flex items-center gap-6">
+        <SkinController />
+        <ButtonLink
+          title="Share My Link"
+          iconPosition="left"
+          icon={<SvgLink className="stroke-primary-content" />}
+          href="/johndoe"
+          target="_blank"
+        />
+      </div>
     </div>
   </div>
 );

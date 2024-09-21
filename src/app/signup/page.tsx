@@ -1,6 +1,5 @@
 'use client';
 
-import Button from '@/components/Button';
 import GradientBg from '@/components/GradientBg';
 import {Form, Formik, FormikErrors} from 'formik';
 import {motion, AnimatePresence} from 'framer-motion';
@@ -11,7 +10,6 @@ import FormEmail from './Forms/FormEmail';
 import FormVerify from './Forms/FormVerify';
 import {useRouter} from 'next/navigation';
 import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
-import SvgCheck from '@/assets/svgComponents/SvgCheck';
 import ButtonIcon from '@/components/ButtonIcon';
 
 export enum Steps {
@@ -25,7 +23,6 @@ interface Item {
   btnLabel: string;
   seq: number;
   step: Steps;
-  icon?: JSX.Element;
 }
 
 const dataSteps: Item[] = [
@@ -34,7 +31,6 @@ const dataSteps: Item[] = [
     title: 'Claim your link',
     btnLabel: 'Grab My Link',
     step: Steps.CLAIM,
-    icon: <SvgCheck className="stroke-primary-content" />,
   },
   {
     seq: 2,
@@ -45,7 +41,7 @@ const dataSteps: Item[] = [
   {
     seq: 3,
     title: 'Please input code that already sent to your email',
-    btnLabel: 'Start Now',
+    btnLabel: '',
     step: Steps.VERIFY,
   },
 ];
@@ -125,12 +121,12 @@ const SignupPage: React.FC = () => {
     }
   };
 
-  const renderForm = (step: Steps) => {
+  const renderForm = (step: Steps, onNext: () => void) => {
     switch (step) {
       case Steps.CLAIM:
-        return <FormClaim />;
+        return <FormClaim onNext={onNext} />;
       case Steps.EMAIL:
-        return <FormEmail />;
+        return <FormEmail onNext={onNext} />;
       case Steps.VERIFY:
         return <FormVerify />;
       default:
@@ -152,7 +148,7 @@ const SignupPage: React.FC = () => {
           validateOnBlur={true}
           onSubmit={handleSubmit}
           validationSchema={stepSchemas[currentSeqActive - 1]}>
-          {({isValid, validateForm, dirty}) => (
+          {({validateForm}) => (
             <Form>
               <div className="stack">
                 <AnimatePresence>
@@ -185,20 +181,11 @@ const SignupPage: React.FC = () => {
                           <h3 className="card-title text-primary">
                             {item.title}
                           </h3>
-                          {index === 0 && renderForm(item.step)}
-                          <div className="card-actions justify-end">
-                            {item.btnLabel && (
-                              <Button
-                                title={item.btnLabel}
-                                onClick={() =>
-                                  handleNext(item.seq, validateForm)
-                                }
-                                disabled={!isValid || !dirty}
-                                type="button"
-                                icon={item.icon}
-                              />
+                          {index === 0 &&
+                            renderForm(
+                              item.step,
+                              () => handleNext(item.seq, validateForm), // Use a callback
                             )}
-                          </div>
                         </div>
                       </div>
                     </motion.div>

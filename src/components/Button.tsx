@@ -7,6 +7,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: 'primary' | 'error' | 'success';
   size?: 'lg' | 'md' | 'sm' | 'xs';
   outline?: boolean;
+  className?: string;
 }
 
 type ColorVariant = 'primary' | 'error' | 'success';
@@ -34,6 +35,7 @@ const Button: React.FC<ButtonProps> = ({
   size = 'md',
   outline = false,
   disabled = false,
+  className,
   ...restProps
 }) => {
   const baseClasses = 'btn font-normal text-base';
@@ -46,7 +48,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
-      className={`${baseClasses} ${colorClass} ${sizeClass} ${outlineClass} ${disabledClass}`}
+      className={`${baseClasses} ${colorClass} ${sizeClass} ${outlineClass} ${disabledClass} ${className}`}
       disabled={disabled}
       {...restProps}>
       {iconPosition === 'left' &&
