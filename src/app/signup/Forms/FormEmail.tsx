@@ -24,7 +24,7 @@ const FormEmail: React.FC<FormEmailProps> = ({onNext}) => {
 
   const handleGoogleSignUp = async () => {
     window.open(
-      `${process.env.NEXT_PUBLIC_API_URL}/user-auth/google`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user-auth-social/google`,
       '_blank',
     );
   };
