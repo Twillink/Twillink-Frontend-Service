@@ -12,6 +12,7 @@ import GoogleIcon from '@/assets/svgs/google-icon.svg';
 interface FormEmailValues {
   email: string;
   password: string;
+  username: string;
 }
 
 interface FormEmailProps {
@@ -23,8 +24,13 @@ const FormEmail: React.FC<FormEmailProps> = ({onNext}) => {
     useFormikContext<FormEmailValues>();
 
   const handleGoogleSignUp = async () => {
+    const username = values.username;
+    if (!username) {
+      console.error('Username is required');
+      return;
+    }
     window.open(
-      `${process.env.NEXT_PUBLIC_API_URL}/user-auth-social/google`,
+      `${process.env.NEXT_PUBLIC_API_URL}/user-auth-social/google?userName=${encodeURIComponent(username)}`,
       '_blank',
     );
   };
