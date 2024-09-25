@@ -30,7 +30,7 @@ const FormEmail: React.FC<FormEmailProps> = ({onNext}) => {
       return;
     }
     window.open(
-      `${process.env.NEXT_PUBLIC_API_URL}/user-auth-social/google?userName=${encodeURIComponent(username)}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google?userName=${encodeURIComponent(username)}`,
       '_blank',
     );
   };
