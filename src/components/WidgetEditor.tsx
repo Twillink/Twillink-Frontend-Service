@@ -1,16 +1,25 @@
 'use client';
 
 import React, {useEffect, useRef, useState, useCallback} from 'react';
-
-import WidgetContainer from '@/components/widgets/WidgetContainer';
+import WidgetContainer, {
+  WidgetTypes,
+} from '@/components/widgets/WidgetContainer';
 import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
 import UserProfile from '@/components/widgets/UserProfile';
+import SocialContainer from '@/components/widgets/SocialContainer';
+import AddWidget from '@/components/widgets/AddWidget';
+import PopupWidget from '@/components/PopupWidget';
+import PopupWidgetLink from '@/components/PopupWidgetLink';
+import PopupWidgetText from '@/components/PopupWidgetText';
 
-interface Widget {
+export interface Widget {
   id: string;
   order: number;
-  color: string;
   width: string;
+  type: WidgetTypes;
+  text: string;
+  url?: string;
+  image?: string | ArrayBuffer | null;
 }
 
 interface WidgetEditorProps {
@@ -19,12 +28,15 @@ interface WidgetEditorProps {
   isEditingDisabled?: boolean;
 }
 
+type PopupState = 'none' | 'main' | WidgetTypes;
+
 const WidgetEditor: React.FC<WidgetEditorProps> = ({
   dataWidget,
   setDataWidget,
   isEditingDisabled = false,
 }) => {
   const [dragId, setDragId] = useState<string | null>(null);
+  const [popupState, setPopupState] = useState<PopupState>('none');
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const scrollSpeed = 10;
 
@@ -87,29 +99,99 @@ const WidgetEditor: React.FC<WidgetEditorProps> = ({
     };
   }, [handleScrollDuringDrag]);
 
+  const handleAddAction = (action: string) => {
+    setPopupState('none');
+
+    switch (action) {
+      case WidgetTypes.Link:
+        setPopupState(WidgetTypes.Link);
+        break;
+      case WidgetTypes.Text:
+        setPopupState(WidgetTypes.Text);
+        break;
+      case 'main':
+        setPopupState('main');
+        break;
+      default:
+        console.log('Unknown action');
+        break;
+    }
+  };
+
+  const handleClosePopup = () => {
+    setPopupState('none');
+  };
+
+  const handleBack = () => {
+    setPopupState('main');
+  };
+
+  const handleAdd = (
+    type: WidgetTypes,
+    title: string,
+    url: string,
+    image?: string | ArrayBuffer | null,
+  ) => {
+    if (setDataWidget) {
+      const newWidget: Widget = {
+        id: `widget-${Date.now()}`,
+        order: dataWidget.length + 1,
+        width: '100%',
+        type,
+        url,
+        text: title,
+        image,
+      };
+
+      setDataWidget([...dataWidget, newWidget]);
+    }
+    handleClosePopup();
+  };
+
   return (
-    <div
-      className="artboard flex flex-col bg-base-100 h-full overflow-auto relative"
-      ref={scrollContainerRef}
-      onDragOver={ev => ev.preventDefault()}>
-      <ScrollHideHeader />
-      <UserProfile />
-      <div className="flex flex-wrap">
-        {dataWidget
-          .sort((a, b) => a.order - b.order)
-          .map(widget => (
-            <WidgetContainer
-              key={widget.id}
-              boxColor={widget.color}
-              boxNumber={widget.id}
-              handleDrag={handleDrag}
-              handleDrop={handleDrop}
-              width={widget.width}
-              // disabled={isEditingDisabled}
-            />
-          ))}
+    <>
+      <div data-theme="light" className="h-full max-w-[428px]">
+        <div
+          className="artboard flex flex-col bg-base-100 h-full overflow-y-auto relative"
+          ref={scrollContainerRef}
+          onDragOver={ev => ev.preventDefault()}>
+          <ScrollHideHeader />
+          <UserProfile />
+          <div className="flex flex-wrap px-6">
+            <SocialContainer />
+            {dataWidget
+              .sort((a, b) => a.order - b.order)
+              .map((widget, index) => (
+                <WidgetContainer
+                  key={`widget-${index}`}
+                  values={widget}
+                  handleDrag={handleDrag}
+                  handleDrop={handleDrop}
+                />
+              ))}
+            <AddWidget onClick={() => setPopupState('main')} />
+          </div>
+        </div>
       </div>
-    </div>
+
+      <PopupWidget
+        isOpen={popupState === 'main'}
+        onClose={handleClosePopup}
+        onAddAction={handleAddAction}
+      />
+      <PopupWidgetLink
+        isOpen={popupState === 'link'}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+      />
+      <PopupWidgetText
+        isOpen={popupState === 'text'}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+      />
+    </>
   );
 };
 

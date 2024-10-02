@@ -1,12 +1,14 @@
-import WidgetEditor from '@/components/WidgetEditor';
+'use client';
+import {Widget} from '@/components/WidgetEditor';
 import {notFound} from 'next/navigation';
 import {FC} from 'react';
 import {dummyWidget} from '@/mock/data';
+import WidgetViewer from '@/components/WidgetViewer';
 
 interface User {
   name: string;
   bio: string;
-  dataWidget: any[];
+  dataWidget: Widget[];
 }
 
 interface MockUsers {
@@ -48,7 +50,7 @@ const TwillinkPage: FC<TwillinkPageProps> = async ({params}) => {
     <div data-theme="light" className="h-full bg-base-100">
       <div className="flex flex-col items-center justify-center">
         <div className="h-screen max-w-[428px]">
-          <WidgetEditor dataWidget={data.dataWidget} isEditingDisabled />
+          <WidgetViewer dataWidget={data.dataWidget} />
         </div>
       </div>
     </div>
