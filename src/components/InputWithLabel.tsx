@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FocusEvent, InputHTMLAttributes} from 'react';
 
-interface InputWithLabelProps extends InputHTMLAttributes<HTMLInputElement> {
+interface IInputWithLabel extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   value: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -10,7 +10,7 @@ interface InputWithLabelProps extends InputHTMLAttributes<HTMLInputElement> {
   autoComplete?: string;
 }
 
-const InputWithLabel: React.FC<InputWithLabelProps> = ({
+const InputWithLabel: React.FC<IInputWithLabel> = ({
   label,
   value,
   onChange,

@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface ButtonSocialAuthProps
+interface IButtonSocialAuth
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: JSX.Element;
   title?: string;
 }
 
-const ButtonSocialAuth: React.FC<ButtonSocialAuthProps> = ({
+const ButtonSocialAuth: React.FC<IButtonSocialAuth> = ({
   icon,
   title = 'Title',
   ...props

@@ -2,22 +2,22 @@ import React, {useState} from 'react';
 import InputLabel from './InputLabel';
 import Button from './Button';
 import PopupContainer from './PopupContainer';
-import {WidgetTypes} from './widgets/WidgetContainer';
 import TextAreaLabel from './TextAreaLabel';
+import {WidgetTypeEnum} from '@/libs/WidgetTypeEnum';
 
-interface PopupWidgetTextProps {
+interface IPopupWidgetText {
   isOpen: boolean;
   onClose: () => void;
   onBack: () => void;
   onAdd: (
-    type: WidgetTypes,
+    type: WidgetTypeEnum,
     title: string,
     url: string,
     image?: string | ArrayBuffer | null,
   ) => void;
 }
 
-const PopupWidgetText: React.FC<PopupWidgetTextProps> = ({
+const PopupWidgetText: React.FC<IPopupWidgetText> = ({
   isOpen,
   onClose,
   onBack,
@@ -30,7 +30,7 @@ const PopupWidgetText: React.FC<PopupWidgetTextProps> = ({
   >(null);
 
   const handleAdd = () => {
-    onAdd(WidgetTypes.Text, title, url, selectedImage);
+    onAdd(WidgetTypeEnum.Text, title, url, selectedImage);
     setTitle('');
     setUrl('');
     setSelectedImage(null);

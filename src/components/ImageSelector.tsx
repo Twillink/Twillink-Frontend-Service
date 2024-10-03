@@ -2,14 +2,13 @@ import SvgPlus from '@/assets/svgComponents/SvgPlus';
 import React, {useState, useEffect} from 'react';
 import Image from 'next/image';
 
-interface ImageSelectorProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+interface IImageSelector extends React.InputHTMLAttributes<HTMLInputElement> {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   reset?: boolean;
 }
 
-const ImageSelector: React.FC<ImageSelectorProps> = ({
+const ImageSelector: React.FC<IImageSelector> = ({
   onChange,
   disabled = false,
   reset = false,

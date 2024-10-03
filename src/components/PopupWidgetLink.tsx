@@ -3,21 +3,21 @@ import InputLabel from './InputLabel';
 import ImageSelector from './ImageSelector';
 import Button from './Button';
 import PopupContainer from './PopupContainer';
-import {WidgetTypes} from './widgets/WidgetContainer';
+import {WidgetTypeEnum} from '@/libs/WidgetTypeEnum';
 
-interface PopupWidgetLinkProps {
+interface IPopupWidgetLink {
   isOpen: boolean;
   onClose: () => void;
   onBack: () => void;
   onAdd: (
-    type: WidgetTypes,
+    type: WidgetTypeEnum,
     title: string,
     url: string,
     image?: string | ArrayBuffer | null,
   ) => void;
 }
 
-const PopupWidgetLink: React.FC<PopupWidgetLinkProps> = ({
+const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
   isOpen,
   onClose,
   onBack,
@@ -30,7 +30,7 @@ const PopupWidgetLink: React.FC<PopupWidgetLinkProps> = ({
   >(null);
 
   const handleAdd = () => {
-    onAdd(WidgetTypes.Link, title, url, selectedImage);
+    onAdd(WidgetTypeEnum.Link, title, url, selectedImage);
     setTitle('');
     setUrl('');
     setSelectedImage(null);

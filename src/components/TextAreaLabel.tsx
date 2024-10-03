@@ -1,14 +1,13 @@
 import React, {ChangeEvent, FocusEvent, TextareaHTMLAttributes} from 'react';
 
-interface TextAreaLabelProps
-  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface ITextAreaLabel extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   value: string;
   label: string;
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur: (event: FocusEvent<HTMLTextAreaElement>) => void;
 }
 
-const TextAreaLabel: React.FC<TextAreaLabelProps> = ({
+const TextAreaLabel: React.FC<ITextAreaLabel> = ({
   value,
   onChange,
   onBlur,

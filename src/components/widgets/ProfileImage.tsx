@@ -2,15 +2,12 @@
 import React, {useEffect, useState} from 'react';
 import Image from 'next/image';
 
-interface ProfileImageProps {
+interface IProfileImage {
   onPhotoChange: (file: File | null) => void;
   isSticky: boolean;
 }
 
-const ProfileImage: React.FC<ProfileImageProps> = ({
-  onPhotoChange,
-  isSticky,
-}) => {
+const ProfileImage: React.FC<IProfileImage> = ({onPhotoChange, isSticky}) => {
   const [selectedProfileImage, setSelectedProfileImage] = useState<File | null>(
     null,
   );

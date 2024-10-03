@@ -3,7 +3,7 @@ import ButtonIcon from './ButtonIcon';
 import SvgClose from '@/assets/svgComponents/SvgClose';
 import SvgArrowLeftThin from '@/assets/svgComponents/SvgArrowLeftThin';
 
-interface PopupContainerProps {
+interface IPopupContainer {
   isOpen: boolean;
   onClose: () => void;
   onBack?: () => void;
@@ -11,7 +11,7 @@ interface PopupContainerProps {
   children: ReactNode;
 }
 
-const PopupContainer: React.FC<PopupContainerProps> = ({
+const PopupContainer: React.FC<IPopupContainer> = ({
   isOpen,
   onClose,
   onBack,

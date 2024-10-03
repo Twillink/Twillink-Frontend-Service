@@ -4,11 +4,11 @@ import SvgBurgerMenu from '@/assets/svgComponents/SvgBurgerMenu';
 import SvgLink from '@/assets/svgComponents/SvgLink';
 import ButtonLink from './ButtonLink';
 
-interface NavBarProps {
+interface INavBar {
   title?: string;
 }
 
-const NavBar: React.FC<NavBarProps> = ({title = 'My Twillink'}) => (
+const NavBar: React.FC<INavBar> = ({title = 'My Twillink'}) => (
   <div className="navbar bg-none px-3 pt-0 md:pt-6">
     <div className="flex-none lg:hidden">
       <label

@@ -1,10 +1,11 @@
 'use client';
 
-import WidgetEditor, {Widget} from '@/components/WidgetEditor';
+import WidgetEditor from '@/components/WidgetEditor';
+import {IItemWidgetType} from '@/libs/IItemWidgetType';
 import {useState} from 'react';
 
 export default function Page() {
-  const [dataWidget, setDataWidget] = useState<Widget[]>([]);
+  const [dataWidget, setDataWidget] = useState<IItemWidgetType[]>([]);
 
   return (
     <div className="flex flex-row items-center justify-center h-[calc(100vh-6.5rem)]">

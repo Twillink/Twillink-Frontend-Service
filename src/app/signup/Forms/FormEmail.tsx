@@ -9,19 +9,19 @@ import ButtonSocialAuth from '@/components/ButtonSocialAuth';
 import Image from 'next/image';
 import GoogleIcon from '@/assets/svgs/google-icon.svg';
 
-interface FormEmailValues {
+interface IFormEmailValues {
   email: string;
   password: string;
   username: string;
 }
 
-interface FormEmailProps {
+interface IFormEmail {
   onNext: () => void;
 }
 
-const FormEmail: React.FC<FormEmailProps> = ({onNext}) => {
+const FormEmail: React.FC<IFormEmail> = ({onNext}) => {
   const {values, errors, touched, handleChange, handleBlur, isValid, dirty} =
-    useFormikContext<FormEmailValues>();
+    useFormikContext<IFormEmailValues>();
 
   const handleGoogleSignUp = async () => {
     const username = values.username;

@@ -16,11 +16,11 @@ export const viewport: Viewport = {
   initialScale: 1.0,
 };
 
-interface RootLayoutProps {
+interface IRootLayoutProps {
   children: React.ReactNode;
 }
 
-export default function RootLayout({children}: RootLayoutProps) {
+export default function RootLayout({children}: IRootLayoutProps) {
   return (
     <html lang="en">
       <body className={plusJakarta.className}>

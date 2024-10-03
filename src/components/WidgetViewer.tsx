@@ -4,14 +4,14 @@ import React, {useRef} from 'react';
 import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
 import UserProfile from '@/components/widgets/UserProfile';
 import SocialContainer from '@/components/widgets/SocialContainer';
-import {Widget} from '@/components/WidgetEditor';
 import WidgetContainerViewer from './widgets/WidgetContainerViewer';
+import {IItemWidgetType} from '@/libs/IItemWidgetType';
 
-interface WidgetViewerProps {
-  dataWidget: Widget[];
+interface IWidgetViewer {
+  dataWidget: IItemWidgetType[];
 }
 
-const WidgetViewer: React.FC<WidgetViewerProps> = ({dataWidget}) => {
+const WidgetViewer: React.FC<IWidgetViewer> = ({dataWidget}) => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   return (
     <>

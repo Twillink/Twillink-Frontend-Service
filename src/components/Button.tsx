@@ -1,5 +1,5 @@
 import React from 'react';
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   title?: string;
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
@@ -26,7 +26,7 @@ const sizeVariants: Record<SizeVariant, string> = {
   xs: 'btn-xs text-xs h-6 px-2 px-1 rounded-lg',
 };
 
-const Button: React.FC<ButtonProps> = ({
+const Button: React.FC<IButton> = ({
   title,
   icon,
   iconPosition = 'right',

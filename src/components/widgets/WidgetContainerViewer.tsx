@@ -3,35 +3,23 @@
 import React from 'react';
 import WidgetLink from '@/components/widgets/WidgetLink';
 import WidgetText from '@/components/widgets/WidgetText';
-import {Widget} from '@/components/WidgetEditor';
+import {IItemWidgetType} from '@/libs/IItemWidgetType';
+import {WidgetTypeEnum} from '@/libs/WidgetTypeEnum';
 
-interface WidgetContainerViewerProps {
+interface IWidgetContainerViewer {
   handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;
   handleDrop?: (ev: React.DragEvent<HTMLDivElement>) => void;
-  values: Widget;
+  values: IItemWidgetType;
 }
 
-export enum WidgetTypes {
-  Link = 'link',
-  Text = 'text',
-  Image = 'image',
-  Video = 'video',
-  Blog = 'blog',
-  Contact = 'contact',
-  Carousel = 'carousel',
-  Map = 'map',
-  Webinar = 'webinar',
-  Schedule = 'schedule',
-}
-
-const WidgetContainerViewer: React.FC<WidgetContainerViewerProps> = ({
+const WidgetContainerViewer: React.FC<IWidgetContainerViewer> = ({
   handleDrag,
   handleDrop,
   values,
 }) => {
   const renderWidget = () => {
     switch (values.type) {
-      case WidgetTypes.Link:
+      case WidgetTypeEnum.Link:
         return (
           <WidgetLink
             url={values.url || '#'}
@@ -39,7 +27,7 @@ const WidgetContainerViewer: React.FC<WidgetContainerViewerProps> = ({
             image={values.image}
           />
         );
-      case WidgetTypes.Text:
+      case WidgetTypeEnum.Text:
         return <WidgetText text={values.text} />;
       default:
         return null;

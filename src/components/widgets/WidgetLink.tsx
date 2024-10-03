@@ -3,14 +3,13 @@
 import React from 'react';
 import Image from 'next/image';
 
-interface WidgetLinkProps
-  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+interface IWidgetLink extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   text: string;
   url: string;
   image?: string | ArrayBuffer | null;
 }
 
-const WidgetLink: React.FC<WidgetLinkProps> = ({
+const WidgetLink: React.FC<IWidgetLink> = ({
   text,
   url,
   image,

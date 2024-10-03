@@ -2,13 +2,13 @@ import SvgSocialAdd from '@/assets/svgComponents/SvgSocialAdd';
 import React, {ComponentProps} from 'react';
 import Image from 'next/image';
 
-interface SocialButtonProps extends ComponentProps<'input'> {
+interface ISocialButton extends ComponentProps<'input'> {
   imageUrl?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
 }
 
-const SocialButton: React.FC<SocialButtonProps> = ({
+const SocialButton: React.FC<ISocialButton> = ({
   imageUrl,
   onChange,
   disabled = false,

@@ -1,9 +1,7 @@
 'use client';
 
 import React, {useEffect, useRef, useState, useCallback} from 'react';
-import WidgetContainer, {
-  WidgetTypes,
-} from '@/components/widgets/WidgetContainer';
+import WidgetContainer from '@/components/widgets/WidgetContainer';
 import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
 import UserProfile from '@/components/widgets/UserProfile';
 import SocialContainer from '@/components/widgets/SocialContainer';
@@ -11,26 +9,18 @@ import AddWidget from '@/components/widgets/AddWidget';
 import PopupWidget from '@/components/PopupWidget';
 import PopupWidgetLink from '@/components/PopupWidgetLink';
 import PopupWidgetText from '@/components/PopupWidgetText';
+import {WidgetTypeEnum} from '@/libs/WidgetTypeEnum';
+import {IItemWidgetType} from '@/libs/IItemWidgetType';
 
-export interface Widget {
-  id: string;
-  order: number;
-  width: string;
-  type: WidgetTypes;
-  text: string;
-  url?: string;
-  image?: string | ArrayBuffer | null;
-}
-
-interface WidgetEditorProps {
-  dataWidget: Widget[];
-  setDataWidget?: React.Dispatch<React.SetStateAction<Widget[]>>;
+interface IWidgetEditor {
+  dataWidget: IItemWidgetType[];
+  setDataWidget?: React.Dispatch<React.SetStateAction<IItemWidgetType[]>>;
   isEditingDisabled?: boolean;
 }
 
-type PopupState = 'none' | 'main' | WidgetTypes;
+type PopupState = 'none' | 'main' | WidgetTypeEnum;
 
-const WidgetEditor: React.FC<WidgetEditorProps> = ({
+const WidgetEditor: React.FC<IWidgetEditor> = ({
   dataWidget,
   setDataWidget,
   isEditingDisabled = false,
@@ -103,11 +93,11 @@ const WidgetEditor: React.FC<WidgetEditorProps> = ({
     setPopupState('none');
 
     switch (action) {
-      case WidgetTypes.Link:
-        setPopupState(WidgetTypes.Link);
+      case WidgetTypeEnum.Link:
+        setPopupState(WidgetTypeEnum.Link);
         break;
-      case WidgetTypes.Text:
-        setPopupState(WidgetTypes.Text);
+      case WidgetTypeEnum.Text:
+        setPopupState(WidgetTypeEnum.Text);
         break;
       case 'main':
         setPopupState('main');
@@ -127,13 +117,13 @@ const WidgetEditor: React.FC<WidgetEditorProps> = ({
   };
 
   const handleAdd = (
-    type: WidgetTypes,
+    type: WidgetTypeEnum,
     title: string,
     url: string,
     image?: string | ArrayBuffer | null,
   ) => {
     if (setDataWidget) {
-      const newWidget: Widget = {
+      const newWidget: IItemWidgetType = {
         id: `widget-${Date.now()}`,
         order: dataWidget.length + 1,
         width: '100%',

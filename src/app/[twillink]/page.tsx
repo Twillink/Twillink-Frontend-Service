@@ -1,22 +1,23 @@
 'use client';
-import {Widget} from '@/components/WidgetEditor';
+
 import {notFound} from 'next/navigation';
 import {FC} from 'react';
 import {dummyWidget} from '@/mock/data';
 import WidgetViewer from '@/components/WidgetViewer';
+import {IItemWidgetType} from '@/libs/IItemWidgetType';
 
-interface User {
+interface IUser {
   name: string;
   bio: string;
-  dataWidget: Widget[];
+  dataWidget: IItemWidgetType[];
 }
 
-interface MockUsers {
-  [key: string]: User;
+interface IMockUsers {
+  [key: string]: IUser;
 }
 
-const fetchUserByUsername = async (username: string): Promise<User | null> => {
-  const mockUsers: MockUsers = {
+const fetchUserByUsername = async (username: string): Promise<IUser | null> => {
+  const mockUsers: IMockUsers = {
     johndoe: {
       name: 'John Doe',
       bio: 'Software Developer',
@@ -32,13 +33,13 @@ const fetchUserByUsername = async (username: string): Promise<User | null> => {
   return mockUsers[username] || null;
 };
 
-interface TwillinkPageProps {
+interface ITwillinkPage {
   params: {
     twillink: string;
   };
 }
 
-const TwillinkPage: FC<TwillinkPageProps> = async ({params}) => {
+const TwillinkPage: FC<ITwillinkPage> = async ({params}) => {
   const {twillink} = params;
   const data = await fetchUserByUsername(twillink);
 

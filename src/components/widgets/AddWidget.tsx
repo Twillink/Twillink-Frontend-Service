@@ -1,12 +1,12 @@
 import SvgPlus from '@/assets/svgComponents/SvgPlus';
 import React, {ComponentProps} from 'react';
 
-interface AddWidgetProps extends ComponentProps<'button'> {
+interface IAddWidget extends ComponentProps<'button'> {
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
 }
 
-const AddWidget: React.FC<AddWidgetProps> = ({
+const AddWidget: React.FC<IAddWidget> = ({
   onClick,
   disabled = false,
   ...restProps

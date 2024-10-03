@@ -1,13 +1,13 @@
 import React, {ChangeEvent, FocusEvent, InputHTMLAttributes} from 'react';
 
-interface InputLabelProps extends InputHTMLAttributes<HTMLInputElement> {
+interface IInputLabel extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   label: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur: (event: FocusEvent<HTMLInputElement>) => void;
 }
 
-const InputLabel: React.FC<InputLabelProps> = ({
+const InputLabel: React.FC<IInputLabel> = ({
   value,
   onChange,
   onBlur,

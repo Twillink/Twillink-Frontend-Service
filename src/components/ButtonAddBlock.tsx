@@ -1,7 +1,7 @@
 import React, {ComponentProps} from 'react';
 import ComingSoon from './ComingSoon';
 
-interface ButtonAddBlockProps extends ComponentProps<'button'> {
+interface IButtonAddBlock extends ComponentProps<'button'> {
   onClick?: () => void;
   icon?: JSX.Element;
   title: string;
@@ -9,7 +9,7 @@ interface ButtonAddBlockProps extends ComponentProps<'button'> {
   isComingSoon?: boolean;
 }
 
-const ButtonAddBlock: React.FC<ButtonAddBlockProps> = ({
+const ButtonAddBlock: React.FC<IButtonAddBlock> = ({
   onClick,
   icon,
   title,

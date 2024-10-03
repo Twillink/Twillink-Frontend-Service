@@ -12,7 +12,7 @@ import SvgWidgetWebinar from '@/assets/svgComponents/SvgWidgetWebinar';
 import SvgWidgetSchedule from '@/assets/svgComponents/SvgWidgetSchedule';
 import PopupContainer from './PopupContainer';
 
-interface PopupWidgetProps {
+interface IPopupWidget {
   isOpen: boolean;
   onClose: () => void;
   onAddAction: (action: string) => void;
@@ -91,7 +91,7 @@ const buttons = [
   },
 ];
 
-const PopupWidget: React.FC<PopupWidgetProps> = ({
+const PopupWidget: React.FC<IPopupWidget> = ({
   isOpen,
   onClose,
   onAddAction,

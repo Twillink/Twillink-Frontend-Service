@@ -1,11 +1,11 @@
-import {WidgetTypes} from '@/components/widgets/WidgetContainer';
+import {WidgetTypeEnum} from '@/libs/WidgetTypeEnum';
 
 export const dummyWidget = [
   {
     id: 'Box-1',
     order: 1,
     width: '100%',
-    type: WidgetTypes.Link,
+    type: WidgetTypeEnum.Link,
     url: 'https://www.google.com',
     text: 'Here your link Box-1',
   },
@@ -13,7 +13,7 @@ export const dummyWidget = [
     id: 'Box-2',
     order: 2,
     width: '50%',
-    type: WidgetTypes.Link,
+    type: WidgetTypeEnum.Link,
     url: 'https://www.google.com',
     text: 'Max lenght 70 chars',
   },
@@ -21,7 +21,7 @@ export const dummyWidget = [
     id: 'Box-3',
     order: 3,
     width: '50%',
-    type: WidgetTypes.Link,
+    type: WidgetTypeEnum.Link,
     url: 'https://www.google.com',
     text: 'Here your link Box-3 Here your link Box-3 Here your link Here your link  Box-3 ',
   },
