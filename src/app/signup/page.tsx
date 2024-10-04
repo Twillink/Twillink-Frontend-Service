@@ -11,38 +11,33 @@ import FormVerify from './Forms/FormVerify';
 import {useRouter} from 'next/navigation';
 import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
 import ButtonIcon from '@/components/ButtonIcon';
+import {StepsEnum} from '@/libs/StepsEnum';
 
-export enum Steps {
-  CLAIM = 'CLAIM',
-  EMAIL = 'EMAIL',
-  VERIFY = 'VERIFY',
-}
-
-interface Item {
+interface IItem {
   title: string;
   btnLabel: string;
   seq: number;
-  step: Steps;
+  step: StepsEnum;
 }
 
-const dataSteps: Item[] = [
+const dataSteps: IItem[] = [
   {
     seq: 1,
     title: 'Claim your link',
     btnLabel: 'Grab My Link',
-    step: Steps.CLAIM,
+    step: StepsEnum.CLAIM,
   },
   {
     seq: 2,
     title: 'Your email and password...',
     btnLabel: 'Send',
-    step: Steps.EMAIL,
+    step: StepsEnum.EMAIL,
   },
   {
     seq: 3,
     title: 'Please input code that already sent to your email',
     btnLabel: '',
-    step: Steps.VERIFY,
+    step: StepsEnum.VERIFY,
   },
 ];
 
@@ -65,7 +60,7 @@ const SCALE_FACTOR = 0.06;
 
 const SignupPage: React.FC = () => {
   const router = useRouter();
-  const [cards, setCards] = useState<Item[]>(dataSteps);
+  const [cards, setCards] = useState<IItem[]>(dataSteps);
   const [currentSeqActive, setCurrentSeqActive] = useState<number>(1);
 
   const stepSchemas = [
@@ -121,13 +116,13 @@ const SignupPage: React.FC = () => {
     }
   };
 
-  const renderForm = (step: Steps, onNext: () => void) => {
+  const renderForm = (step: StepsEnum, onNext: () => void) => {
     switch (step) {
-      case Steps.CLAIM:
+      case StepsEnum.CLAIM:
         return <FormClaim onNext={onNext} />;
-      case Steps.EMAIL:
+      case StepsEnum.EMAIL:
         return <FormEmail onNext={onNext} />;
-      case Steps.VERIFY:
+      case StepsEnum.VERIFY:
         return <FormVerify />;
       default:
         return null;

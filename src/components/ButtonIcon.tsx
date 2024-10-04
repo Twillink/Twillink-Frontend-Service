@@ -1,12 +1,12 @@
 import React, {ComponentProps} from 'react';
 
-interface ButtonIconProps extends ComponentProps<'button'> {
+interface IButtonIcon extends ComponentProps<'button'> {
   onClick?: () => void;
   icon?: JSX.Element;
   disabled?: boolean;
 }
 
-const ButtonIcon: React.FC<ButtonIconProps> = ({
+const ButtonIcon: React.FC<IButtonIcon> = ({
   onClick,
   icon,
   disabled = false,

@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface ButtonProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+interface IButton extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   title?: string;
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
@@ -28,7 +28,7 @@ const sizeVariants: Record<SizeVariant, string> = {
   xs: 'btn-xs text-xs h-6 px-2 px-1 rounded-lg',
 };
 
-const ButtonLink: React.FC<ButtonProps> = ({
+const ButtonLink: React.FC<IButton> = ({
   title,
   icon,
   iconPosition = 'right',

@@ -7,7 +7,7 @@ import ErrorMessageField from '@/components/ErrorMessageField';
 import Button from '@/components/Button';
 import {useRouter} from 'next/navigation';
 
-interface FormVerifyValues {
+interface IFormVerifyValues {
   otp: string;
 }
 
@@ -18,7 +18,7 @@ export default function FormVerify() {
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const {values, errors, touched, setFieldValue, setFieldTouched} =
-    useFormikContext<FormVerifyValues>();
+    useFormikContext<IFormVerifyValues>();
 
   const verifyOtp = async (otp: string) => {
     try {

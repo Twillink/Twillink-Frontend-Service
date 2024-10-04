@@ -1,5 +1,6 @@
 'use client';
 
+import SvgPlus from '@/assets/svgComponents/SvgPlus';
 import Image from 'next/image';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 
@@ -60,7 +61,7 @@ const ScrollHideHeader: React.FC = () => {
         transition: 'transform 0.1s ease-out',
       }}
       className={`sticky z-[5] w-full bg-base-200 cursor-pointer shadow-md rounded-2xl`}>
-      <label htmlFor="file-upload-header">
+      <label htmlFor="file-upload-header" className="cursor-pointer">
         <input
           type="file"
           accept="image/*"
@@ -82,21 +83,8 @@ const ScrollHideHeader: React.FC = () => {
           </div>
         ) : (
           <div className={`h-[136px] flex justify-center items-center`}>
-            <div className="flex text-neutral-content items-center gap-3 font-normal">
-              <svg
-                width="17"
-                height="16"
-                viewBox="0 0 17 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="stroke-neutral-content">
-                <path
-                  d="M8.50008 1.66675V8.00008M8.50008 8.00008V14.3334M8.50008 8.00008H14.8334M8.50008 8.00008L2.16675 8.00008"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+            <div className="flex text-neutral-content items-center gap-3 font-normal text-base">
+              <SvgPlus height={16} className="stroke-neutral-content" />
               <div>Browse Image</div>
             </div>
           </div>

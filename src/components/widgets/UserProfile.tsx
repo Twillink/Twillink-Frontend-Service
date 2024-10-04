@@ -52,7 +52,7 @@ const UserProfile: React.FC = () => {
   return (
     <div
       ref={profileRef}
-      className={`w-full ${isSticky ? 'sticky top-0 left-0 right-0 p-4 shadow-md flex flex-row items-center gap-4 pt-9 bg-base-200' : 'relative flex flex-col items-center gap-4 -top-14'}`}>
+      className={`w-full ${isSticky ? 'sticky top-0 left-0 right-0 p-4 shadow-md flex flex-row items-center gap-4 pt-9 bg-base-200 z-10' : 'relative flex flex-col items-center gap-4 -top-14 -mb-8'}`}>
       <div>
         <ProfileImage
           onPhotoChange={file => console.log('Photo changed:', file)}

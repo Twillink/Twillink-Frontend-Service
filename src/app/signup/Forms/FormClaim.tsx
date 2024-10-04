@@ -7,17 +7,17 @@ import InputWithLabel from '@/components/InputWithLabel';
 import {useFormikContext} from 'formik';
 import React from 'react';
 
-interface FormClaimValues {
+interface IFormClaimValues {
   username: string;
 }
 
-interface FormClaimProps {
+interface IFormClaim {
   onNext: () => void;
 }
 
-const FormClaim: React.FC<FormClaimProps> = ({onNext}) => {
+const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
   const {values, errors, touched, handleChange, handleBlur, isValid, dirty} =
-    useFormikContext<FormClaimValues>();
+    useFormikContext<IFormClaimValues>();
 
   return (
     <div className="flex flex-col gap-6">

@@ -4,7 +4,7 @@ import React from 'react';
 import {usePathname, useRouter} from 'next/navigation';
 import SvgTwillinkLogo from '@/assets/svgComponents/SvgTwillinkLogo';
 import ComingSoon from './ComingSoon';
-export interface SidebarProps {
+export interface ISidebar {
   menus?: Menu[];
 }
 
@@ -22,7 +22,7 @@ export type MenuChild = {
   icon?: React.ReactNode;
 };
 
-const Sidebar: React.FC<SidebarProps> = ({menus = []}) => {
+const Sidebar: React.FC<ISidebar> = ({menus = []}) => {
   const pathname = usePathname();
   const router = useRouter();
 
