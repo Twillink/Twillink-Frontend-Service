@@ -177,9 +177,8 @@ const SignupPage: React.FC = () => {
                             {item.title}
                           </h3>
                           {index === 0 &&
-                            renderForm(
-                              item.step,
-                              () => handleNext(item.seq, validateForm), // Use a callback
+                            renderForm(item.step, () =>
+                              handleNext(item.seq, validateForm),
                             )}
                         </div>
                       </div>

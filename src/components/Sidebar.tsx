@@ -96,7 +96,7 @@ const Sidebar: React.FC<ISidebar> = ({menus = []}) => {
                 className="rounded-2xl h-full w-full object-cover"
                 src={twilmeetAds}
                 alt="twilmeet-ads"
-                layout="fill" // This makes the image fill the container while maintaining its aspect ratio
+                layout="fill"
               />
               <div className="absolute inset-0 z-10 flex flex-col justify-between items-center p-4 bg-gradient-to-t from-black via-transparent to-transparent rounded-2xl">
                 <div className="flex items-center justify-end w-full">
