@@ -157,6 +157,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
                   values={widget}
                   handleDrag={handleDrag}
                   handleDrop={handleDrop}
+                  setDataWidget={setDataWidget}
                 />
               ))}
             <AddWidget onClick={() => setPopupState('main')} />

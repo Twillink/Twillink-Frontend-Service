@@ -127,6 +127,7 @@ const config: Config = {
       {
         light: {
           ...daisyuiTheme.light,
+          primary: '#353845',
           'neutral-content': '#B2B6C7',
           'base-100': '#FFFFFF',
           'base-200': '#F6F7F9',

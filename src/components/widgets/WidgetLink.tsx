@@ -6,6 +6,7 @@ import Image from 'next/image';
 interface IWidgetLink extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   text: string;
   url: string;
+  width: string;
   image?: string | ArrayBuffer | null;
 }
 
@@ -13,6 +14,7 @@ const WidgetLink: React.FC<IWidgetLink> = ({
   text,
   url,
   image,
+  width,
   ...restProps
 }) => {
   return (
@@ -24,9 +26,8 @@ const WidgetLink: React.FC<IWidgetLink> = ({
         <p
           className={`text-center text-base text-ellipsis line-clamp-2 overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'}`}>
           {text}
-          {url}
         </p>
-        {image && (
+        {image && width === '100%' && (
           <Image
             src={typeof image === 'string' ? image : ''}
             alt={text}
