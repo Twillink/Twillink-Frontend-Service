@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    domains: ['localhost', 'api.twillink.com'],
+  },
+  output: 'standalone',
+};
 
 export default nextConfig;
