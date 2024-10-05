@@ -7,6 +7,7 @@ import ComingSoon from './ComingSoon';
 import Image from 'next/image';
 import twilmeetAds from '@/assets/gifs/twilmeet-ads.gif';
 import SvgTwilmeetIcon from '@/assets/svgComponents/SvgTwilmeetIcon';
+import Link from 'next/link';
 export interface ISidebar {
   menus?: Menu[];
 }
@@ -72,13 +73,12 @@ const Sidebar: React.FC<ISidebar> = ({menus = []}) => {
                             const childClasses = `rounded-lg ${pathname === child.path ? 'bg-base-200' : ''}`;
                             return (
                               <li key={`child-${idx}`} className={childClasses}>
-                                <button
-                                  type="button"
-                                  onClick={handleClick(child.path)}
-                                  className="group pl-8 gap-4">
-                                  {child.icon && child.icon}
-                                  {child.title}
-                                </button>
+                                <Link href={child.path}>
+                                  <div className="group pl-8 gap-4">
+                                    {child.icon && child.icon}
+                                    {child.title}
+                                  </div>
+                                </Link>
                               </li>
                             );
                           })}
@@ -96,7 +96,7 @@ const Sidebar: React.FC<ISidebar> = ({menus = []}) => {
                 className="rounded-2xl h-full w-full object-cover"
                 src={twilmeetAds}
                 alt="twilmeet-ads"
-                layout="fill"
+                priority={false}
               />
               <div className="absolute inset-0 z-10 flex flex-col justify-between items-center p-4 bg-gradient-to-t from-black via-transparent to-transparent rounded-2xl">
                 <div className="flex items-center justify-end w-full">
