@@ -1,9 +1,12 @@
 import React, {ChangeEvent, FocusEvent, InputHTMLAttributes} from 'react';
 
 interface IInput extends InputHTMLAttributes<HTMLInputElement> {
-  value: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (event: FocusEvent<HTMLInputElement>) => void;
+  value?: string;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  autoComplete?: string;
+  className?: string;
 }
 
 const Input: React.FC<IInput> = ({

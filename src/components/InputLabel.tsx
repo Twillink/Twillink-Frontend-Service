@@ -22,7 +22,7 @@ const InputLabel: React.FC<IInputLabel> = ({
     <label className="mb-1 text-general-med text-sm">{label}</label>
     <input
       type={type}
-      className={`input input-bordered rounded-lg p-3 w-full text-primary font-normal text-base bg-contras-high ${className}`}
+      className={`input input-bordered h-10 rounded-lg p-3 w-full text-primary font-normal text-base bg-contras-high ${className}`}
       placeholder={placeholder}
       value={value}
       onChange={onChange}

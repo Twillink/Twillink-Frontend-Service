@@ -54,8 +54,10 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
     <div className="drawer lg:drawer-open">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
-        <NavBar title={title} />
-        <main className="min-h-screen p-3">{children}</main>
+        <div className="min-h-dvh flex flex-col">
+          <NavBar title={title} />
+          <main className="flex flex-grow px-3 pt-3 pb-6">{children}</main>
+        </div>
       </div>
       <Sidebar menus={sidebarMenu} />
     </div>
