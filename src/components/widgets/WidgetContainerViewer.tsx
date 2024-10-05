@@ -25,6 +25,7 @@ const WidgetContainerViewer: React.FC<IWidgetContainerViewer> = ({
             url={values.url || '#'}
             text={values.text}
             image={values.image}
+            width={''}
           />
         );
       case WidgetTypeEnum.Text:

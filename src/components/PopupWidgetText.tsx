@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import InputLabel from './InputLabel';
 import Button from './Button';
 import PopupContainer from './PopupContainer';
 import TextAreaLabel from './TextAreaLabel';
