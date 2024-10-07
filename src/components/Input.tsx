@@ -21,7 +21,7 @@ const Input: React.FC<IInput> = ({
 }) => (
   <input
     type={type}
-    className={`input input-bordered rounded-lg p-3 w-full text-primary bg-contras-high ${className}`}
+    className={`input input-bordered rounded-lg p-3 w-full text-primary text-base font-normal bg-contras-high ${className}`}
     placeholder={placeholder}
     value={value}
     onChange={onChange}

@@ -1,7 +1,7 @@
 import React from 'react';
 const SvgArrowLeft: React.FunctionComponent<React.SVGProps<SVGSVGElement>> = ({
   height = 32,
-  width = 33,
+  width = 32,
   className,
 }) => (
   <svg
@@ -9,6 +9,7 @@ const SvgArrowLeft: React.FunctionComponent<React.SVGProps<SVGSVGElement>> = ({
     width={width}
     className={className}
     fill="none"
+    viewBox="0 0 32 32"
     xmlns="http://www.w3.org/2000/svg">
     <path
       strokeLinecap="round"

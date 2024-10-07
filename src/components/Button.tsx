@@ -20,10 +20,10 @@ const colorVariants: Record<ColorVariant, string> = {
 };
 
 const sizeVariants: Record<SizeVariant, string> = {
-  lg: 'btn-lg text-xl h-13 p-4 rounded-large',
-  md: 'btn-md text-base h-10 p-medium rounded-medium',
-  sm: 'btn-sm text-base h-8 p-small rounded-lg',
-  xs: 'btn-xs text-xs h-6 px-2 px-1 rounded-lg',
+  lg: 'btn-lg text-xl h-13 min-h-13 p-4 rounded-large',
+  md: 'btn-md text-base h-10 min-h-10 p-medium rounded-medium',
+  sm: 'btn-sm text-base h-8 min-h-8 p-small rounded-lg',
+  xs: 'btn-xs text-xs h-6 min-h-6 px-2 px-1 rounded-lg',
 };
 
 const Button: React.FC<IButton> = ({
