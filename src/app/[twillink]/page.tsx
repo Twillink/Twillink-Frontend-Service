@@ -1,5 +1,3 @@
-'use client';
-
 import {notFound} from 'next/navigation';
 import {FC} from 'react';
 import {dummyWidget} from '@/mock/data';
