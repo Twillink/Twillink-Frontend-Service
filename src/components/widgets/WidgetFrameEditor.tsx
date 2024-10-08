@@ -44,28 +44,28 @@ const WidgetFrameEditor: React.FC<IWidgetFrameEditor> = ({
           {isMenuVisible ? (
             <div className="flex items-center justify-center gap-[10px]">
               <div onClick={handleDelete} className="cursor-pointer">
-                <SvgWidgetDelete className="stroke-contras-high" height={16} />
+                <SvgWidgetDelete className="stroke-base-100" height={16} />
               </div>
               <div onClick={handleMoveUp} className="cursor-pointer">
-                <SvgOrderUp className="stroke-contras-high" height={16} />
+                <SvgOrderUp className="stroke-base-100" height={16} />
               </div>
               <div onClick={handleMoveDown} className="cursor-pointer">
-                <SvgOrderDown className="stroke-contras-high" height={16} />
+                <SvgOrderDown className="stroke-base-100" height={16} />
               </div>
               <div onClick={handleResize} className="cursor-pointer">
                 {values.width === '50%' ? (
-                  <SvgWidgetFull className="stroke-contras-high" height={16} />
+                  <SvgWidgetFull className="stroke-base-100" height={16} />
                 ) : (
-                  <SvgWidgetHalf className="stroke-contras-high" height={16} />
+                  <SvgWidgetHalf className="stroke-base-100" height={16} />
                 )}
               </div>
               <div onClick={handleClose} className="cursor-pointer">
-                <SvgWidgetClose className="stroke-contras-high" height={16} />
+                <SvgWidgetClose className="stroke-base-100" height={16} />
               </div>
             </div>
           ) : (
             <div onClick={handleEdit} className="cursor-pointer">
-              <SvgWidgetEdit className="stroke-contras-high" height={16} />
+              <SvgWidgetEdit className="stroke-base-100" height={16} />
             </div>
           )}
         </div>

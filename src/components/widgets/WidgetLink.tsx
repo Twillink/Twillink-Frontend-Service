@@ -19,7 +19,7 @@ const WidgetLink: React.FC<IWidgetLink> = ({
   return (
     <a
       href={url}
-      className="border-contras-low border-2 rounded-2xl h-full w-full p-2 flex items-center"
+      className="border-base-300 border-2 rounded-2xl h-full w-full p-2 flex items-center"
       {...restProps}>
       <div className="flex justify-between items-center w-full gap-2">
         <p
