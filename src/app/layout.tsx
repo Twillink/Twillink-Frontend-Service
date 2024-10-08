@@ -1,8 +1,10 @@
 import type {Metadata, Viewport} from 'next';
 import {Plus_Jakarta_Sans} from 'next/font/google';
 import './globals.css';
-import {SkinProvider} from '@/providers/SkinContext';
-import ClientThemeWrapper from '@/providers/ClientSkinWrapper';
+import {SkinProvider} from '@/libs/providers/SkinContext';
+import ReduxStoreProvider from '@/libs/providers/ReduxStoreProvider';
+import ClientAuthLayoutWrapper from '@/libs/providers/ClientAuthLayoutWrapper';
+import ClientThemeWrapper from '@/libs/providers/ClientSkinWrapper';
 
 const plusJakarta = Plus_Jakarta_Sans({subsets: ['latin']});
 
@@ -24,9 +26,13 @@ export default function RootLayout({children}: IRootLayoutProps) {
   return (
     <html lang="en">
       <body className={plusJakarta.className}>
-        <SkinProvider>
-          <ClientThemeWrapper>{children}</ClientThemeWrapper>
-        </SkinProvider>
+        <ReduxStoreProvider>
+          <ClientAuthLayoutWrapper>
+            <SkinProvider>
+              <ClientThemeWrapper>{children}</ClientThemeWrapper>
+            </SkinProvider>
+          </ClientAuthLayoutWrapper>
+        </ReduxStoreProvider>
       </body>
     </html>
   );

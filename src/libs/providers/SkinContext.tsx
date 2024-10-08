@@ -1,6 +1,6 @@
 'use client';
 
-import {SkinTypeEnum} from '@/libs/SkinTypeEnum';
+import {SkinTypeEnum} from '@/libs/types/SkinTypeEnum';
 import React, {createContext, useEffect, useState, ReactNode} from 'react';
 
 interface ISkinContext {

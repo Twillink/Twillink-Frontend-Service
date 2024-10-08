@@ -10,6 +10,10 @@ import ErrorMessageField from '@/components/ErrorMessageField';
 import Input from '@/components/Input';
 import Image from 'next/image';
 import GoogleIcon from '@/assets/svgs/google-icon.svg';
+import {authLogin} from '@/libs/store/features/authSlice';
+import {useRouter} from 'next/navigation';
+import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import {apiAuthLogin} from '@/libs/api';
 
 type InitialData = {
   email: string;
@@ -22,6 +26,8 @@ const initialValue: InitialData = {
 };
 
 const LoginPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const schema = Yup.object({
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string()
@@ -35,9 +41,19 @@ const LoginPage: React.FC = () => {
       '_blank',
     );
   };
+  const handleSubmit = async (values: InitialData) => {
+    try {
+      const response = await apiAuthLogin(values.email, values.password);
 
-  const handleSubmit = (values: InitialData) => {
-    console.log('Form submitted:', values);
+      if (response.status === 200 || response.status === 201) {
+        dispatch(authLogin(response.data));
+        localStorage.setItem('authToken', response.data.accessToken);
+        localStorage.setItem('user', JSON.stringify(response.data));
+        router.push('/admin');
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   return (

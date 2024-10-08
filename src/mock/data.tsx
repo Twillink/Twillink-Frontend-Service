@@ -1,4 +1,4 @@
-import {WidgetTypeEnum} from '@/libs/WidgetTypeEnum';
+import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 
 export const dummyWidget = [
   {

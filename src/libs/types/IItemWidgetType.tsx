@@ -1,7 +1,7 @@
 import {WidgetTypeEnum} from './WidgetTypeEnum';
 
 export interface IItemWidgetType {
-  id: string;
+  id: number;
   order: number;
   width: string;
   type: WidgetTypeEnum;

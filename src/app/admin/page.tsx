@@ -1,7 +1,7 @@
 'use client';
 
 import WidgetEditor from '@/components/WidgetEditor';
-import {IItemWidgetType} from '@/libs/IItemWidgetType';
+import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {useState} from 'react';
 
 export default function Page() {

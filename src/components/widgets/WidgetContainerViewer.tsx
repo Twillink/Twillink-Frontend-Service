@@ -3,8 +3,8 @@
 import React from 'react';
 import WidgetLink from '@/components/widgets/WidgetLink';
 import WidgetText from '@/components/widgets/WidgetText';
-import {IItemWidgetType} from '@/libs/IItemWidgetType';
-import {WidgetTypeEnum} from '@/libs/WidgetTypeEnum';
+import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
+import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 
 interface IWidgetContainerViewer {
   handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;

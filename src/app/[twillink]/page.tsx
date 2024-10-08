@@ -2,7 +2,7 @@ import {notFound} from 'next/navigation';
 import {FC} from 'react';
 import {dummyWidget} from '@/mock/data';
 import WidgetViewer from '@/components/WidgetViewer';
-import {IItemWidgetType} from '@/libs/IItemWidgetType';
+import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 
 interface IUser {
   name: string;

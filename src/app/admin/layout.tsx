@@ -2,12 +2,14 @@
 
 import NavBar from '@/components/NavBar';
 import Sidebar, {Menu} from '@/components/Sidebar';
-import {usePathname} from 'next/navigation';
+import {usePathname, useRouter} from 'next/navigation';
 import {useEffect, useState} from 'react';
 import SvgChartSquare from '@/assets/svgComponents/SvgChartSquare';
 import SvgLink from '@/assets/svgComponents/SvgLink';
 import SvgTwilmeetIcon from '@/assets/svgComponents/SvgTwilmeetIcon';
 import SvgUser from '@/assets/svgComponents/SvgUser';
+import {useSelector} from 'react-redux';
+import {RootState} from '@/libs/store/store';
 
 const sidebarMenu: Menu[] = [
   {
@@ -39,6 +41,12 @@ const sidebarMenu: Menu[] = [
 ];
 
 export default function AdminLayout({children}: {children: React.ReactNode}) {
+  const [initialized, setInitialized] = useState<boolean>(false);
+
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  console.log('User logged in:', isLoggedIn);
+
+  const router = useRouter();
   const pathname = usePathname();
   const [title, setTitle] = useState<string>('My Twillink');
 
@@ -49,6 +57,19 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
       setTitle(foundMenu.title);
     }
   }, [pathname]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('authToken');
+    if (!isLoggedIn && !token) {
+      router.push('/');
+    } else {
+      setInitialized(true);
+    }
+  }, [isLoggedIn, router]);
+
+  if (!initialized) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="drawer lg:drawer-open">
