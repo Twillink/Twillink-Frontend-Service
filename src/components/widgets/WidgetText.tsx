@@ -8,7 +8,7 @@ interface IWidgetText extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 
 const WidgetText: React.FC<IWidgetText> = ({text}) => {
   return (
-    <div className="border-contras-low border-2 rounded-2xl h-full w-full p-2 flex items-center">
+    <div className="border-base-300 border-2 rounded-2xl h-full w-full p-2 flex items-center">
       <p
         className={`text-center text-[14px] text-ellipsis line-clamp-2 overflow-hidden font-semibold w-full`}>
         {text}
