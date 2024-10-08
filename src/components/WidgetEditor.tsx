@@ -138,6 +138,65 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     handleClosePopup();
   };
 
+  const handleMoveUp = (id: string) => {
+    if (!setDataWidget) return;
+
+    setDataWidget(prevWidgets => {
+      const index = prevWidgets.findIndex(widget => widget.id === id);
+      if (index > 0) {
+        const newWidgets = [...prevWidgets];
+
+        const temp = newWidgets[index - 1];
+        newWidgets[index - 1] = newWidgets[index];
+        newWidgets[index] = temp;
+
+        newWidgets[index - 1].order = index;
+        newWidgets[index].order = index + 1;
+        return newWidgets;
+      }
+      return prevWidgets;
+    });
+  };
+
+  const handleMoveDown = (id: string) => {
+    if (!setDataWidget) return;
+
+    setDataWidget(prevWidgets => {
+      const index = prevWidgets.findIndex(widget => widget.id === id);
+      if (index < prevWidgets.length - 1) {
+        const newWidgets = [...prevWidgets];
+
+        const temp = newWidgets[index + 1];
+        newWidgets[index + 1] = newWidgets[index];
+        newWidgets[index] = temp;
+
+        newWidgets[index + 1].order = index + 2;
+        newWidgets[index].order = index + 1;
+        return newWidgets;
+      }
+      return prevWidgets;
+    });
+  };
+
+  const handleDelete = (id: string) => {
+    if (setDataWidget) {
+      setDataWidget(prevWidgets =>
+        prevWidgets.filter(widget => widget.id !== id),
+      );
+    }
+  };
+
+  const handleResize = (id: string, width: string) => {
+    const newWidth = width === '50%' ? '100%' : '50%';
+    if (setDataWidget) {
+      setDataWidget(prevWidgets =>
+        prevWidgets.map(widget =>
+          widget.id === id ? {...widget, width: newWidth} : widget,
+        ),
+      );
+    }
+  };
+
   return (
     <>
       <div data-theme="light" className="h-full max-w-[428px]">
@@ -157,7 +216,10 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
                   values={widget}
                   handleDrag={handleDrag}
                   handleDrop={handleDrop}
-                  setDataWidget={setDataWidget}
+                  handleMoveUp={() => handleMoveUp(widget.id)}
+                  handleMoveDown={() => handleMoveDown(widget.id)}
+                  handleDelete={() => handleDelete(widget.id)}
+                  handleResize={() => handleResize(widget.id, widget.width)}
                 />
               ))}
             <AddWidget onClick={() => setPopupState('main')} />

@@ -36,6 +36,7 @@ const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
       </div>
       <div className="flex justify-end">
         <Button
+          size="lg"
           onClick={onNext}
           title="Grab My Link"
           disabled={!isValid || !dirty}

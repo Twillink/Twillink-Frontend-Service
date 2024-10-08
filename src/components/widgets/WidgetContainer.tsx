@@ -11,14 +11,20 @@ interface IWidgetContainer {
   handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;
   handleDrop?: (ev: React.DragEvent<HTMLDivElement>) => void;
   values: IItemWidgetType;
-  setDataWidget?: React.Dispatch<React.SetStateAction<IItemWidgetType[]>>;
+  handleMoveUp: () => void;
+  handleMoveDown: () => void;
+  handleDelete: () => void;
+  handleResize: () => void;
 }
 
 const WidgetContainer: React.FC<IWidgetContainer> = ({
   handleDrag,
   handleDrop,
   values,
-  setDataWidget,
+  handleMoveUp,
+  handleMoveDown,
+  handleDelete,
+  handleResize,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
@@ -55,25 +61,6 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
     setIsMenuVisible(!isMenuVisible);
   };
 
-  const handleDelete = () => {
-    if (setDataWidget) {
-      setDataWidget(prevWidgets =>
-        prevWidgets.filter(widget => widget.id !== values.id),
-      );
-    }
-  };
-
-  const handleResize = () => {
-    const newWidth = values.width === '50%' ? '100%' : '50%';
-    if (setDataWidget) {
-      setDataWidget(prevWidgets =>
-        prevWidgets.map(widget =>
-          widget.id === values.id ? {...widget, width: newWidth} : widget,
-        ),
-      );
-    }
-  };
-
   const handleClose = () => {
     setIsMenuVisible(false);
   };
@@ -93,6 +80,8 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
         isHovered={isHovered}
         isMenuVisible={isMenuVisible}
         handleEdit={handleEdit}
+        handleMoveUp={handleMoveUp}
+        handleMoveDown={handleMoveDown}
         handleResize={handleResize}
         handleDelete={handleDelete}
         handleClose={handleClose}

@@ -67,6 +67,7 @@ const FormEmail: React.FC<IFormEmail> = ({onNext}) => {
 
       <div className="flex justify-end">
         <Button
+          size="lg"
           onClick={onNext}
           title="Send"
           disabled={!isValid || !dirty}

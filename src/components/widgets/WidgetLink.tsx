@@ -24,10 +24,10 @@ const WidgetLink: React.FC<IWidgetLink> = ({
       {...restProps}>
       <div className="flex justify-between items-center w-full gap-2">
         <p
-          className={`text-center text-base text-ellipsis line-clamp-2 overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'}`}>
+          className={`text-center text-base text-ellipsis line-clamp-3 overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'}`}>
           {text}
         </p>
-        {image && width === '100%' && (
+        {image && (
           <Image
             src={typeof image === 'string' ? image : ''}
             alt={text}
