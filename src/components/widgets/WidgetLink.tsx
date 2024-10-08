@@ -14,7 +14,6 @@ const WidgetLink: React.FC<IWidgetLink> = ({
   text,
   url,
   image,
-  width = '100%',
   ...restProps
 }) => {
   return (
