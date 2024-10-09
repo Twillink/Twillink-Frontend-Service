@@ -67,7 +67,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
 
   return (
     <div
-      id={values.id}
+      id={values.idEditor}
       draggable
       onDragStart={handleDrag}
       onDrop={handleDrop}

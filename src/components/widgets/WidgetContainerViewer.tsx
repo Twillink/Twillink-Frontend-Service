@@ -7,16 +7,10 @@ import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 
 interface IWidgetContainerViewer {
-  handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;
-  handleDrop?: (ev: React.DragEvent<HTMLDivElement>) => void;
   values: IItemWidgetType;
 }
 
-const WidgetContainerViewer: React.FC<IWidgetContainerViewer> = ({
-  handleDrag,
-  handleDrop,
-  values,
-}) => {
+const WidgetContainerViewer: React.FC<IWidgetContainerViewer> = ({values}) => {
   const renderWidget = () => {
     switch (values.type) {
       case WidgetTypeEnum.Link:
@@ -37,11 +31,6 @@ const WidgetContainerViewer: React.FC<IWidgetContainerViewer> = ({
 
   return (
     <div
-      id={values.id}
-      draggable
-      onDragStart={handleDrag}
-      onDrop={handleDrop}
-      onDragOver={ev => ev.preventDefault()}
       className="flex align-middle items-center justify-center p-[6px] h-[120px]"
       style={{
         width: values.width,
