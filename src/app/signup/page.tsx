@@ -11,7 +11,7 @@ import FormVerify from './Forms/FormVerify';
 import {useRouter} from 'next/navigation';
 import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
 import ButtonIcon from '@/components/ButtonIcon';
-import {StepsEnum} from '@/libs/StepsEnum';
+import {StepsEnum} from '@/libs/types/StepsEnum';
 
 interface IItem {
   title: string;

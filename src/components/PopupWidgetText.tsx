@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Button from './Button';
 import PopupContainer from './PopupContainer';
 import TextAreaLabel from './TextAreaLabel';
-import {WidgetTypeEnum} from '@/libs/WidgetTypeEnum';
+import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 
 interface IPopupWidgetText {
   isOpen: boolean;

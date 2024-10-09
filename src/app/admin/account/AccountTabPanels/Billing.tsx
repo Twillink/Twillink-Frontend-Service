@@ -1,6 +1,6 @@
 import React from 'react';
 import {mockBilling} from '@/mock/mockBilling';
-import {capitalizeFirstLetter} from '@/helper/formater';
+import {capitalizeFirstLetter} from '@/utils/formater';
 
 interface PlanContainerProps {
   title: string;

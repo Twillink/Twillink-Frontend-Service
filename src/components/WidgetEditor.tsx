@@ -9,8 +9,8 @@ import AddWidget from '@/components/widgets/AddWidget';
 import PopupWidget from '@/components/PopupWidget';
 import PopupWidgetLink from '@/components/PopupWidgetLink';
 import PopupWidgetText from '@/components/PopupWidgetText';
-import {WidgetTypeEnum} from '@/libs/WidgetTypeEnum';
-import {IItemWidgetType} from '@/libs/IItemWidgetType';
+import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
+import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 
 interface IWidgetEditor {
   dataWidget: IItemWidgetType[];

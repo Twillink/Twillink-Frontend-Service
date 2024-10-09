@@ -3,7 +3,7 @@ import InputLabel from './InputLabel';
 import ImageSelector from './ImageSelector';
 import Button from './Button';
 import PopupContainer from './PopupContainer';
-import {WidgetTypeEnum} from '@/libs/WidgetTypeEnum';
+import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 
 interface IPopupWidgetLink {
   isOpen: boolean;

@@ -1,10 +1,10 @@
 'use client';
 
 import React, {useContext} from 'react';
-import {SkinContext} from '@/providers/SkinContext';
+import {SkinContext} from '@/libs/providers/SkinContext';
 import SvgSun from '@/assets/svgComponents/SvgSun';
 import SvgMoon from '@/assets/svgComponents/SvgMoon';
-import {SkinTypeEnum} from '@/libs/SkinTypeEnum';
+import {SkinTypeEnum} from '@/libs/types/SkinTypeEnum';
 
 const SkinController: React.FC = () => {
   const {skin, changeSkin} = useContext(SkinContext);

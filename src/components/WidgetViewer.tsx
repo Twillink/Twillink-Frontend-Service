@@ -5,7 +5,7 @@ import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
 import UserProfile from '@/components/widgets/UserProfile';
 import SocialContainer from '@/components/widgets/SocialContainer';
 import WidgetContainerViewer from './widgets/WidgetContainerViewer';
-import {IItemWidgetType} from '@/libs/IItemWidgetType';
+import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 
 interface IWidgetViewer {
   dataWidget: IItemWidgetType[];

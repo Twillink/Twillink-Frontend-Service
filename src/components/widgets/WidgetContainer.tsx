@@ -3,8 +3,8 @@
 import React, {useState} from 'react';
 import WidgetLink from '@/components/widgets/WidgetLink';
 import WidgetText from '@/components/widgets/WidgetText';
-import {WidgetTypeEnum} from '@/libs/WidgetTypeEnum';
-import {IItemWidgetType} from '@/libs/IItemWidgetType';
+import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
+import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import WidgetFrameEditor from './WidgetFrameEditor';
 
 interface IWidgetContainer {

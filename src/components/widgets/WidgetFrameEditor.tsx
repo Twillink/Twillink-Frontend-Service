@@ -4,7 +4,7 @@ import SvgWidgetDelete from '@/assets/svgComponents/SvgWidgetDelete';
 import SvgWidgetEdit from '@/assets/svgComponents/SvgWidgetEdit';
 import SvgWidgetFull from '@/assets/svgComponents/SvgWidgetFull';
 import SvgWidgetHalf from '@/assets/svgComponents/SvgWidgetHalf';
-import {IItemWidgetType} from '@/libs/IItemWidgetType';
+import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import SvgOrderDown from '@/assets/svgComponents/SvgOrderDown';
 import SvgOrderUp from '@/assets/svgComponents/SvgOrderUp';
 
