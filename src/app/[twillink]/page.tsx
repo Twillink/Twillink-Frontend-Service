@@ -3,6 +3,7 @@ import {FC} from 'react';
 import {dummyWidget} from '@/mock/data';
 import WidgetViewer from '@/components/WidgetViewer';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
+import {generateUniqueString} from '@/utils/generateUniqueString';
 
 interface IUser {
   name: string;
@@ -15,11 +16,16 @@ interface IMockUsers {
 }
 
 const fetchUserByUsername = async (username: string): Promise<IUser | null> => {
+  const dataWidget = dummyWidget.map(widget => ({
+    ...widget,
+    idEditor: generateUniqueString('widget'),
+  }));
+
   const mockUsers: IMockUsers = {
     johndoe: {
       name: 'John Doe',
       bio: 'Software Developer',
-      dataWidget: dummyWidget,
+      dataWidget,
     },
     janedoe: {
       name: 'Jane Doe',

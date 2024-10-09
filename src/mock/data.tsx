@@ -15,7 +15,7 @@ export const dummyWidget = [
     width: '50%',
     type: WidgetTypeEnum.Link,
     url: 'https://www.google.com',
-    text: 'Max lenght 70 chars',
+    text: 'Max length 70 chars',
   },
   {
     id: 3,

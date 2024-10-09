@@ -11,6 +11,7 @@ import PopupWidgetLink from '@/components/PopupWidgetLink';
 import PopupWidgetText from '@/components/PopupWidgetText';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
+import {generateUniqueString} from '@/utils/generateUniqueString';
 
 interface IWidgetEditor {
   dataWidget: IItemWidgetType[];
@@ -38,17 +39,17 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     ev.preventDefault();
     if (!dragId || isEditingDisabled) return;
 
-    const dragWidget = dataWidget.find(widget => widget.id === dragId);
+    const dragWidget = dataWidget.find(widget => widget.idEditor === dragId);
     const dropWidget = dataWidget.find(
-      widget => widget.id === ev.currentTarget.id,
+      widget => widget.idEditor === ev.currentTarget.id,
     );
 
     if (dragWidget && dropWidget) {
       const newWidgetState = dataWidget.map(widget => {
-        if (widget.id === dragId) {
+        if (widget.idEditor === dragId) {
           return {...widget, order: dropWidget.order};
         }
-        if (widget.id === ev.currentTarget.id) {
+        if (widget.idEditor === ev.currentTarget.id) {
           return {...widget, order: dragWidget.order};
         }
         return widget;
@@ -124,7 +125,8 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
   ) => {
     if (setDataWidget) {
       const newWidget: IItemWidgetType = {
-        id: `widget-${Date.now()}`,
+        id: Math.random(),
+        idEditor: generateUniqueString(),
         order: dataWidget.length + 1,
         width: '100%',
         type,
@@ -142,7 +144,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     if (!setDataWidget) return;
 
     setDataWidget(prevWidgets => {
-      const index = prevWidgets.findIndex(widget => widget.id === id);
+      const index = prevWidgets.findIndex(widget => widget.idEditor === id);
       if (index > 0) {
         const newWidgets = [...prevWidgets];
 
@@ -162,7 +164,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     if (!setDataWidget) return;
 
     setDataWidget(prevWidgets => {
-      const index = prevWidgets.findIndex(widget => widget.id === id);
+      const index = prevWidgets.findIndex(widget => widget.idEditor === id);
       if (index < prevWidgets.length - 1) {
         const newWidgets = [...prevWidgets];
 
@@ -181,7 +183,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
   const handleDelete = (id: string) => {
     if (setDataWidget) {
       setDataWidget(prevWidgets =>
-        prevWidgets.filter(widget => widget.id !== id),
+        prevWidgets.filter(widget => widget.idEditor !== id),
       );
     }
   };
@@ -191,7 +193,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     if (setDataWidget) {
       setDataWidget(prevWidgets =>
         prevWidgets.map(widget =>
-          widget.id === id ? {...widget, width: newWidth} : widget,
+          widget.idEditor === id ? {...widget, width: newWidth} : widget,
         ),
       );
     }
@@ -210,16 +212,18 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
             <SocialContainer />
             {dataWidget
               .sort((a, b) => a.order - b.order)
-              .map((widget, index) => (
+              .map(widget => (
                 <WidgetContainer
-                  key={`widget-${index}`}
+                  key={widget.idEditor}
                   values={widget}
                   handleDrag={handleDrag}
                   handleDrop={handleDrop}
-                  handleMoveUp={() => handleMoveUp(widget.id)}
-                  handleMoveDown={() => handleMoveDown(widget.id)}
-                  handleDelete={() => handleDelete(widget.id)}
-                  handleResize={() => handleResize(widget.id, widget.width)}
+                  handleMoveUp={() => handleMoveUp(widget.idEditor)}
+                  handleMoveDown={() => handleMoveDown(widget.idEditor)}
+                  handleDelete={() => handleDelete(widget.idEditor)}
+                  handleResize={() =>
+                    handleResize(widget.idEditor, widget.width)
+                  }
                 />
               ))}
             <AddWidget onClick={() => setPopupState('main')} />
