@@ -8,10 +8,15 @@ import * as Yup from 'yup';
 import FormClaim from './Forms/FormClaim';
 import FormEmail from './Forms/FormEmail';
 import FormVerify from './Forms/FormVerify';
-import {useRouter} from 'next/navigation';
 import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
 import ButtonIcon from '@/components/ButtonIcon';
 import {StepsEnum} from '@/libs/types/StepsEnum';
+import {apiAuthRegister, apiOtpSend} from '@/libs/api';
+import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
+import {AuthInitialData, AuthSubmitState} from '@/libs/types/AuthType';
+import {TypeOtpEnum} from '@/libs/types/TypeOtpEnum';
+import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import {authLogin} from '@/libs/store/features/authSlice';
 
 interface IItem {
   title: string;
@@ -41,72 +46,85 @@ const dataSteps: IItem[] = [
   },
 ];
 
-type InitialData = {
-  username: string;
-  email: string;
-  password: string;
-  otp: string;
-};
-
-const initialValue: InitialData = {
+const initialValue: AuthInitialData = {
   username: '',
   email: '',
   password: '',
   otp: '',
 };
 
+const submitStateDefault: AuthSubmitState = {
+  isLoading: false,
+  isSuccess: false,
+  message: '',
+};
+
 const CARD_OFFSET = -20;
 const SCALE_FACTOR = 0.06;
 
 const SignupPage: React.FC = () => {
-  const router = useRouter();
+  const dispatch = useAppDispatch();
   const [cards, setCards] = useState<IItem[]>(dataSteps);
   const [currentSeqActive, setCurrentSeqActive] = useState<number>(1);
 
+  const [submitState, setSubmitState] =
+    useState<AuthSubmitState>(submitStateDefault);
+
   const stepSchemas = [
     Yup.object({
-      username: Yup.string().required('Username is required'),
+      username: Yup.string()
+        .required('Username is required')
+        .min(3, 'Username must be at least 3 characters long')
+        .max(30, 'Username cannot exceed 30 characters')
+        .matches(
+          /^[a-zA-Z0-9._-]+$/,
+          'Username can only contain letters, numbers, dots, underscores, and hyphens',
+        ),
     }),
     Yup.object({
       email: Yup.string().email('Invalid email').required('Email is required'),
       password: Yup.string()
         .required('Password is required')
-        .min(8, 'Password must be at least 8 characters')
-        .max(20, 'Password cannot exceed 20 characters')
-        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-        .matches(/\d/, 'Password must contain at least one number'),
+        .min(6, 'Password must be at least 6 characters'),
     }),
     Yup.object({
       otp: Yup.string()
         .required('OTP is required')
-        .length(6, 'OTP must be exactly 6 characters'),
+        .length(4, 'OTP must be exactly 4 characters'),
     }),
   ];
 
   const handleNext = async (
     currentSeq: number,
-    validateForm: () => Promise<FormikErrors<InitialData>>,
+    validateForm: () => Promise<FormikErrors<AuthInitialData>>,
+    values: AuthInitialData,
   ) => {
     const errors = await validateForm();
 
     if (Object.keys(errors).length > 0) {
-      console.log('Validation Errors:', errors);
       return;
     }
 
-    if (currentSeq === dataSteps[dataSteps.length - 1].seq) {
-      handleSubmit(initialValue);
-      router.push('/admin');
-    } else {
-      setCards(cards.slice(1));
-      setCurrentSeqActive(
-        dataSteps.find(item => item.seq > currentSeq)?.seq || 1,
-      );
+    if (currentSeq === 2) {
+      const success = await handleSendOtp(values);
+
+      if (!success) {
+        return;
+      }
     }
+
+    setCards(cards.slice(1));
+    setCurrentSeqActive(
+      dataSteps.find(item => item.seq > currentSeq)?.seq || 1,
+    );
+    setSubmitState(submitStateDefault);
   };
 
-  const handleBack = (currentSeq: number) => {
+  const handleBack = (
+    currentSeq: number,
+    setFieldValue: (field: string, value: any) => void,
+  ) => {
+    setSubmitState(submitStateDefault);
     const targetSeq = currentSeq - 1;
     const previousCard = dataSteps.find(item => item.seq === targetSeq);
 
@@ -114,23 +132,96 @@ const SignupPage: React.FC = () => {
       setCards([previousCard, ...cards]);
       setCurrentSeqActive(targetSeq);
     }
+    if (currentSeq === 3) {
+      setFieldValue('otp', '');
+    }
   };
 
-  const renderForm = (step: StepsEnum, onNext: () => void) => {
+  const renderForm = (
+    step: StepsEnum,
+    onNext: () => void,
+    handleSubmit: () => void,
+    formValues: AuthInitialData,
+  ) => {
     switch (step) {
       case StepsEnum.CLAIM:
         return <FormClaim onNext={onNext} />;
       case StepsEnum.EMAIL:
-        return <FormEmail onNext={onNext} />;
+        return <FormEmail onNext={onNext} submitState={submitState} />;
       case StepsEnum.VERIFY:
-        return <FormVerify />;
+        return (
+          <FormVerify
+            handleSubmit={handleSubmit}
+            submitState={submitState}
+            formValues={formValues}
+          />
+        );
       default:
         return null;
     }
   };
 
-  const handleSubmit = (values: InitialData) => {
-    console.log('Form submitted:', values);
+  const handleSendOtp = async (values: AuthInitialData) => {
+    setSubmitState(prev => ({
+      ...prev,
+      isLoading: true,
+    }));
+    try {
+      const response = await apiOtpSend(values.email, TypeOtpEnum.signUp);
+      setSubmitState(prev => ({
+        ...prev,
+        isSuccess: response.status === 200,
+      }));
+      return true;
+    } catch (error: unknown) {
+      const apiError = error as ErrorApiResponseType;
+      setSubmitState(prev => ({
+        ...prev,
+        isSuccess: false,
+        message: apiError.data?.message,
+      }));
+      return false;
+    } finally {
+      setSubmitState(prev => ({
+        ...prev,
+        isLoading: false,
+      }));
+    }
+  };
+
+  const handleSubmit = async (values: any) => {
+    setSubmitState(prev => ({
+      ...prev,
+      isLoading: true,
+    }));
+    try {
+      const response = await apiAuthRegister(
+        values.username,
+        values.email,
+        values.password,
+      );
+      if (response.status === 200 || response.status === 201) {
+        dispatch(authLogin(response.data));
+        localStorage.setItem('authToken', response.data.accessToken);
+        localStorage.setItem('user', JSON.stringify(response.data));
+        setSubmitState(prev => ({
+          ...prev,
+          isSuccess: true,
+        }));
+      }
+    } catch (error: unknown) {
+      const apiError = error as ErrorApiResponseType;
+      setSubmitState(prev => ({
+        ...prev,
+        isSuccess: false,
+        message: apiError.data?.message,
+      }));
+    } finally {
+      setSubmitState(prev => ({
+        ...prev,
+        isLoading: false,
+      }));
+    }
   };
 
   return (
@@ -143,13 +234,13 @@ const SignupPage: React.FC = () => {
           validateOnBlur={true}
           onSubmit={handleSubmit}
           validationSchema={stepSchemas[currentSeqActive - 1]}>
-          {({validateForm}) => (
-            <Form>
-              <div className="stack">
+          {({validateForm, handleSubmit, setFieldValue, values}) => (
+            <Form className="w-full">
+              <div className="stack w-full">
                 <AnimatePresence>
                   {cards.map((item, index) => (
                     <motion.div
-                      className="card bg-contras-high text-primary-content shadow-sm"
+                      className="card w-full max-w-[528px] bg-contras-high text-primary-content shadow-sm"
                       key={`card_${item.seq}`}
                       initial={{y: 0}}
                       animate={{
@@ -161,14 +252,16 @@ const SignupPage: React.FC = () => {
                       }}
                       exit={{y: -700}}
                       transition={{duration: 0.3, ease: [0, 0.71, 0.2, 1.01]}}>
-                      <div className="card-body px-[99px] py-[90px]">
-                        <div className="flex flex-col gap-6 w-full sm:w-[376px]">
+                      <div className="card-body px-6 sm:px-[99px] py-14 sm:py-[90px]">
+                        <div className="flex flex-col gap-6 w-full">
                           {item.seq !== dataSteps[0].seq && (
                             <ButtonIcon
                               icon={
                                 <SvgArrowLeft className="stroke-primary hover:stroke-general-med" />
                               }
-                              onClick={() => handleBack(item.seq)}
+                              onClick={() =>
+                                handleBack(item.seq, setFieldValue)
+                              }
                               type="button"
                               className="flex justify-start w-max"
                             />
@@ -177,8 +270,11 @@ const SignupPage: React.FC = () => {
                             {item.title}
                           </h3>
                           {index === 0 &&
-                            renderForm(item.step, () =>
-                              handleNext(item.seq, validateForm),
+                            renderForm(
+                              item.step,
+                              () => handleNext(item.seq, validateForm, values),
+                              handleSubmit,
+                              values,
                             )}
                         </div>
                       </div>

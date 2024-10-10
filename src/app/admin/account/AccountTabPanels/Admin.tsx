@@ -52,7 +52,7 @@ const Admin = () => {
                   </div>
                 </td>
                 <td>
-                  <div className="w-max text-general-med bg-contras-med px-3 py-[6px] rounded-lg border border-general-med font-normal text-base">
+                  <div className="w-max text-general-med bg-contras-med px-3 py-[0.375rem] rounded-lg border border-general-med font-normal text-base">
                     {admin.role}
                   </div>
                 </td>

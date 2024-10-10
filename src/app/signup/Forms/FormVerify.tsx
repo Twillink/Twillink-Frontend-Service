@@ -4,32 +4,52 @@ import React, {useEffect, useState} from 'react';
 import {useFormikContext} from 'formik';
 import OtpInput from 'react-otp-input';
 import ErrorMessageField from '@/components/ErrorMessageField';
-import Button from '@/components/Button';
-import {useRouter} from 'next/navigation';
+import ButtonIcon from '@/components/ButtonIcon';
+import successIcon from '@/assets/gifs/register-succes.gif';
+import Image from 'next/image';
+import Link from 'next/link';
+import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
+import {AuthInitialData, AuthSubmitState} from '@/libs/types/AuthType';
+import {apiOtpValidate} from '@/libs/api';
 
 interface IFormVerifyValues {
   otp: string;
 }
 
+interface IFormVerify {
+  handleSubmit: () => void;
+  submitState: AuthSubmitState;
+  formValues: AuthInitialData;
+}
+
 const NUMINPUT: number = 4;
 
-export default function FormVerify() {
-  const router = useRouter();
+export default function FormVerify({
+  handleSubmit,
+  submitState,
+  formValues,
+}: IFormVerify) {
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [apiError, setApiError] = useState<string | null>('');
   const {values, errors, touched, setFieldValue, setFieldTouched} =
     useFormikContext<IFormVerifyValues>();
 
   const verifyOtp = async (otp: string) => {
+    setIsLoading(true);
+    setApiError(null);
     try {
-      console.log('OTP verification:', otp);
-      setIsLoading(true);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 3000);
-      setIsVerified(true);
-    } catch (error) {
-      console.error('OTP verification error:', error);
+      const response = await apiOtpValidate(otp, formValues.email);
+      if (response.status === 200 || response.status === 201) {
+        setIsVerified(true);
+        handleSubmit();
+      }
+    } catch (error: unknown) {
+      const apiError = error as ErrorApiResponseType;
+      setApiError(apiError?.data?.message);
+      setIsVerified(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,18 +69,23 @@ export default function FormVerify() {
 
   return (
     <div className="flex items-center w-full justify-center">
-      {isLoading ? (
-        <span className="loading loading-ring w-[60px] text-general-med"></span>
+      {isLoading || submitState.isLoading ? (
+        <span className="loading loading-ring w-20 text-general-med"></span>
       ) : (
         <>
-          {isVerified ? (
-            <>
-              <Button
-                title="Navigate to Admin"
-                onClick={() => router.push('/admin')}
-                type="button"
+          {isVerified && !apiError && submitState.isSuccess ? (
+            <Link href="/admin">
+              <ButtonIcon
+                icon={
+                  <Image
+                    className="h-20 w-20"
+                    src={successIcon}
+                    alt="valid"
+                    priority={false}
+                  />
+                }
               />
-            </>
+            </Link>
           ) : (
             <div className="flex-col w-full">
               <OtpInput
@@ -85,7 +110,10 @@ export default function FormVerify() {
                   />
                 )}
               />
-              <ErrorMessageField error={errors.otp} touched={touched.otp} />
+              <ErrorMessageField
+                error={errors.otp || apiError || submitState.message}
+                touched={touched.otp}
+              />
             </div>
           )}
         </>

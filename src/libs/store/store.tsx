@@ -1,10 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit';
 import authReducer from './features/authSlice';
+import generalSubmitReducer from './features/generalSubmit';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       auth: authReducer,
+      generalSubmit: generalSubmitReducer,
     },
   });
 };

@@ -17,7 +17,7 @@ const SkinController: React.FC = () => {
         <input
           type="checkbox"
           name="theme-dropdown"
-          className="toggle theme-controller bg-primary-content col-span-2 col-start-1 row-start-1 h-8 w-60px border-base-200 border-2 [--tglbg:theme(colors.base-200)] toggle-custom"
+          className="toggle theme-controller bg-primary-content col-span-2 col-start-1 row-start-1 h-8 w-[60px] border-base-200 border-2 [--tglbg:theme(colors.base-200)] toggle-custom"
           onChange={changeSkin}
           checked={!isLightMode}
         />

@@ -32,7 +32,7 @@ const LoginPage: React.FC = () => {
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string()
       .required('Password is required')
-      .min(8, 'Password must be at least 8 characters'),
+      .min(6, 'Password must be at least 6 characters'),
   });
 
   const handleGoogleSignIn = async () => {
@@ -76,13 +76,13 @@ const LoginPage: React.FC = () => {
             handleBlur,
             validateForm,
           }) => (
-            <Form>
-              <div className="stack">
+            <Form className="w-full">
+              <div className="stack w-full">
                 <div
-                  className="card bg-contras-high text-primary-content shadow-sm"
+                  className="card w-full max-w-[528px] bg-contras-high text-primary-content shadow-sm"
                   key="card_login">
-                  <div className="card-body px-[99px] py-[90px]">
-                    <div className="flex flex-col gap-6 w-full sm:w-[376px]">
+                  <div className="card-body w-full px-6 sm:px-[99px] py-10 sm:py-[90px]">
+                    <div className="flex flex-col gap-6 w-full">
                       <h3 className="card-title text-primary">Login</h3>
                       <div className="flex flex-col gap-6">
                         <div>

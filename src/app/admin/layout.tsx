@@ -8,8 +8,8 @@ import SvgChartSquare from '@/assets/svgComponents/SvgChartSquare';
 import SvgLink from '@/assets/svgComponents/SvgLink';
 import SvgTwilmeetIcon from '@/assets/svgComponents/SvgTwilmeetIcon';
 import SvgUser from '@/assets/svgComponents/SvgUser';
-import {useSelector} from 'react-redux';
 import {RootState} from '@/libs/store/store';
+import {useAppSelector} from '@/libs/hooks/useReduxHook';
 
 const sidebarMenu: Menu[] = [
   {
@@ -43,8 +43,9 @@ const sidebarMenu: Menu[] = [
 export default function AdminLayout({children}: {children: React.ReactNode}) {
   const [initialized, setInitialized] = useState<boolean>(false);
 
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
-  console.log('User logged in:', isLoggedIn);
+  const isLoggedIn = useAppSelector(
+    (state: RootState) => state.auth.isLoggedIn,
+  );
 
   const router = useRouter();
   const pathname = usePathname();
