@@ -12,6 +12,8 @@ import PopupWidgetText from '@/components/PopupWidgetText';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {generateUniqueString} from '@/utils/generateUniqueString';
+import PopupWidgetImage from '@/components/PopUpWidgetImage';
+import PopupWidgetVideo from '@/components/PopupWidgetVideo';
 
 interface IWidgetEditor {
   dataWidget: IItemWidgetType[];
@@ -99,6 +101,12 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         break;
       case WidgetTypeEnum.Text:
         setPopupState(WidgetTypeEnum.Text);
+        break;
+      case WidgetTypeEnum.Image:
+        setPopupState(WidgetTypeEnum.Image);
+        break;
+      case WidgetTypeEnum.Video:
+        setPopupState(WidgetTypeEnum.Video);
         break;
       case 'main':
         setPopupState('main');
@@ -244,6 +252,19 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       />
       <PopupWidgetText
         isOpen={popupState === 'text'}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+      />
+      <PopupWidgetImage
+        isOpen={popupState === 'image'}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+      />
+
+      <PopupWidgetVideo
+        isOpen={popupState === 'video'}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
