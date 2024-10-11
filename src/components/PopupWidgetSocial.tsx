@@ -76,21 +76,25 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
   return (
     <PopupContainer title="Add Image" onClose={onClose} isOpen={isOpen}>
       <form method="dialog" className="modal-backdrop flex flex-col gap-5">
-        <p className="mb-1 text-general-med text-sm">Select social account</p>
+        <p className="text-general-med text-sm">Select social account</p>
         <div className="flex gap-4 justify-between flex-nowrap overflow-x-scroll">
           {socialButtons.map(button => {
             const Icon = button.icon;
             return (
-              <button
+              <div
                 key={button.name}
                 // disabled={title !== button.name}
                 onClick={() => {
                   setTitle(button.name);
                 }}
-                className={`w-6 ${title !== button.name && 'grayscale'} hover:cursor-pointer`}>
-                <Icon width={24} height={24} className={'fill-slate-500'} />
+                className={`w-8 p-1 flex justify-center items-center ${title !== button.name ? 'grayscale' : 'bg-base-200'} hover:cursor-pointer`}>
+                <Icon
+                  width={28}
+                  height={28}
+                  className={'fill-slate-500 w-full h-full'}
+                />
                 {/* <span>{button.name}</span> */}
-              </button>
+              </div>
             );
           })}
         </div>
