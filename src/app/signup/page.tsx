@@ -13,19 +13,26 @@ import ButtonIcon from '@/components/ButtonIcon';
 import {StepsEnum} from '@/libs/types/StepsEnum';
 import {apiAuthRegister, apiOtpSend} from '@/libs/api';
 import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
-import {AuthInitialData, AuthSubmitState} from '@/libs/types/AuthType';
+import {IAuthInitialData} from '@/libs/types/IAuthInitialData';
 import {TypeOtpEnum} from '@/libs/types/TypeOtpEnum';
-import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import {authLogin} from '@/libs/store/features/authSlice';
+import {
+  resetSubmitState,
+  setSubmitLoading,
+  setSubmitSuccess,
+} from '@/libs/store/features/generalSubmitSlice';
+import {resetToastState, showToast} from '@/libs/store/features/toastSlice';
+import {ToastType} from '@/libs/types/ToastType';
 
-interface IItem {
+interface IItemStepSignup {
   title: string;
   btnLabel: string;
   seq: number;
   step: StepsEnum;
 }
 
-const dataSteps: IItem[] = [
+const dataSteps: IItemStepSignup[] = [
   {
     seq: 1,
     title: 'Claim your link',
@@ -46,17 +53,11 @@ const dataSteps: IItem[] = [
   },
 ];
 
-const initialValue: AuthInitialData = {
+const initialValue: IAuthInitialData = {
   username: '',
   email: '',
   password: '',
   otp: '',
-};
-
-const submitStateDefault: AuthSubmitState = {
-  isLoading: false,
-  isSuccess: false,
-  message: '',
 };
 
 const CARD_OFFSET = -20;
@@ -64,22 +65,18 @@ const SCALE_FACTOR = 0.06;
 
 const SignupPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [cards, setCards] = useState<IItem[]>(dataSteps);
+
+  const [cards, setCards] = useState<IItemStepSignup[]>(dataSteps);
   const [currentSeqActive, setCurrentSeqActive] = useState<number>(1);
 
-  const [submitState, setSubmitState] =
-    useState<AuthSubmitState>(submitStateDefault);
+  const generalSubmit = useAppSelector(state => state.generalSubmit);
 
   const stepSchemas = [
     Yup.object({
       username: Yup.string()
         .required('Username is required')
         .min(3, 'Username must be at least 3 characters long')
-        .max(30, 'Username cannot exceed 30 characters')
-        .matches(
-          /^[a-zA-Z0-9._-]+$/,
-          'Username can only contain letters, numbers, dots, underscores, and hyphens',
-        ),
+        .max(30, 'Username cannot exceed 30 characters'),
     }),
     Yup.object({
       email: Yup.string().email('Invalid email').required('Email is required'),
@@ -96,9 +93,11 @@ const SignupPage: React.FC = () => {
 
   const handleNext = async (
     currentSeq: number,
-    validateForm: () => Promise<FormikErrors<AuthInitialData>>,
-    values: AuthInitialData,
+    validateForm: () => Promise<FormikErrors<IAuthInitialData>>,
+    values: IAuthInitialData,
   ) => {
+    dispatch(resetSubmitState());
+    dispatch(resetToastState());
     const errors = await validateForm();
 
     if (Object.keys(errors).length > 0) {
@@ -117,14 +116,14 @@ const SignupPage: React.FC = () => {
     setCurrentSeqActive(
       dataSteps.find(item => item.seq > currentSeq)?.seq || 1,
     );
-    setSubmitState(submitStateDefault);
   };
 
   const handleBack = (
     currentSeq: number,
     setFieldValue: (field: string, value: any) => void,
   ) => {
-    setSubmitState(submitStateDefault);
+    dispatch(resetSubmitState());
+    dispatch(resetToastState());
     const targetSeq = currentSeq - 1;
     const previousCard = dataSteps.find(item => item.seq === targetSeq);
 
@@ -141,18 +140,18 @@ const SignupPage: React.FC = () => {
     step: StepsEnum,
     onNext: () => void,
     handleSubmit: () => void,
-    formValues: AuthInitialData,
+    formValues: IAuthInitialData,
   ) => {
     switch (step) {
       case StepsEnum.CLAIM:
         return <FormClaim onNext={onNext} />;
       case StepsEnum.EMAIL:
-        return <FormEmail onNext={onNext} submitState={submitState} />;
+        return <FormEmail onNext={onNext} generalSubmit={generalSubmit} />;
       case StepsEnum.VERIFY:
         return (
           <FormVerify
             handleSubmit={handleSubmit}
-            submitState={submitState}
+            generalSubmit={generalSubmit}
             formValues={formValues}
           />
         );
@@ -161,39 +160,31 @@ const SignupPage: React.FC = () => {
     }
   };
 
-  const handleSendOtp = async (values: AuthInitialData) => {
-    setSubmitState(prev => ({
-      ...prev,
-      isLoading: true,
-    }));
+  const handleSendOtp = async (values: IAuthInitialData) => {
+    dispatch(setSubmitLoading(true));
     try {
       const response = await apiOtpSend(values.email, TypeOtpEnum.signUp);
-      setSubmitState(prev => ({
-        ...prev,
-        isSuccess: response.status === 200,
-      }));
+      if (response.status === 200 || response.status === 201) {
+        dispatch(setSubmitSuccess(true));
+      }
       return true;
     } catch (error: unknown) {
       const apiError = error as ErrorApiResponseType;
-      setSubmitState(prev => ({
-        ...prev,
-        isSuccess: false,
-        message: apiError.data?.message,
-      }));
+      dispatch(
+        showToast({
+          title: 'Failed',
+          message: apiError.data?.message,
+          type: ToastType.ERROR,
+        }),
+      );
       return false;
     } finally {
-      setSubmitState(prev => ({
-        ...prev,
-        isLoading: false,
-      }));
+      dispatch(setSubmitLoading(false));
     }
   };
 
   const handleSubmit = async (values: any) => {
-    setSubmitState(prev => ({
-      ...prev,
-      isLoading: true,
-    }));
+    dispatch(setSubmitLoading(true));
     try {
       const response = await apiAuthRegister(
         values.username,
@@ -204,23 +195,26 @@ const SignupPage: React.FC = () => {
         dispatch(authLogin(response.data));
         localStorage.setItem('authToken', response.data.accessToken);
         localStorage.setItem('user', JSON.stringify(response.data));
-        setSubmitState(prev => ({
-          ...prev,
-          isSuccess: true,
-        }));
+        dispatch(setSubmitSuccess(true));
+        dispatch(
+          showToast({
+            title: 'Success',
+            message: response.data.message,
+            type: ToastType.SUCCESS,
+          }),
+        );
       }
     } catch (error: unknown) {
       const apiError = error as ErrorApiResponseType;
-      setSubmitState(prev => ({
-        ...prev,
-        isSuccess: false,
-        message: apiError.data?.message,
-      }));
+      dispatch(
+        showToast({
+          title: 'Failed',
+          message: apiError.data?.message,
+          type: ToastType.ERROR,
+        }),
+      );
     } finally {
-      setSubmitState(prev => ({
-        ...prev,
-        isLoading: false,
-      }));
+      dispatch(setSubmitLoading(false));
     }
   };
 

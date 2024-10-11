@@ -11,7 +11,7 @@ import GoogleIcon from '@/assets/svgs/google-icon.svg';
 import useDebounce from '@/libs/hooks/useDebounce';
 import {apiAuthCheckEmail} from '@/libs/api';
 import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
-import {AuthSubmitState} from '@/libs/types/AuthType';
+import {IGeneralSubmit} from '@/libs/types/IGeneralSubmit';
 
 interface IFormEmailValues {
   email: string;
@@ -21,10 +21,10 @@ interface IFormEmailValues {
 
 interface IFormEmail {
   onNext: () => void;
-  submitState: AuthSubmitState;
+  generalSubmit: IGeneralSubmit;
 }
 
-const FormEmail: React.FC<IFormEmail> = ({onNext, submitState}) => {
+const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
   const {values, errors, touched, handleChange, handleBlur, isValid, dirty} =
     useFormikContext<IFormEmailValues>();
 
@@ -111,8 +111,9 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, submitState}) => {
             !dirty ||
             checking ||
             !emailValid ||
-            submitState.isLoading
+            generalSubmit.isLoading
           }
+          loading={generalSubmit.isLoading}
           type="button"
           className="px-[42px]"
         />

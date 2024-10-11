@@ -21,16 +21,8 @@ interface IFormClaim {
 }
 
 const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
-  const {
-    values,
-    setFieldValue,
-    errors,
-    touched,
-    handleChange,
-    handleBlur,
-    isValid,
-    dirty,
-  } = useFormikContext<IFormClaimValues>();
+  const {values, setFieldValue, errors, touched, handleBlur, isValid, dirty} =
+    useFormikContext<IFormClaimValues>();
   const [usernameValid, setUsernameValid] = useState<boolean>(false);
   const [checking, setChecking] = useState<boolean>(false);
   const [apiError, setApiError] = useState<string | null>(null);
@@ -51,6 +43,14 @@ const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
       setTimeout(() => {
         setChecking(false);
       }, 500);
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {value} = event.target;
+    const isValid = /^[a-zA-Z0-9._-]+$/.test(value);
+    if (isValid) {
+      setFieldValue('username', value);
     }
   };
 

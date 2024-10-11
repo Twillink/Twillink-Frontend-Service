@@ -9,8 +9,9 @@ import successIcon from '@/assets/gifs/register-succes.gif';
 import Image from 'next/image';
 import Link from 'next/link';
 import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
-import {AuthInitialData, AuthSubmitState} from '@/libs/types/AuthType';
+import {IAuthInitialData} from '@/libs/types/IAuthInitialData';
 import {apiOtpValidate} from '@/libs/api';
+import {IGeneralSubmit} from '@/libs/types/IGeneralSubmit';
 
 interface IFormVerifyValues {
   otp: string;
@@ -18,15 +19,15 @@ interface IFormVerifyValues {
 
 interface IFormVerify {
   handleSubmit: () => void;
-  submitState: AuthSubmitState;
-  formValues: AuthInitialData;
+  generalSubmit: IGeneralSubmit;
+  formValues: IAuthInitialData;
 }
 
 const NUMINPUT: number = 4;
 
 export default function FormVerify({
   handleSubmit,
-  submitState,
+  generalSubmit,
   formValues,
 }: IFormVerify) {
   const [isVerified, setIsVerified] = useState<boolean>(false);
@@ -69,11 +70,11 @@ export default function FormVerify({
 
   return (
     <div className="flex items-center w-full justify-center">
-      {isLoading || submitState.isLoading ? (
+      {isLoading || generalSubmit.isLoading ? (
         <span className="loading loading-ring w-20 text-general-med"></span>
       ) : (
         <>
-          {isVerified && !apiError && submitState.isSuccess ? (
+          {isVerified && !apiError && generalSubmit.isSuccess ? (
             <Link href="/admin">
               <ButtonIcon
                 icon={
@@ -111,7 +112,7 @@ export default function FormVerify({
                 )}
               />
               <ErrorMessageField
-                error={errors.otp || apiError || submitState.message}
+                error={errors.otp || apiError}
                 touched={touched.otp}
               />
             </div>
