@@ -78,16 +78,16 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
       <form method="dialog" className="modal-backdrop flex flex-col gap-5">
         <p className="mb-1 text-general-med text-sm">Select social account</p>
         <div className="flex gap-4 justify-between flex-nowrap overflow-x-scroll">
-          {socialButtons.map((button, index) => {
+          {socialButtons.map(button => {
             const Icon = button.icon;
             return (
               <button
                 key={button.name}
-                disabled={title !== button.name}
+                // disabled={title !== button.name}
                 onClick={() => {
                   setTitle(button.name);
                 }}
-                className={`w-6 ${title !== button.name && 'text-slate-500'}`}>
+                className={`w-6 ${title !== button.name && 'grayscale'} hover:cursor-pointer`}>
                 <Icon width={24} height={24} className={'fill-slate-500'} />
                 {/* <span>{button.name}</span> */}
               </button>
