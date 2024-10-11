@@ -9,4 +9,5 @@ export interface IItemWidgetType {
   text: string;
   url?: string;
   image?: string | ArrayBuffer | null;
+  images?: string[] | ArrayBuffer[] | null[];
 }

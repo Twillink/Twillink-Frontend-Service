@@ -7,9 +7,9 @@ const SvgTelegram: React.FunctionComponent<React.SVGProps<SVGSVGElement>> = ({
   <svg
     height={height}
     width={width}
-    className={className}
+    className={'fill-black'}
     viewBox="0 0 24 24"
-    fill="none"
+    fill="black"
     xmlns="http://www.w3.org/2000/svg">
     <g clip-path="url(#clip0_1621_1597)">
       <path

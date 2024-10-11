@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
 import SocialButton from './SocialButton';
 
-const SocialContainer: React.FC = () => {
+interface ISocialContainer {
+  onClick?: () => void;
+}
+
+const SocialContainer: React.FC<ISocialContainer> = ({onClick}) => {
   const [imageUrls, setImageUrls] = useState<string[]>(Array(8).fill(''));
 
   const handleFileChange =
@@ -20,11 +24,11 @@ const SocialContainer: React.FC = () => {
   return (
     <div className="flex flex-wrap justify-center py-4 px-8 w-full">
       {imageUrls.map((_, index) => (
-        <div key={index} className="w-1/4 flex justify-center mb-4">
-          <SocialButton
-            onChange={handleFileChange(index)}
-            imageUrl={imageUrls[index]}
-          />
+        <div
+          key={index}
+          className="w-1/4 flex justify-center mb-4"
+          onClick={onClick}>
+          <SocialButton imageUrl={imageUrls[index]} />
         </div>
       ))}
     </div>

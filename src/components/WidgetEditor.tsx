@@ -1,19 +1,22 @@
 'use client';
 
-import React, {useEffect, useRef, useState, useCallback} from 'react';
-import WidgetContainer from '@/components/widgets/WidgetContainer';
-import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
-import UserProfile from '@/components/widgets/UserProfile';
-import SocialContainer from '@/components/widgets/SocialContainer';
-import AddWidget from '@/components/widgets/AddWidget';
 import PopupWidget from '@/components/PopupWidget';
+import PopupWidgetContact from '@/components/PopupWidgetContact';
+import PopupWidgetImage from '@/components/PopupWidgetImage';
 import PopupWidgetLink from '@/components/PopupWidgetLink';
 import PopupWidgetText from '@/components/PopupWidgetText';
-import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
-import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
-import {generateUniqueString} from '@/utils/generateUniqueString';
-import PopupWidgetImage from '@/components/PopUpWidgetImage';
 import PopupWidgetVideo from '@/components/PopupWidgetVideo';
+import AddWidget from '@/components/widgets/AddWidget';
+import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
+import SocialContainer from '@/components/widgets/SocialContainer';
+import UserProfile from '@/components/widgets/UserProfile';
+import WidgetContainer from '@/components/widgets/WidgetContainer';
+import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
+import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
+import {generateUniqueString} from '@/utils/generateUniqueString';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
+import PopupWidgetCarousel from './PopupWidgetCarousel';
+import PopupWidgetSocial from './PopupWidgetSocial';
 
 interface IWidgetEditor {
   dataWidget: IItemWidgetType[];
@@ -108,6 +111,12 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       case WidgetTypeEnum.Video:
         setPopupState(WidgetTypeEnum.Video);
         break;
+      case WidgetTypeEnum.Contact:
+        setPopupState(WidgetTypeEnum.Contact);
+        break;
+      case WidgetTypeEnum.Carousel:
+        setPopupState(WidgetTypeEnum.Carousel);
+        break;
       case 'main':
         setPopupState('main');
         break;
@@ -130,6 +139,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     title: string,
     url: string,
     image?: string | ArrayBuffer | null,
+    images?: string[] | ArrayBuffer[] | null[],
   ) => {
     if (setDataWidget) {
       const newWidget: IItemWidgetType = {
@@ -141,6 +151,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         url,
         text: title,
         image,
+        images,
       };
 
       setDataWidget([...dataWidget, newWidget]);
@@ -217,7 +228,9 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           <ScrollHideHeader />
           <UserProfile />
           <div className="flex flex-wrap px-6">
-            <SocialContainer />
+            <SocialContainer
+              onClick={() => setPopupState(WidgetTypeEnum.Social)}
+            />
             {dataWidget
               .sort((a, b) => a.order - b.order)
               .map(widget => (
@@ -267,6 +280,26 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         isOpen={popupState === 'video'}
         onClose={handleClosePopup}
         onBack={handleBack}
+        onAdd={handleAdd}
+      />
+
+      <PopupWidgetContact
+        isOpen={popupState === 'contact'}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+      />
+
+      <PopupWidgetCarousel
+        isOpen={popupState === 'carousel'}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+      />
+
+      <PopupWidgetSocial
+        isOpen={popupState === 'social'}
+        onClose={handleClosePopup}
         onAdd={handleAdd}
       />
     </>

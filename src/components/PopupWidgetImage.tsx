@@ -4,7 +4,7 @@ import Button from './Button';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
 
-interface IPopupWidgetLink {
+interface IPopupWidgetImage {
   isOpen: boolean;
   onClose: () => void;
   onBack: () => void;
@@ -16,7 +16,7 @@ interface IPopupWidgetLink {
   ) => void;
 }
 
-const PopupWidgetImage: React.FC<IPopupWidgetLink> = ({
+const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
   isOpen,
   onClose,
   onBack,

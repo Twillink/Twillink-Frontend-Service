@@ -1,10 +1,12 @@
+import SvgMail from '@/assets/svgComponents/SvgMail';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import React, {useState} from 'react';
 import Button from './Button';
-import InputLabel from './InputLabel';
+import InputLabelWithIcon from './InputLabelWithIcon';
+import InputPhoneCountries from './InputPhoneCountries';
 import PopupContainer from './PopupContainer';
 
-interface IPopupWidgetVideo {
+interface IPopupWidgetContact {
   isOpen: boolean;
   onClose: () => void;
   onBack: () => void;
@@ -16,7 +18,7 @@ interface IPopupWidgetVideo {
   ) => void;
 }
 
-const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
+const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
   isOpen,
   onClose,
   onBack,
@@ -26,7 +28,7 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
   const [url, setUrl] = useState('');
 
   const handleAdd = () => {
-    onAdd(WidgetTypeEnum.Video, title, url);
+    onAdd(WidgetTypeEnum.Contact, title, url);
     setTitle('');
     setUrl('');
     onClose();
@@ -34,25 +36,34 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
 
   return (
     <PopupContainer
-      title="Add Video"
+      title="Add Contact"
       onClose={onClose}
       onBack={onBack}
       isOpen={isOpen}>
       <form method="dialog" className="modal-backdrop flex flex-col gap-5">
-        <InputLabel
-          label="Video Caption"
+        <InputLabelWithIcon
+          label="Email"
+          icon={
+            <div className="relative w-5 h-5 mr-2 bg-transparent">
+              <SvgMail />
+            </div>
+          }
           value={title}
           onChange={e => setTitle(e.target.value)}
           onBlur={() => console.log('Input blurred')}
-          placeholder="Your video caption"
+          placeholder="my email"
         />
-        <InputLabel
-          type="url"
-          label="Input URL Video"
+        <InputPhoneCountries
+          options={[
+            {value: '+62', label: '+62', emoji: '🇮🇩'},
+            {value: '+1', label: '+1', emoji: '🇺🇸'},
+            {value: '+81', label: '+81', emoji: '🇯🇵'},
+          ]}
+          label="Phone Number"
           value={url}
           onChange={e => setUrl(e.target.value)}
           onBlur={() => console.log('Input blurred')}
-          placeholder="https://www."
+          placeholder="87111122222"
         />
 
         <div className="flex justify-end">
@@ -68,4 +79,4 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
   );
 };
 
-export default PopupWidgetVideo;
+export default PopupWidgetContact;
