@@ -55,13 +55,7 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
           placeholder="https://www."
         />
 
-        <div className="flex justify-between">
-          <Button
-            type="button"
-            className="w-max bg-base-100 text-primary"
-            onClick={onClose}
-            title="Cancel"
-          />
+        <div className="flex justify-end">
           <Button
             type="button"
             className="w-max"
