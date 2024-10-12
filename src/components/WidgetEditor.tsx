@@ -258,47 +258,47 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         onAddAction={handleAddAction}
       />
       <PopupWidgetLink
-        isOpen={popupState === 'link'}
+        isOpen={popupState === WidgetTypeEnum.Link}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
       />
       <PopupWidgetText
-        isOpen={popupState === 'text'}
+        isOpen={popupState === WidgetTypeEnum.Text}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
       />
       <PopupWidgetImage
-        isOpen={popupState === 'image'}
+        isOpen={popupState === WidgetTypeEnum.Image}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
       />
 
       <PopupWidgetVideo
-        isOpen={popupState === 'video'}
+        isOpen={popupState === WidgetTypeEnum.Video}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
       />
 
       <PopupWidgetContact
-        isOpen={popupState === 'contact'}
+        isOpen={popupState === WidgetTypeEnum.Contact}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
       />
 
       <PopupWidgetCarousel
-        isOpen={popupState === 'carousel'}
+        isOpen={popupState === WidgetTypeEnum.Carousel}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
       />
 
       <PopupWidgetSocial
-        isOpen={popupState === 'social'}
+        isOpen={popupState === WidgetTypeEnum.Social}
         onClose={handleClosePopup}
         onAdd={handleAdd}
       />
