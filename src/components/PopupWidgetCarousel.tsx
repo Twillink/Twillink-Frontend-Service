@@ -1,5 +1,5 @@
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import Button from './Button';
 import ImageSelectorWithSource from './ImageSelectorWithSource';
 import InputLabel from './InputLabel';
@@ -18,8 +18,6 @@ interface IPopupWidgetCarousel {
   ) => void;
 }
 
-const defaultArrayImages = [null, null, null, null];
-
 const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
   isOpen,
   onClose,
@@ -30,17 +28,20 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
   const [url, setUrl] = useState('');
   const [selectedImages, setSelectedImages] = useState<
     string[] | ArrayBuffer[] | null[]
-  >(defaultArrayImages);
+  >([]);
 
   const handleAdd = () => {
     onAdd(WidgetTypeEnum.Carousel, title, url, null, selectedImages);
     setTitle('');
     setUrl('');
-    setSelectedImages(defaultArrayImages);
+    setSelectedImages([]);
     onClose();
   };
 
-  console.log(selectedImages, 'image');
+  const imageIndex = useMemo(
+    () => selectedImages.length,
+    [selectedImages.length],
+  );
 
   return (
     <PopupContainer
@@ -67,7 +68,6 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
                   const file = e.target.files?.[0];
                   if (file) {
                     const reader = new FileReader();
-                    console.log('onload');
                     reader.onloadend = () => {
                       setSelectedImages((prev: any) => {
                         const newArr = [...prev];
@@ -82,6 +82,28 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
               />
             </div>
           ))}
+
+          <div className="w-full h-full">
+            <ImageSelectorWithSource
+              image={null}
+              name={`image-${imageIndex}`}
+              onChange={e => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setSelectedImages((prev: any) => {
+                      const newArr = [...prev];
+                      newArr[imageIndex] = reader.result;
+                      return newArr;
+                    });
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="hidden"
+            />
+          </div>
         </div>
 
         <div className="flex justify-end">
