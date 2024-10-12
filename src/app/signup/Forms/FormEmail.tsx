@@ -70,7 +70,7 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
       return;
     }
     window.open(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google?userName=${encodeURIComponent(username)}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google-signup?userName=${encodeURIComponent(username)}`,
       '_blank',
     );
   };

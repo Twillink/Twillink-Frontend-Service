@@ -14,6 +14,11 @@ import {authLogin} from '@/libs/store/features/authSlice';
 import {useRouter} from 'next/navigation';
 import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 import {apiAuthLogin} from '@/libs/api';
+import {showToast} from '@/libs/store/features/toastSlice';
+import {ToastType} from '@/libs/types/ToastType';
+import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
+import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
+import {useEffect} from 'react';
 
 type InitialData = {
   email: string;
@@ -28,6 +33,7 @@ const initialValue: InitialData = {
 const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+
   const schema = Yup.object({
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string()
@@ -37,11 +43,12 @@ const LoginPage: React.FC = () => {
 
   const handleGoogleSignIn = async () => {
     window.open(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google-signin`,
       '_blank',
     );
   };
   const handleSubmit = async (values: InitialData) => {
+    dispatch(setSubmitLoading(true));
     try {
       const body = {
         email: values.email,
@@ -53,12 +60,43 @@ const LoginPage: React.FC = () => {
         dispatch(authLogin(response.data));
         localStorage.setItem('authToken', response.data.accessToken);
         localStorage.setItem('user', JSON.stringify(response.data));
+        dispatch(
+          showToast({
+            title: 'Success',
+            message: response.data.message,
+            type: ToastType.SUCCESS,
+          }),
+        );
         router.push('/admin');
       }
-    } catch (error) {
-      console.error('Login failed:', error);
+    } catch (error: unknown) {
+      const apiError = error as ErrorApiResponseType;
+      dispatch(
+        showToast({
+          title: 'Failed',
+          message: apiError.data?.message,
+          type: ToastType.ERROR,
+        }),
+      );
+    } finally {
+      dispatch(setSubmitLoading(false));
     }
   };
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const error = queryParams.get('error');
+
+    if (error) {
+      dispatch(
+        showToast({
+          title: 'Failed',
+          message: error,
+          type: ToastType.ERROR,
+        }),
+      );
+    }
+  }, [dispatch]);
 
   return (
     <div data-theme="skinLight">

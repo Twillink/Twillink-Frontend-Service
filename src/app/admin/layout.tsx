@@ -60,16 +60,36 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
   }, [pathname]);
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (!isLoggedIn && !token) {
-      router.push('/');
-    } else {
-      setInitialized(true);
+    const queryParams = new URLSearchParams(window.location.search);
+    const authResString = queryParams.get('authRes');
+
+    if (authResString) {
+      try {
+        const authRes = JSON.parse(authResString);
+        localStorage.setItem('authToken', authRes.accessToken);
+        localStorage.setItem('user', JSON.stringify(authRes));
+      } catch (error) {
+        console.error('Error parsing authRes:', error);
+      }
     }
+
+    const checkAuth = () => {
+      const token = localStorage.getItem('authToken');
+      if (!isLoggedIn && !token) {
+        router.push('/');
+      } else {
+        setInitialized(true);
+      }
+    };
+    checkAuth();
   }, [isLoggedIn, router]);
 
   if (!initialized) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <span className="loading loading-ring w-20 text-general-med"></span>
+      </div>
+    );
   }
 
   return (
