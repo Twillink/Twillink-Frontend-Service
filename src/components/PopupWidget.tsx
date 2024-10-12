@@ -11,6 +11,7 @@ import SvgWidgetMap from '@/assets/svgComponents/SvgWidgetMap';
 import SvgWidgetWebinar from '@/assets/svgComponents/SvgWidgetWebinar';
 import SvgWidgetSchedule from '@/assets/svgComponents/SvgWidgetSchedule';
 import PopupContainer from './PopupContainer';
+import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 
 interface IPopupWidget {
   isOpen: boolean;
@@ -21,70 +22,70 @@ interface IPopupWidget {
 const buttons = [
   {
     title: 'Add Link',
-    action: 'link',
+    action: WidgetTypeEnum.Link,
     icon: <SvgWidgetLink className="stroke-general-med" />,
     isComingSoon: false,
     disabled: false,
   },
   {
     title: 'Add Text',
-    action: 'text',
+    action: WidgetTypeEnum.Text,
     icon: <SvgWidgetText className="stroke-general-med" />,
     isComingSoon: false,
     disabled: false,
   },
   {
     title: 'Add Image',
-    action: 'image',
+    action: WidgetTypeEnum.Image,
     icon: <SvgWidgetImage className="stroke-general-med" />,
     isComingSoon: false,
     disabled: false,
   },
   {
     title: 'Add Video',
-    action: 'video',
+    action: WidgetTypeEnum.Video,
     icon: <SvgWidgetVideo className="stroke-general-med" />,
     isComingSoon: false,
     disabled: false,
   },
   {
     title: 'Blog Content',
-    action: 'blog',
+    action: WidgetTypeEnum.Blog,
     icon: <SvgWidgetBlog className="stroke-general-med" />,
     isComingSoon: true,
     disabled: true,
   },
   {
     title: 'Add Contact',
-    action: 'contact',
+    action: WidgetTypeEnum.Contact,
     icon: <SvgWidgetContact className="stroke-general-med" />,
     isComingSoon: false,
     disabled: false,
   },
   {
     title: 'Add Carousel',
-    action: 'carousel',
+    action: WidgetTypeEnum.Carousel,
     icon: <SvgWidgetCarousel className="stroke-general-med" />,
     isComingSoon: false,
     disabled: false,
   },
   {
     title: 'Add Map',
-    action: 'map',
+    action: WidgetTypeEnum.Map,
     icon: <SvgWidgetMap className="stroke-general-med" />,
     isComingSoon: true,
     disabled: true,
   },
   {
     title: 'Add Webinar',
-    action: 'webinar',
+    action: WidgetTypeEnum.Webinar,
     icon: <SvgWidgetWebinar className="stroke-general-med" />,
     isComingSoon: true,
     disabled: true,
   },
   {
     title: 'Add Schedule',
-    action: 'schedule',
+    action: WidgetTypeEnum.Schedule,
     icon: <SvgWidgetSchedule className="stroke-general-med" />,
     isComingSoon: true,
     disabled: true,
