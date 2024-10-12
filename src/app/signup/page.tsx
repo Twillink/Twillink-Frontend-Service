@@ -163,7 +163,11 @@ const SignupPage: React.FC = () => {
   const handleSendOtp = async (values: IAuthInitialData) => {
     dispatch(setSubmitLoading(true));
     try {
-      const response = await apiOtpSend(values.email, TypeOtpEnum.signUp);
+      const body = {
+        email: values.email,
+        typeOtp: TypeOtpEnum.signUp,
+      };
+      const response = await apiOtpSend(body);
       if (response.status === 200 || response.status === 201) {
         dispatch(setSubmitSuccess(true));
       }
@@ -186,11 +190,14 @@ const SignupPage: React.FC = () => {
   const handleSubmit = async (values: any) => {
     dispatch(setSubmitLoading(true));
     try {
-      const response = await apiAuthRegister(
-        values.username,
-        values.email,
-        values.password,
-      );
+      const body = {
+        userName: values.username,
+        email: values.email,
+        phoneNumber: '',
+        fullName: '',
+        password: values.password,
+      };
+      const response = await apiAuthRegister(body);
       if (response.status === 200 || response.status === 201) {
         dispatch(authLogin(response.data));
         localStorage.setItem('authToken', response.data.accessToken);

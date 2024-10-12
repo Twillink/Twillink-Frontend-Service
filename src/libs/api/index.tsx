@@ -1,8 +1,7 @@
-import {TypeOtpEnum} from '../types/TypeOtpEnum';
 import api from './apiClient';
 
-export const apiAuthLogin = async (email: string, password: string) => {
-  return await api.post('/api/v1/user-auth/login', {email, password});
+export const apiAuthLogin = async (body: any) => {
+  return await api.post('/api/v1/user-auth/login', body);
 };
 
 export const apiLinkCheck = async (username: string) => {
@@ -15,26 +14,16 @@ export const apiAuthCheckEmail = async (email: string) => {
   );
 };
 
-export const apiOtpSend = async (email: string, typeOtp: TypeOtpEnum) => {
-  return await api.post('/api/v1/otp/send-email', {email, typeOtp});
+export const apiOtpSend = async (body: any) => {
+  return await api.post('/api/v1/otp/send-email', body);
 };
 
-export const apiOtpValidate = async (codeOtp: string, email: string) => {
-  return await api.post('/api/v1/otp/validate', {codeOtp, email});
+export const apiOtpValidate = async (body: any) => {
+  return await api.post('/api/v1/otp/validate', body);
 };
 
-export const apiAuthRegister = async (
-  userName: string,
-  email: string,
-  password: string,
-) => {
-  return await api.post('/api/v1/user-auth/register', {
-    userName,
-    email,
-    phoneNumber: '',
-    fullName: '',
-    password,
-  });
+export const apiAuthRegister = async (body: any) => {
+  return await api.post('/api/v1/user-auth/register', body);
 };
 
 export const apiAuthLogout = async () => {

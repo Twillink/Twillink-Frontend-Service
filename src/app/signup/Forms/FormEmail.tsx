@@ -25,25 +25,40 @@ interface IFormEmail {
 }
 
 const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
-  const {values, errors, touched, handleChange, handleBlur, isValid, dirty} =
-    useFormikContext<IFormEmailValues>();
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    setFieldValue,
+    handleBlur,
+    isValid,
+    dirty,
+  } = useFormikContext<IFormEmailValues>();
 
-  const [emailValid, setEmailValid] = useState<boolean>(false);
+  const [emailAvail, setEmailAvail] = useState<boolean>(false);
   const [checking, setChecking] = useState<boolean>(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
 
-  const debouncedEmail = useDebounce(values.email, 1000);
+  const debouncedEmail = useDebounce(values.email, 3000);
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {value} = event.target;
+    setFieldValue('email', value);
+    setIsTyping(true);
+  };
 
   const handleCheckEmail = async (email: string) => {
     setChecking(true);
     setApiError(null);
     try {
       const response = await apiAuthCheckEmail(email);
-      setEmailValid(response.status === 200);
+      setEmailAvail(response.status === 200);
     } catch (error: unknown) {
       const apiError = error as ErrorApiResponseType;
       setApiError(apiError?.data?.message);
-      setEmailValid(false);
+      setEmailAvail(false);
     } finally {
       setChecking(false);
     }
@@ -61,13 +76,14 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
   };
 
   useEffect(() => {
-    if (debouncedEmail && values.email) {
+    if (debouncedEmail && !errors.email) {
       handleCheckEmail(debouncedEmail);
+      setIsTyping(false);
+    } else {
+      setEmailAvail(false);
+      setApiError(null);
     }
-    if (!values.email) {
-      setEmailValid(false);
-    }
-  }, [debouncedEmail, values]);
+  }, [debouncedEmail, errors]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -78,7 +94,7 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
           name="email"
           id="email"
           value={values.email}
-          onChange={handleChange}
+          onChange={handleEmailChange}
           onBlur={handleBlur}
           autoComplete="email"
         />
@@ -110,7 +126,8 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
             !isValid ||
             !dirty ||
             checking ||
-            !emailValid ||
+            !emailAvail ||
+            isTyping ||
             generalSubmit.isLoading
           }
           loading={generalSubmit.isLoading}

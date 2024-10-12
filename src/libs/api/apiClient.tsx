@@ -1,9 +1,11 @@
 import axios from 'axios';
 import {ErrorApiResponseType} from '../types/ErrorApiResponseType';
 
+const defaultTimeout = 1000 * 90;
+
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  timeout: 1000,
+  timeout: defaultTimeout,
   headers: {'Content-Type': 'application/json'},
 });
 

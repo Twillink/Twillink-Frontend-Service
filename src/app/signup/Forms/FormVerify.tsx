@@ -40,7 +40,11 @@ export default function FormVerify({
     setIsLoading(true);
     setApiError(null);
     try {
-      const response = await apiOtpValidate(otp, formValues.email);
+      const body = {
+        codeOtp: otp,
+        email: formValues.email,
+      };
+      const response = await apiOtpValidate(body);
       if (response.status === 200 || response.status === 201) {
         setIsVerified(true);
         handleSubmit();

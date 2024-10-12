@@ -11,6 +11,7 @@ import {useFormikContext} from 'formik';
 import React, {useEffect, useState} from 'react';
 import validIcon from '@/assets/gifs/valid-green.gif';
 import Image from 'next/image';
+import {testValidUsername} from '@/utils/validationTest';
 
 interface IFormClaimValues {
   username: string;
@@ -26,8 +27,9 @@ const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
   const [usernameValid, setUsernameValid] = useState<boolean>(false);
   const [checking, setChecking] = useState<boolean>(false);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
 
-  const debouncedUsername = useDebounce(values.username, 1000);
+  const debouncedUsername = useDebounce(values.username, 2000);
 
   const handleCheckUsername = async (username: string) => {
     setChecking(true);
@@ -48,9 +50,10 @@ const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
-    const isValid = /^[a-zA-Z0-9._-]+$/.test(value);
+    const isValid = testValidUsername(value);
     if (isValid) {
       setFieldValue('username', value);
+      setIsTyping(true);
     }
   };
 
@@ -63,6 +66,7 @@ const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
   useEffect(() => {
     if (debouncedUsername && isValid) {
       handleCheckUsername(debouncedUsername);
+      setIsTyping(false);
     }
     if (!isValid) {
       setUsernameValid(false);
@@ -103,7 +107,9 @@ const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
         <Button
           onClick={onNext}
           title="Grab My Link"
-          disabled={!isValid || !dirty || !usernameValid || checking}
+          disabled={
+            !isValid || !dirty || !usernameValid || checking || isTyping
+          }
           type="button"
           icon={<SvgCheck className="stroke-primary-content" height={20} />}
         />

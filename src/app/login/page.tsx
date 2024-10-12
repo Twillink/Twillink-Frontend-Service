@@ -43,7 +43,11 @@ const LoginPage: React.FC = () => {
   };
   const handleSubmit = async (values: InitialData) => {
     try {
-      const response = await apiAuthLogin(values.email, values.password);
+      const body = {
+        email: values.email,
+        password: values.password,
+      };
+      const response = await apiAuthLogin(body);
 
       if (response.status === 200 || response.status === 201) {
         dispatch(authLogin(response.data));
