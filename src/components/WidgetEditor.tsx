@@ -139,7 +139,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     title: string,
     url: string,
     image?: string | ArrayBuffer | null,
-    images?: string[] | ArrayBuffer[] | null[],
+    images?: (string | ArrayBuffer | null)[],
   ) => {
     if (setDataWidget) {
       const newWidget: IItemWidgetType = {

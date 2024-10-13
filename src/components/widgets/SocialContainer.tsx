@@ -6,20 +6,23 @@ interface ISocialContainer {
 }
 
 const SocialContainer: React.FC<ISocialContainer> = ({onClick}) => {
-  const [imageUrls, setImageUrls] = useState<string[]>(Array(8).fill(''));
+  const [
+    imageUrls,
+    // setImageUrls
+  ] = useState<string[]>(Array(8).fill(''));
 
-  const handleFileChange =
-    (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files;
-      if (files?.length) {
-        const imageUrl = URL.createObjectURL(files[0]);
-        setImageUrls(prev => {
-          const newUrls = [...prev];
-          newUrls[index] = imageUrl;
-          return newUrls;
-        });
-      }
-    };
+  // const handleFileChange =
+  //   (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  //     const files = event.target.files;
+  //     if (files?.length) {
+  //       const imageUrl = URL.createObjectURL(files[0]);
+  //       setImageUrls(prev => {
+  //         const newUrls = [...prev];
+  //         newUrls[index] = imageUrl;
+  //         return newUrls;
+  //       });
+  //     }
+  //   };
 
   return (
     <div className="flex flex-wrap justify-center py-4 px-8 w-full">
