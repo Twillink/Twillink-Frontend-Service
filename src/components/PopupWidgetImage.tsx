@@ -1,5 +1,7 @@
+import AddWidgetImageSchema from '@/libs/schema/Widget/WidgetImage.schema';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
-import React, {useState} from 'react';
+import {useFormik} from 'formik';
+import React from 'react';
 import Button from './Button';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
@@ -22,15 +24,18 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
   onBack,
   onAdd,
 }) => {
-  const [title, setTitle] = useState<string>('');
-  const [url, setUrl] = useState('');
-
-  const handleAdd = () => {
-    onAdd(WidgetTypeEnum.Image, title, url);
-    setTitle('');
-    setUrl('');
-    onClose();
-  };
+  const formik = useFormik({
+    initialValues: {
+      title: '',
+      url: '',
+    },
+    validationSchema: AddWidgetImageSchema,
+    onSubmit: values => {
+      onAdd(WidgetTypeEnum.Image, values.title, values.url);
+      formik.resetForm();
+      onClose();
+    },
+  });
 
   return (
     <PopupContainer
@@ -38,30 +43,38 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
       onClose={onClose}
       onBack={onBack}
       isOpen={isOpen}>
-      <form method="dialog" className="modal-backdrop flex flex-col gap-5">
+      <form
+        method="dialog"
+        className="modal-backdrop flex flex-col gap-5"
+        onSubmit={formik.handleSubmit}>
         <InputLabel
           label="Image Caption"
-          value={title}
-          onChange={e => setTitle(e.target.value)}
-          onBlur={() => console.log('Input blurred')}
+          name="title"
+          value={formik.values.title}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           placeholder="Your caption image"
+          error={
+            formik.touched.title && formik.errors.title
+              ? formik.errors.title
+              : ''
+          }
         />
         <InputLabel
           type="url"
           label="Input URL Image"
-          value={url}
-          onChange={e => setUrl(e.target.value)}
-          onBlur={() => console.log('Input blurred')}
+          name="url"
+          value={formik.values.url}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           placeholder="https://www."
+          error={
+            formik.touched.url && formik.errors.url ? formik.errors.url : ''
+          }
         />
 
         <div className="flex justify-end">
-          <Button
-            type="button"
-            className="w-max"
-            onClick={handleAdd}
-            title="Add"
-          />
+          <Button type="submit" className="w-max" title="Add" />
         </div>
       </form>
     </PopupContainer>

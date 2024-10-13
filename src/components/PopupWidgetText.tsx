@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import AddWidgetTextSchema from '@/libs/schema/Widget/WidgetText.shcema';
+import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
+import {useFormik} from 'formik';
+import React from 'react';
 import Button from './Button';
 import PopupContainer from './PopupContainer';
 import TextAreaLabel from './TextAreaLabel';
-import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 
 interface IPopupWidgetText {
   isOpen: boolean;
@@ -22,19 +24,24 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
   onBack,
   onAdd,
 }) => {
-  const [title, setTitle] = useState('');
-  const [url, setUrl] = useState('');
-  const [selectedImage, setSelectedImage] = useState<
-    string | ArrayBuffer | null
-  >(null);
-
-  const handleAdd = () => {
-    onAdd(WidgetTypeEnum.Text, title, url, selectedImage);
-    setTitle('');
-    setUrl('');
-    setSelectedImage(null);
-    onClose();
-  };
+  const formik = useFormik({
+    initialValues: {
+      title: '',
+      url: '',
+      selectedImage: null,
+    },
+    validationSchema: AddWidgetTextSchema,
+    onSubmit: values => {
+      onAdd(
+        WidgetTypeEnum.Text,
+        values.title,
+        values.url,
+        values.selectedImage,
+      );
+      formik.resetForm();
+      onClose();
+    },
+  });
 
   return (
     <PopupContainer
@@ -42,22 +49,28 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
       onClose={onClose}
       onBack={onBack}
       isOpen={isOpen}>
-      <form method="dialog" className="modal-backdrop flex flex-col gap-5">
+      <form
+        method="dialog"
+        className="modal-backdrop flex flex-col gap-5"
+        onSubmit={formik.handleSubmit}>
         <TextAreaLabel
           label="Text"
-          value={title}
-          onChange={e => setTitle(e.target.value)}
-          onBlur={() => console.log('Input blurred')}
+          name="title"
+          value={formik.values.title}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           placeholder="Input Text..."
           rows={5}
+          error={
+            formik.touched.title &&
+            formik.errors.title &&
+            formik.submitCount > 0
+              ? formik.errors.title
+              : ''
+          }
         />
         <div className="flex justify-end">
-          <Button
-            type="button"
-            className="w-max"
-            onClick={handleAdd}
-            title="Add"
-          />
+          <Button type="submit" className="w-max" title="Add" />
         </div>
       </form>
     </PopupContainer>

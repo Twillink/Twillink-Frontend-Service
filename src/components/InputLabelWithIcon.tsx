@@ -9,6 +9,7 @@ interface IInputWithLabel extends InputHTMLAttributes<HTMLInputElement> {
   type?: string;
   placeholder?: string;
   autoComplete?: string;
+  error?: string;
 }
 
 const InputLabelWithIcon: React.FC<IInputWithLabel> = ({
@@ -20,6 +21,7 @@ const InputLabelWithIcon: React.FC<IInputWithLabel> = ({
   type = 'text',
   placeholder,
   autoComplete,
+  error,
   ...rest
 }) => (
   <div>
@@ -41,6 +43,7 @@ const InputLabelWithIcon: React.FC<IInputWithLabel> = ({
         {...rest}
       />
     </label>
+    {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
   </div>
 );
 

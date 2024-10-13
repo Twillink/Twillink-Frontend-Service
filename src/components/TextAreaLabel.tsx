@@ -5,6 +5,7 @@ interface ITextAreaLabel extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label: string;
   onChange: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur: (event: FocusEvent<HTMLTextAreaElement>) => void;
+  error?: string;
 }
 
 const TextAreaLabel: React.FC<ITextAreaLabel> = ({
@@ -15,6 +16,7 @@ const TextAreaLabel: React.FC<ITextAreaLabel> = ({
   autoComplete,
   className,
   label,
+  error,
   ...rest
 }) => (
   <div className="flex flex-col">
@@ -28,6 +30,7 @@ const TextAreaLabel: React.FC<ITextAreaLabel> = ({
       autoComplete={autoComplete}
       {...rest}
     />
+    {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
   </div>
 );
 

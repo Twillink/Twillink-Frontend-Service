@@ -1,6 +1,8 @@
 import SvgMail from '@/assets/svgComponents/SvgMail';
+import AddWidgetContactSchema from '@/libs/schema/Widget/WidgetContact.schema';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
-import React, {useState} from 'react';
+import {useFormik} from 'formik';
+import React from 'react';
 import Button from './Button';
 import InputLabelWithIcon from './InputLabelWithIcon';
 import InputPhoneCountries from './InputPhoneCountries';
@@ -24,15 +26,18 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
   onBack,
   onAdd,
 }) => {
-  const [title, setTitle] = useState<string>('');
-  const [url, setUrl] = useState('');
-
-  const handleAdd = () => {
-    onAdd(WidgetTypeEnum.Contact, title, url);
-    setTitle('');
-    setUrl('');
-    onClose();
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      phone: '',
+    },
+    validationSchema: AddWidgetContactSchema,
+    onSubmit: values => {
+      onAdd(WidgetTypeEnum.Contact, values.email, values.phone);
+      formik.resetForm();
+      onClose();
+    },
+  });
 
   return (
     <PopupContainer
@@ -40,7 +45,10 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
       onClose={onClose}
       onBack={onBack}
       isOpen={isOpen}>
-      <form method="dialog" className="modal-backdrop flex flex-col gap-5">
+      <form
+        method="dialog"
+        className="modal-backdrop flex flex-col gap-5"
+        onSubmit={formik.handleSubmit}>
         <InputLabelWithIcon
           label="Email"
           icon={
@@ -48,10 +56,16 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
               <SvgMail />
             </div>
           }
-          value={title}
-          onChange={e => setTitle(e.target.value)}
-          onBlur={() => console.log('Input blurred')}
+          name="email"
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           placeholder="my email"
+          error={
+            formik.touched.email && formik.errors.email
+              ? formik.errors.email
+              : ''
+          }
         />
         <InputPhoneCountries
           options={[
@@ -60,19 +74,20 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
             {value: '+81', label: '+81', emoji: '🇯🇵'},
           ]}
           label="Phone Number"
-          value={url}
-          onChange={e => setUrl(e.target.value)}
-          onBlur={() => console.log('Input blurred')}
+          name="phone"
+          value={formik.values.phone}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           placeholder="87111122222"
+          error={
+            formik.touched.phone && formik.errors.phone
+              ? formik.errors.phone
+              : ''
+          }
         />
 
         <div className="flex justify-end">
-          <Button
-            type="button"
-            className="w-max"
-            onClick={handleAdd}
-            title="Add"
-          />
+          <Button type="submit" className="w-max" title="Add" />
         </div>
       </form>
     </PopupContainer>

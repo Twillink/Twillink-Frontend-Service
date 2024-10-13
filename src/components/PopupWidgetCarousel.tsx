@@ -1,5 +1,7 @@
+import AddWidgetCarouselSchema from '@/libs/schema/Widget/WidgetCarousel.schema';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
-import React, {useMemo, useState} from 'react';
+import {useFormik} from 'formik';
+import React, {useMemo} from 'react';
 import Button from './Button';
 import ImageSelectorWithSource from './ImageSelectorWithSource';
 import InputLabel from './InputLabel';
@@ -14,7 +16,7 @@ interface IPopupWidgetCarousel {
     title: string,
     url: string,
     image?: string | ArrayBuffer | null,
-    images?: string[] | ArrayBuffer[] | null[],
+    images?: (string | ArrayBuffer | null)[],
   ) => void;
 }
 
@@ -24,23 +26,28 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
   onBack,
   onAdd,
 }) => {
-  const [title, setTitle] = useState('');
-  const [url, setUrl] = useState('');
-  const [selectedImages, setSelectedImages] = useState<
-    string[] | ArrayBuffer[] | null[]
-  >([]);
-
-  const handleAdd = () => {
-    onAdd(WidgetTypeEnum.Carousel, title, url, null, selectedImages);
-    setTitle('');
-    setUrl('');
-    setSelectedImages([]);
-    onClose();
-  };
+  const formik = useFormik({
+    initialValues: {
+      title: '',
+      selectedImages: [] as (string | ArrayBuffer | null)[],
+    },
+    validationSchema: AddWidgetCarouselSchema,
+    onSubmit: values => {
+      onAdd(
+        WidgetTypeEnum.Carousel,
+        values.title,
+        '',
+        null,
+        values.selectedImages,
+      );
+      formik.resetForm();
+      onClose();
+    },
+  });
 
   const imageIndex = useMemo(
-    () => selectedImages.length,
-    [selectedImages.length],
+    () => formik.values.selectedImages.length,
+    [formik.values.selectedImages.length],
   );
 
   return (
@@ -49,17 +56,26 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
       onClose={onClose}
       onBack={onBack}
       isOpen={isOpen}>
-      <form method="dialog" className="modal-backdrop flex flex-col gap-5">
+      <form
+        method="dialog"
+        className="modal-backdrop flex flex-col gap-5"
+        onSubmit={formik.handleSubmit}>
         <InputLabel
           label="Caption"
-          value={title}
-          onChange={e => setTitle(e.target.value)}
-          onBlur={() => console.log('Input blurred')}
+          name="title"
+          value={formik.values.title}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           placeholder="Your caption carousel"
+          error={
+            formik.touched.title && formik.errors.title
+              ? formik.errors.title
+              : ''
+          }
         />
 
         <div className="overflow-x-scroll flex gap-2">
-          {selectedImages.map((item, index) => (
+          {formik.values.selectedImages.map((item, index) => (
             <div key={index} className="w-full h-full">
               <ImageSelectorWithSource
                 image={item}
@@ -69,11 +85,10 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
                   if (file) {
                     const reader = new FileReader();
                     reader.onloadend = () => {
-                      setSelectedImages((prev: any) => {
-                        const newArr = [...prev];
-                        newArr[index] = reader.result;
-                        return newArr;
-                      });
+                      formik.setFieldValue(
+                        `selectedImages[${index}]`,
+                        reader.result,
+                      );
                     };
                     reader.readAsDataURL(file);
                   }
@@ -92,27 +107,26 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
                 if (file) {
                   const reader = new FileReader();
                   reader.onloadend = () => {
-                    setSelectedImages((prev: any) => {
-                      const newArr = [...prev];
-                      newArr[imageIndex] = reader.result;
-                      return newArr;
-                    });
+                    formik.setFieldValue(
+                      `selectedImages[${imageIndex}]`,
+                      reader.result,
+                    );
                   };
                   reader.readAsDataURL(file);
                 }
               }}
               className="hidden"
             />
+            {formik.touched.selectedImages && formik.errors.selectedImages ? (
+              <span className="text-red-500 text-sm">
+                {formik.errors.selectedImages}
+              </span>
+            ) : null}
           </div>
         </div>
 
         <div className="flex justify-end">
-          <Button
-            type="button"
-            className="w-max"
-            onClick={handleAdd}
-            title="Add"
-          />
+          <Button type="submit" className="w-max" title="Add" />
         </div>
       </form>
     </PopupContainer>

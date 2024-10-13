@@ -1,16 +1,18 @@
+import SvgFacebook from '@/assets/svgComponents/SvgFacebook';
+import SvgInstagram from '@/assets/svgComponents/SvgInstagram';
+import SvgLinkedIn from '@/assets/svgComponents/SvgLinkedIn';
+import SvgTelegram from '@/assets/svgComponents/SvgTelegram';
+import SvgTiktok from '@/assets/svgComponents/SvgTiktok';
+import SvgTumblr from '@/assets/svgComponents/SvgTumblr';
+import SvgTwitter from '@/assets/svgComponents/SvgTwitter';
+import SvgYoutube from '@/assets/svgComponents/SvgYoutube';
+import AddWidgetSocialSchema from '@/libs/schema/Widget/WidgetSocial.schema';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
-import React, {useState} from 'react';
+import {useFormik} from 'formik';
+import React from 'react';
 import Button from './Button';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
-import SvgYoutube from '@/assets/svgComponents/SvgYoutube';
-import SvgInstagram from '@/assets/svgComponents/SvgInstagram';
-import SvgTelegram from '@/assets/svgComponents/SvgTelegram';
-import SvgFacebook from '@/assets/svgComponents/SvgFacebook';
-import SvgLinkedIn from '@/assets/svgComponents/SvgLinkedIn';
-import SvgTwitter from '@/assets/svgComponents/SvgTwitter';
-import SvgTiktok from '@/assets/svgComponents/SvgTiktok';
-import SvgTumblr from '@/assets/svgComponents/SvgTumblr';
 
 interface IPopupWidgetSocial {
   isOpen: boolean;
@@ -63,19 +65,25 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
   onClose,
   onAdd,
 }) => {
-  const [title, setTitle] = useState<string>('');
-  const [url, setUrl] = useState('');
-
-  const handleAdd = () => {
-    onAdd(WidgetTypeEnum.Image, title, url);
-    setTitle('');
-    setUrl('');
-    onClose();
-  };
+  const formik = useFormik({
+    initialValues: {
+      title: '',
+      url: '',
+    },
+    validationSchema: AddWidgetSocialSchema,
+    onSubmit: values => {
+      onAdd(WidgetTypeEnum.Image, values.title, values.url);
+      formik.resetForm();
+      onClose();
+    },
+  });
 
   return (
     <PopupContainer title="Add Image" onClose={onClose} isOpen={isOpen}>
-      <form method="dialog" className="modal-backdrop flex flex-col gap-5">
+      <form
+        method="dialog"
+        className="modal-backdrop flex flex-col gap-5"
+        onSubmit={formik.handleSubmit}>
         <p className="text-general-med text-sm">Select social account</p>
         <div className="flex gap-4 justify-between flex-nowrap overflow-x-scroll">
           {socialButtons.map(button => {
@@ -83,11 +91,10 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
             return (
               <div
                 key={button.name}
-                // disabled={title !== button.name}
                 onClick={() => {
-                  setTitle(button.name);
+                  formik.setFieldValue('title', button.name);
                 }}
-                className={`w-8 p-1 flex justify-center items-center ${title !== button.name ? 'grayscale' : 'bg-base-200'} hover:cursor-pointer`}>
+                className={`w-8 p-1 flex justify-center items-center ${formik.values.title !== button.name ? 'grayscale' : 'bg-base-200'} hover:cursor-pointer`}>
                 <Icon
                   width={28}
                   height={28}
@@ -98,22 +105,25 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
             );
           })}
         </div>
+        {formik.touched.title && formik.errors.title ? (
+          <span className="text-red-500 text-sm">{formik.errors.title}</span>
+        ) : null}
+
         <InputLabel
           type="url"
           label="URL Link"
-          value={url}
-          onChange={e => setUrl(e.target.value)}
-          onBlur={() => console.log('Input blurred')}
+          name="url"
+          value={formik.values.url}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           placeholder="https://www."
+          error={
+            formik.touched.url && formik.errors.url ? formik.errors.url : ''
+          }
         />
 
         <div className="flex justify-end">
-          <Button
-            type="button"
-            className="w-max"
-            onClick={handleAdd}
-            title="Add"
-          />
+          <Button type="submit" className="w-max" title="Add" />
         </div>
       </form>
     </PopupContainer>

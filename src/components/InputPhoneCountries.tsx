@@ -12,6 +12,7 @@ interface IInputLabel extends InputHTMLAttributes<HTMLInputElement> {
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur: (event: FocusEvent<HTMLInputElement>) => void;
   options: CountryOption[];
+  error?: string;
 }
 
 const InputPhoneCountries: React.FC<IInputLabel> = ({
@@ -24,6 +25,7 @@ const InputPhoneCountries: React.FC<IInputLabel> = ({
   className,
   label,
   options,
+  error,
   ...rest
 }) => {
   const currentCountryCode =
@@ -83,6 +85,7 @@ const InputPhoneCountries: React.FC<IInputLabel> = ({
           {...rest}
         />
       </div>
+      {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
     </div>
   );
 };
