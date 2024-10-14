@@ -6,6 +6,7 @@ import Button from '@/components/Button';
 import ErrorMessageField from '@/components/ErrorMessageField';
 import Input from '@/components/Input';
 import {mockAdmins} from '@/mock/mockAdmins';
+import Image from 'next/image';
 
 const Admin = () => {
   const formik = useFormik({
@@ -35,7 +36,7 @@ const Admin = () => {
                   <div className="flex items-center gap-3">
                     <div className="avatar">
                       <div className="mask mask-circle h-9 w-9">
-                        <img
+                        <Image
                           src={admin.avatar}
                           alt={`Avatar of ${admin.name}`}
                         />
