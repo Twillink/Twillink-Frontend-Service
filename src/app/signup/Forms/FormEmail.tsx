@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useFormikContext} from 'formik';
 import Input from '@/components/Input';
 import ErrorMessageField from '@/components/ErrorMessageField';
@@ -8,6 +8,11 @@ import Button from '@/components/Button';
 import ButtonSocialAuth from '@/components/ButtonSocialAuth';
 import Image from 'next/image';
 import GoogleIcon from '@/assets/svgs/google-icon.svg';
+import useDebounce from '@/libs/hooks/useDebounce';
+import {apiAuthCheckEmail} from '@/libs/api';
+import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
+import {IGeneralSubmit} from '@/libs/types/IGeneralSubmit';
+import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 
 interface IFormEmailValues {
   email: string;
@@ -17,23 +22,75 @@ interface IFormEmailValues {
 
 interface IFormEmail {
   onNext: () => void;
+  generalSubmit: IGeneralSubmit;
 }
 
-const FormEmail: React.FC<IFormEmail> = ({onNext}) => {
-  const {values, errors, touched, handleChange, handleBlur, isValid, dirty} =
-    useFormikContext<IFormEmailValues>();
+const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
+  const dispatch = useAppDispatch();
+
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    setFieldValue,
+    handleBlur,
+    isValid,
+    dirty,
+  } = useFormikContext<IFormEmailValues>();
+
+  const [emailAvail, setEmailAvail] = useState<boolean>(false);
+  const [checking, setChecking] = useState<boolean>(false);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+
+  const debouncedEmail = useDebounce(values.email);
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {value} = event.target;
+    setFieldValue('email', value);
+    setIsTyping(true);
+  };
+
+  const handleCheckEmail = useCallback(
+    async (email: string) => {
+      setChecking(true);
+      setApiError(null);
+
+      try {
+        await apiAuthCheckEmail(dispatch, email, false);
+        setEmailAvail(true);
+      } catch (error: unknown) {
+        const apiError = error as ErrorApiResponseType;
+        setApiError(apiError?.data?.message);
+        setEmailAvail(false);
+      } finally {
+        setChecking(false);
+      }
+    },
+    [dispatch],
+  );
 
   const handleGoogleSignUp = async () => {
     const username = values.username;
     if (!username) {
-      console.error('Username is required');
       return;
     }
     window.open(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google?userName=${encodeURIComponent(username)}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google-signup?userName=${encodeURIComponent(username)}`,
       '_blank',
     );
   };
+
+  useEffect(() => {
+    if (debouncedEmail && !errors.email) {
+      handleCheckEmail(debouncedEmail);
+      setIsTyping(false);
+    } else {
+      setEmailAvail(false);
+      setApiError(null);
+    }
+  }, [debouncedEmail, errors.email, handleCheckEmail]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -44,11 +101,14 @@ const FormEmail: React.FC<IFormEmail> = ({onNext}) => {
           name="email"
           id="email"
           value={values.email}
-          onChange={handleChange}
+          onChange={handleEmailChange}
           onBlur={handleBlur}
           autoComplete="email"
         />
-        <ErrorMessageField error={errors.email} touched={touched.email} />
+        <ErrorMessageField
+          error={errors.email || apiError}
+          touched={touched.email}
+        />
       </div>
 
       <div>
@@ -67,10 +127,17 @@ const FormEmail: React.FC<IFormEmail> = ({onNext}) => {
 
       <div className="flex justify-end">
         <Button
-          size="lg"
           onClick={onNext}
           title="Send"
-          disabled={!isValid || !dirty}
+          disabled={
+            !isValid ||
+            !dirty ||
+            checking ||
+            !emailAvail ||
+            isTyping ||
+            generalSubmit.isLoading
+          }
+          loading={generalSubmit.isLoading}
           type="button"
           className="px-[42px]"
         />

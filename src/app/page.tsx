@@ -1,8 +1,15 @@
+'use client';
+
 import Button from '@/components/Button';
 import SvgTwillinkLogo from '@/assets/svgComponents/SvgTwillinkLogo';
 import Link from 'next/link';
+import {useAppSelector} from '@/libs/hooks/useReduxHook';
+import {RootState} from '@/libs/store/store';
 
 const Home: React.FC = () => {
+  const isLoggedIn = useAppSelector(
+    (state: RootState) => state.auth.isLoggedIn,
+  );
   return (
     <div
       data-theme="skinLight"
@@ -14,16 +21,26 @@ const Home: React.FC = () => {
       <h2 className="text-primary font-semibold leading-relaxed">
         Claim your username now
       </h2>
-      <div>
-        <Link href="/signup">
-          <Button title="Create your Twillink" />
-        </Link>
-      </div>
-      <div>
-        <Link href="/login" className="hover:underline">
-          Log In
-        </Link>
-      </div>
+      {isLoggedIn ? (
+        <div>
+          <Link href="/admin">
+            <Button title="Go to Admin" />
+          </Link>
+        </div>
+      ) : (
+        <>
+          <div>
+            <Link href="/signup">
+              <Button title="Create your Twillink" />
+            </Link>
+          </div>
+          <div>
+            <Link href="/login" className="hover:underline">
+              Log In
+            </Link>
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -3,24 +3,35 @@
 import GradientBg from '@/components/GradientBg';
 import {Form, Formik, FormikErrors} from 'formik';
 import {motion, AnimatePresence} from 'framer-motion';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import * as Yup from 'yup';
 import FormClaim from './Forms/FormClaim';
 import FormEmail from './Forms/FormEmail';
 import FormVerify from './Forms/FormVerify';
-import {useRouter} from 'next/navigation';
 import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
 import ButtonIcon from '@/components/ButtonIcon';
 import {StepsEnum} from '@/libs/types/StepsEnum';
+import {apiAuthRegister, apiOtpSend} from '@/libs/api';
+import {IAuthInitialData} from '@/libs/types/IAuthInitialData';
+import {TypeOtpEnum} from '@/libs/types/TypeOtpEnum';
+import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
+import {authLogin} from '@/libs/store/features/authSlice';
+import {
+  resetSubmitState,
+  setSubmitLoading,
+  setSubmitSuccess,
+} from '@/libs/store/features/generalSubmitSlice';
+import {resetToastState, showToast} from '@/libs/store/features/toastSlice';
+import {ToastType} from '@/libs/types/ToastType';
 
-interface IItem {
+interface IItemStepSignup {
   title: string;
   btnLabel: string;
   seq: number;
   step: StepsEnum;
 }
 
-const dataSteps: IItem[] = [
+const dataSteps: IItemStepSignup[] = [
   {
     seq: 1,
     title: 'Claim your link',
@@ -41,14 +52,7 @@ const dataSteps: IItem[] = [
   },
 ];
 
-type InitialData = {
-  username: string;
-  email: string;
-  password: string;
-  otp: string;
-};
-
-const initialValue: InitialData = {
+const initialValue: IAuthInitialData = {
   username: '',
   email: '',
   password: '',
@@ -59,54 +63,66 @@ const CARD_OFFSET = -20;
 const SCALE_FACTOR = 0.06;
 
 const SignupPage: React.FC = () => {
-  const router = useRouter();
-  const [cards, setCards] = useState<IItem[]>(dataSteps);
+  const dispatch = useAppDispatch();
+
+  const [cards, setCards] = useState<IItemStepSignup[]>(dataSteps);
   const [currentSeqActive, setCurrentSeqActive] = useState<number>(1);
+
+  const generalSubmit = useAppSelector(state => state.generalSubmit);
 
   const stepSchemas = [
     Yup.object({
-      username: Yup.string().required('Username is required'),
+      username: Yup.string()
+        .required('Username is required')
+        .min(3, 'Username must be at least 3 characters long')
+        .max(30, 'Username cannot exceed 30 characters'),
     }),
     Yup.object({
       email: Yup.string().email('Invalid email').required('Email is required'),
       password: Yup.string()
         .required('Password is required')
-        .min(8, 'Password must be at least 8 characters')
-        .max(20, 'Password cannot exceed 20 characters')
-        .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-        .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-        .matches(/\d/, 'Password must contain at least one number'),
+        .min(6, 'Password must be at least 6 characters'),
     }),
     Yup.object({
       otp: Yup.string()
         .required('OTP is required')
-        .length(6, 'OTP must be exactly 6 characters'),
+        .length(4, 'OTP must be exactly 4 characters'),
     }),
   ];
 
   const handleNext = async (
     currentSeq: number,
-    validateForm: () => Promise<FormikErrors<InitialData>>,
+    validateForm: () => Promise<FormikErrors<IAuthInitialData>>,
+    values: IAuthInitialData,
   ) => {
+    dispatch(resetSubmitState());
+    dispatch(resetToastState());
     const errors = await validateForm();
 
     if (Object.keys(errors).length > 0) {
-      console.log('Validation Errors:', errors);
       return;
     }
 
-    if (currentSeq === dataSteps[dataSteps.length - 1].seq) {
-      handleSubmit(initialValue);
-      router.push('/admin');
-    } else {
-      setCards(cards.slice(1));
-      setCurrentSeqActive(
-        dataSteps.find(item => item.seq > currentSeq)?.seq || 1,
-      );
+    if (currentSeq === 2) {
+      const success = await handleSendOtp(values);
+
+      if (!success) {
+        return;
+      }
     }
+
+    setCards(cards.slice(1));
+    setCurrentSeqActive(
+      dataSteps.find(item => item.seq > currentSeq)?.seq || 1,
+    );
   };
 
-  const handleBack = (currentSeq: number) => {
+  const handleBack = (
+    currentSeq: number,
+    setFieldValue: (field: string, value: any) => void,
+  ) => {
+    dispatch(resetSubmitState());
+    dispatch(resetToastState());
     const targetSeq = currentSeq - 1;
     const previousCard = dataSteps.find(item => item.seq === targetSeq);
 
@@ -114,24 +130,96 @@ const SignupPage: React.FC = () => {
       setCards([previousCard, ...cards]);
       setCurrentSeqActive(targetSeq);
     }
+    if (currentSeq === 3) {
+      setFieldValue('otp', '');
+    }
   };
 
-  const renderForm = (step: StepsEnum, onNext: () => void) => {
+  const renderForm = (
+    step: StepsEnum,
+    onNext: () => void,
+    handleSubmit: () => void,
+    formValues: IAuthInitialData,
+  ) => {
     switch (step) {
       case StepsEnum.CLAIM:
         return <FormClaim onNext={onNext} />;
       case StepsEnum.EMAIL:
-        return <FormEmail onNext={onNext} />;
+        return <FormEmail onNext={onNext} generalSubmit={generalSubmit} />;
       case StepsEnum.VERIFY:
-        return <FormVerify />;
+        return (
+          <FormVerify
+            handleSubmit={handleSubmit}
+            generalSubmit={generalSubmit}
+            formValues={formValues}
+          />
+        );
       default:
         return null;
     }
   };
 
-  const handleSubmit = (values: InitialData) => {
-    console.log('Form submitted:', values);
+  const handleSendOtp = async (values: IAuthInitialData) => {
+    dispatch(setSubmitLoading(true));
+
+    const body = {
+      email: values.email,
+      typeOtp: TypeOtpEnum.signUp,
+    };
+
+    return apiOtpSend(dispatch, body)
+      .then(() => {
+        dispatch(setSubmitLoading(false));
+        dispatch(setSubmitSuccess(true));
+        return true;
+      })
+      .catch(() => {
+        dispatch(setSubmitLoading(false));
+        return false;
+      });
   };
+
+  const handleSubmit = async (values: any) => {
+    dispatch(setSubmitLoading(true));
+
+    const body = {
+      userName: values.username,
+      email: values.email,
+      phoneNumber: '',
+      fullName: '',
+      password: values.password,
+    };
+
+    return apiAuthRegister(dispatch, body)
+      .then(response => {
+        dispatch(authLogin(response.data));
+        localStorage.setItem('authToken', response.data.accessToken);
+        localStorage.setItem('user', JSON.stringify(response.data));
+        dispatch(setSubmitSuccess(true));
+        return true;
+      })
+      .catch(() => {
+        return false;
+      })
+      .finally(() => {
+        dispatch(setSubmitLoading(false));
+      });
+  };
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const error = queryParams.get('error');
+
+    if (error) {
+      dispatch(
+        showToast({
+          title: 'Failed',
+          message: error,
+          type: ToastType.ERROR,
+        }),
+      );
+    }
+  }, [dispatch]);
 
   return (
     <div data-theme="skinLight">
@@ -143,13 +231,13 @@ const SignupPage: React.FC = () => {
           validateOnBlur={true}
           onSubmit={handleSubmit}
           validationSchema={stepSchemas[currentSeqActive - 1]}>
-          {({validateForm}) => (
-            <Form>
-              <div className="stack">
+          {({validateForm, handleSubmit, setFieldValue, values}) => (
+            <Form className="w-full">
+              <div className="stack w-full">
                 <AnimatePresence>
                   {cards.map((item, index) => (
                     <motion.div
-                      className="card bg-contras-high text-primary-content shadow-sm"
+                      className="card w-full max-w-[528px] bg-contras-high text-primary-content shadow-sm"
                       key={`card_${item.seq}`}
                       initial={{y: 0}}
                       animate={{
@@ -161,14 +249,16 @@ const SignupPage: React.FC = () => {
                       }}
                       exit={{y: -700}}
                       transition={{duration: 0.3, ease: [0, 0.71, 0.2, 1.01]}}>
-                      <div className="card-body px-[99px] py-[90px]">
-                        <div className="flex flex-col gap-6 w-full sm:w-[376px]">
+                      <div className="card-body px-6 sm:px-[99px] py-14 sm:py-[90px]">
+                        <div className="flex flex-col gap-6 w-full">
                           {item.seq !== dataSteps[0].seq && (
                             <ButtonIcon
                               icon={
                                 <SvgArrowLeft className="stroke-primary hover:stroke-general-med" />
                               }
-                              onClick={() => handleBack(item.seq)}
+                              onClick={() =>
+                                handleBack(item.seq, setFieldValue)
+                              }
                               type="button"
                               className="flex justify-start w-max"
                             />
@@ -177,8 +267,11 @@ const SignupPage: React.FC = () => {
                             {item.title}
                           </h3>
                           {index === 0 &&
-                            renderForm(item.step, () =>
-                              handleNext(item.seq, validateForm),
+                            renderForm(
+                              item.step,
+                              () => handleNext(item.seq, validateForm, values),
+                              handleSubmit,
+                              values,
                             )}
                         </div>
                       </div>

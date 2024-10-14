@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface IErrorMessageField {
-  error?: string;
+  error?: string | null;
   touched?: boolean;
   className?: string;
 }
@@ -13,7 +13,15 @@ const ErrorMessageField: React.FC<IErrorMessageField> = ({
 }) => {
   if (!error || !touched) return null;
 
-  return <div className={`text-error text-sm ${className}`}>{error}</div>;
+  return (
+    <div className={`text-error text-sm ${className}`}>
+      {Array.isArray(error) ? (
+        error.map((msg, index) => <div key={index}>{msg}</div>)
+      ) : (
+        <div>{error}</div>
+      )}
+    </div>
+  );
 };
 
 export default ErrorMessageField;
