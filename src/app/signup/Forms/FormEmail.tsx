@@ -44,7 +44,7 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
   const [apiError, setApiError] = useState<string | null>(null);
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
-  const debouncedEmail = useDebounce(values.email, 3000);
+  const debouncedEmail = useDebounce(values.email);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
