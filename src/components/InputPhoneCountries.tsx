@@ -41,7 +41,7 @@ const InputPhoneCountries: React.FC<IInputLabel> = ({
 
     const newValue = currentCountryCode + filteredPhoneNumber;
     onChange({
-      target: {value: newValue},
+      target: {name: e.target.name, value: newValue},
     } as ChangeEvent<HTMLInputElement>);
   };
 
@@ -49,7 +49,7 @@ const InputPhoneCountries: React.FC<IInputLabel> = ({
     const selectedCountryCode = e.target.value;
     const newValue = selectedCountryCode + phoneNumber;
     onChange({
-      target: {value: newValue},
+      target: {name: rest.name, value: newValue},
     } as ChangeEvent<HTMLInputElement>);
   };
 

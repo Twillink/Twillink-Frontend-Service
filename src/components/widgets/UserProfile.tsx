@@ -121,7 +121,9 @@ const UserProfile: React.FC<IUserProfile> = ({contact}) => {
               </button>
             )}
             {item.url && (
-              <button key={item.url} className="btn btn-primary btn-xs">
+              <button
+                key={item.url}
+                className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
                   <SvgPhoneCall height={20} width={20} className="text-white" />
                 </div>
