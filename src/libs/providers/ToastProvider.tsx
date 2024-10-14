@@ -20,7 +20,9 @@ const ToastProvider: React.FC<IToastProvider> = ({children}) => {
       {children}
       <Toast
         title={title}
-        message={message}
+        message={
+          typeof message === 'string' ? message : JSON.stringify(message)
+        }
         type={type}
         isVisible={isVisible}
         onClose={() => dispatch(hideToast())}
