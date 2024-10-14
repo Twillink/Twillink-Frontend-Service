@@ -12,12 +12,15 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.8",
+    "@vime/core": "^5.4.1",
+    "@vime/react": "^5.4.1",
     "axios": "^1.7.7",
     "formik": "^2.4.6",
     "framer-motion": "^11.3.31",
     "is-url": "^1.2.4",
     "lodash-move": "^1.1.1",
     "next": "14.2.7",
+    "next-video": "^1.2.0",
     "react": "^18",
     "react-dom": "^18",
     "react-otp-input": "^3.1.1",
@@ -25,6 +28,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@types/is-url": "^1.2.32",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

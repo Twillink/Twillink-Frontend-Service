@@ -2,8 +2,15 @@
 
 import React, {useState, useEffect, useRef} from 'react';
 import ProfileImage from './ProfileImage';
+import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
+import SvgMail from '@/assets/svgComponents/SvgMail';
+import SvgPhoneCall from '@/assets/svgComponents/SvgPhoneCall';
 
-const UserProfile: React.FC = () => {
+interface IUserProfile {
+  contact: IItemWidgetType[];
+}
+
+const UserProfile: React.FC<IUserProfile> = ({contact}) => {
   const [isSticky, setIsSticky] = useState<boolean>(false);
   const [editingSection, setEditingSection] = useState<
     'none' | 'businessName' | 'caption'
@@ -99,6 +106,30 @@ const UserProfile: React.FC = () => {
             </p>
           )}
         </div>
+      </div>
+      <div className="flex justify-between gap-2 items-center">
+        {contact?.map((item: IItemWidgetType) => (
+          <>
+            {item.text && (
+              <button
+                key={item.text}
+                className="btn btn-primary btn-sm rounded-full">
+                <div className="relative w-4 h-4 mr-1 bg-transparent">
+                  <SvgMail height={20} width={20} className="text-white" />
+                </div>
+                <p>Email</p>
+              </button>
+            )}
+            {item.url && (
+              <button key={item.url} className="btn btn-primary btn-xs">
+                <div className="relative w-4 h-4 mr-1 bg-transparent">
+                  <SvgPhoneCall height={20} width={20} className="text-white" />
+                </div>
+                <p>Call</p>
+              </button>
+            )}
+          </>
+        ))}
       </div>
     </div>
   );

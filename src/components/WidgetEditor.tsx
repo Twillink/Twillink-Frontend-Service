@@ -14,7 +14,7 @@ import WidgetContainer from '@/components/widgets/WidgetContainer';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {generateUniqueString} from '@/utils/generateUniqueString';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import PopupWidgetCarousel from './PopupWidgetCarousel';
 import PopupWidgetSocial from './PopupWidgetSocial';
 
@@ -218,6 +218,21 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     }
   };
 
+  const dataContact = useMemo(() => {
+    return dataWidget.filter(item => item.type === WidgetTypeEnum.Contact);
+  }, [dataWidget]);
+
+  const dataWidgetFiltered = useMemo(() => {
+    return dataWidget.filter(
+      item =>
+        ![WidgetTypeEnum.Contact, WidgetTypeEnum.Social].includes(item.type),
+    );
+  }, [dataWidget]);
+
+  const dataSocial = useMemo(() => {
+    return dataWidget.filter(item => item.type === WidgetTypeEnum.Social);
+  }, [dataWidget]);
+
   return (
     <>
       <div data-theme="light" className="h-full max-w-[428px]">
@@ -226,12 +241,13 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           ref={scrollContainerRef}
           onDragOver={ev => ev.preventDefault()}>
           <ScrollHideHeader />
-          <UserProfile />
+          <UserProfile contact={dataContact} />
           <div className="flex flex-wrap px-6">
             <SocialContainer
               onClick={() => setPopupState(WidgetTypeEnum.Social)}
+              data={dataSocial}
             />
-            {dataWidget
+            {dataWidgetFiltered
               .sort((a, b) => a.order - b.order)
               .map(widget => (
                 <WidgetContainer

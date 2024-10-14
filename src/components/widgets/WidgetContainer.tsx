@@ -6,6 +6,8 @@ import WidgetText from '@/components/widgets/WidgetText';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import WidgetFrameEditor from './WidgetFrameEditor';
+import WidgetImage from './WidgetImage';
+import WidgetVideo from './WIdgetVideo';
 
 interface IWidgetContainer {
   handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;
@@ -47,6 +49,28 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
         return (
           <WidgetText
             text={values.text}
+            onClick={e => {
+              e.preventDefault();
+            }}
+          />
+        );
+      case WidgetTypeEnum.Image:
+        return (
+          <WidgetImage
+            text={values.text}
+            url={values.url || '#'}
+            image={values.image}
+            onClick={e => {
+              e.preventDefault();
+            }}
+          />
+        );
+      case WidgetTypeEnum.Video:
+        return (
+          <WidgetVideo
+            text={values.text}
+            url={values.url || '#'}
+            image={values.image}
             onClick={e => {
               e.preventDefault();
             }}

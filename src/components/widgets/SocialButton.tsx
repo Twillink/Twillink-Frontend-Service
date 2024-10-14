@@ -4,6 +4,7 @@ import React, {ComponentProps} from 'react';
 
 interface ISocialButton extends ComponentProps<'input'> {
   imageUrl?: string;
+  name?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
 }

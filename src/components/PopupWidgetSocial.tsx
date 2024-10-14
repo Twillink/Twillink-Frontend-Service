@@ -25,7 +25,7 @@ interface IPopupWidgetSocial {
   ) => void;
 }
 
-const socialButtons = [
+export const socialButtons = [
   {
     name: 'Instagram',
     icon: SvgInstagram,
@@ -72,7 +72,7 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
     },
     validationSchema: AddWidgetSocialSchema,
     onSubmit: values => {
-      onAdd(WidgetTypeEnum.Image, values.title, values.url);
+      onAdd(WidgetTypeEnum.Social, values.title, values.url);
       formik.resetForm();
       onClose();
     },
