@@ -4,7 +4,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 interface IToastState {
   isVisible: boolean;
   title: string;
-  message: string;
+  message: string | object;
   type: ToastType;
 }
 

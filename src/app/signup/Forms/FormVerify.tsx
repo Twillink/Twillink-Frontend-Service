@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useFormikContext} from 'formik';
 import OtpInput from 'react-otp-input';
 import ErrorMessageField from '@/components/ErrorMessageField';
@@ -12,6 +12,7 @@ import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {IAuthInitialData} from '@/libs/types/IAuthInitialData';
 import {apiOtpValidate} from '@/libs/api';
 import {IGeneralSubmit} from '@/libs/types/IGeneralSubmit';
+import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 
 interface IFormVerifyValues {
   otp: string;
@@ -30,39 +31,47 @@ export default function FormVerify({
   generalSubmit,
   formValues,
 }: IFormVerify) {
+  const dispatch = useAppDispatch();
   const [isVerified, setIsVerified] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiError, setApiError] = useState<string | null>('');
   const {values, errors, touched, setFieldValue, setFieldTouched} =
     useFormikContext<IFormVerifyValues>();
 
-  const verifyOtp = async (otp: string) => {
-    setIsLoading(true);
-    setApiError(null);
-    try {
+  const verifyOtp = useCallback(
+    async (otp: string) => {
+      setIsLoading(true);
+      setApiError(null);
+
       const body = {
         codeOtp: otp,
         email: formValues.email,
       };
-      const response = await apiOtpValidate(body);
-      if (response.status === 200 || response.status === 201) {
-        setIsVerified(true);
-        handleSubmit();
-      }
-    } catch (error: unknown) {
-      const apiError = error as ErrorApiResponseType;
-      setApiError(apiError?.data?.message);
-      setIsVerified(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
+      return apiOtpValidate(dispatch, body)
+        .then(response => {
+          if (response.status === 200 || response.status === 201) {
+            setIsVerified(true);
+            handleSubmit();
+          }
+        })
+        .catch((error: unknown) => {
+          const apiError = error as ErrorApiResponseType;
+          setApiError(apiError?.data?.message);
+          setIsVerified(false);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [dispatch, formValues.email, handleSubmit],
+  );
 
   useEffect(() => {
     if (values.otp.length === NUMINPUT) {
       verifyOtp(values.otp);
     }
-  }, [values.otp]);
+  }, [values.otp, verifyOtp]);
 
   const handleOtpChange = (otp: string) => {
     setFieldValue('otp', otp);

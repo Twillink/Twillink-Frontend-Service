@@ -3,7 +3,7 @@
 import GradientBg from '@/components/GradientBg';
 import {Form, Formik, FormikErrors} from 'formik';
 import {motion, AnimatePresence} from 'framer-motion';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import * as Yup from 'yup';
 import FormClaim from './Forms/FormClaim';
 import FormEmail from './Forms/FormEmail';
@@ -12,7 +12,6 @@ import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
 import ButtonIcon from '@/components/ButtonIcon';
 import {StepsEnum} from '@/libs/types/StepsEnum';
 import {apiAuthRegister, apiOtpSend} from '@/libs/api';
-import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {IAuthInitialData} from '@/libs/types/IAuthInitialData';
 import {TypeOtpEnum} from '@/libs/types/TypeOtpEnum';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
@@ -162,68 +161,65 @@ const SignupPage: React.FC = () => {
 
   const handleSendOtp = async (values: IAuthInitialData) => {
     dispatch(setSubmitLoading(true));
-    try {
-      const body = {
-        email: values.email,
-        typeOtp: TypeOtpEnum.signUp,
-      };
-      const response = await apiOtpSend(body);
-      if (response.status === 200 || response.status === 201) {
+
+    const body = {
+      email: values.email,
+      typeOtp: TypeOtpEnum.signUp,
+    };
+
+    return apiOtpSend(dispatch, body)
+      .then(() => {
+        dispatch(setSubmitLoading(false));
         dispatch(setSubmitSuccess(true));
-      }
-      return true;
-    } catch (error: unknown) {
-      const apiError = error as ErrorApiResponseType;
-      dispatch(
-        showToast({
-          title: 'Failed',
-          message: apiError.data?.message,
-          type: ToastType.ERROR,
-        }),
-      );
-      return false;
-    } finally {
-      dispatch(setSubmitLoading(false));
-    }
+        return true;
+      })
+      .catch(() => {
+        dispatch(setSubmitLoading(false));
+        return false;
+      });
   };
 
   const handleSubmit = async (values: any) => {
     dispatch(setSubmitLoading(true));
-    try {
-      const body = {
-        userName: values.username,
-        email: values.email,
-        phoneNumber: '',
-        fullName: '',
-        password: values.password,
-      };
-      const response = await apiAuthRegister(body);
-      if (response.status === 200 || response.status === 201) {
+
+    const body = {
+      userName: values.username,
+      email: values.email,
+      phoneNumber: '',
+      fullName: '',
+      password: values.password,
+    };
+
+    return apiAuthRegister(dispatch, body)
+      .then(response => {
         dispatch(authLogin(response.data));
         localStorage.setItem('authToken', response.data.accessToken);
         localStorage.setItem('user', JSON.stringify(response.data));
         dispatch(setSubmitSuccess(true));
-        dispatch(
-          showToast({
-            title: 'Success',
-            message: response.data.message,
-            type: ToastType.SUCCESS,
-          }),
-        );
-      }
-    } catch (error: unknown) {
-      const apiError = error as ErrorApiResponseType;
+        return true;
+      })
+      .catch(() => {
+        return false;
+      })
+      .finally(() => {
+        dispatch(setSubmitLoading(false));
+      });
+  };
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const error = queryParams.get('error');
+
+    if (error) {
       dispatch(
         showToast({
           title: 'Failed',
-          message: apiError.data?.message,
+          message: error,
           type: ToastType.ERROR,
         }),
       );
-    } finally {
-      dispatch(setSubmitLoading(false));
     }
-  };
+  }, [dispatch]);
 
   return (
     <div data-theme="skinLight">

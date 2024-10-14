@@ -12,12 +12,11 @@ import Image from 'next/image';
 import GoogleIcon from '@/assets/svgs/google-icon.svg';
 import {authLogin} from '@/libs/store/features/authSlice';
 import {useRouter} from 'next/navigation';
-import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import {apiAuthLogin} from '@/libs/api';
 import {showToast} from '@/libs/store/features/toastSlice';
 import {ToastType} from '@/libs/types/ToastType';
 import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
-import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {useEffect} from 'react';
 
 type InitialData = {
@@ -32,6 +31,8 @@ const initialValue: InitialData = {
 
 const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
+  const generalSubmit = useAppSelector(state => state.generalSubmit);
+
   const router = useRouter();
 
   const schema = Yup.object({
@@ -47,40 +48,25 @@ const LoginPage: React.FC = () => {
       '_blank',
     );
   };
+
   const handleSubmit = async (values: InitialData) => {
     dispatch(setSubmitLoading(true));
-    try {
-      const body = {
-        email: values.email,
-        password: values.password,
-      };
-      const response = await apiAuthLogin(body);
+    const body = {
+      email: values.email,
+      password: values.password,
+    };
 
-      if (response.status === 200 || response.status === 201) {
+    return apiAuthLogin(dispatch, body)
+      .then(response => {
         dispatch(authLogin(response.data));
         localStorage.setItem('authToken', response.data.accessToken);
         localStorage.setItem('user', JSON.stringify(response.data));
-        dispatch(
-          showToast({
-            title: 'Success',
-            message: response.data.message,
-            type: ToastType.SUCCESS,
-          }),
-        );
         router.push('/admin');
-      }
-    } catch (error: unknown) {
-      const apiError = error as ErrorApiResponseType;
-      dispatch(
-        showToast({
-          title: 'Failed',
-          message: apiError.data?.message,
-          type: ToastType.ERROR,
-        }),
-      );
-    } finally {
-      dispatch(setSubmitLoading(false));
-    }
+      })
+      .catch()
+      .finally(() => {
+        dispatch(setSubmitLoading(false));
+      });
   };
 
   useEffect(() => {
@@ -180,7 +166,9 @@ const LoginPage: React.FC = () => {
                                 }
                               }}
                               title="Login"
-                              disabled={!isValid || !dirty}
+                              disabled={
+                                !isValid || !dirty || generalSubmit.isLoading
+                              }
                               type="button"
                               size="md"
                             />

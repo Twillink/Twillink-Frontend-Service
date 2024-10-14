@@ -8,10 +8,11 @@ import {apiLinkCheck} from '@/libs/api';
 import useDebounce from '@/libs/hooks/useDebounce';
 import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {useFormikContext} from 'formik';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import validIcon from '@/assets/gifs/valid-green.gif';
 import Image from 'next/image';
 import {testValidUsername} from '@/utils/validationTest';
+import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 
 interface IFormClaimValues {
   username: string;
@@ -22,6 +23,8 @@ interface IFormClaim {
 }
 
 const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
+  const dispatch = useAppDispatch();
+
   const {values, setFieldValue, errors, touched, handleBlur, isValid, dirty} =
     useFormikContext<IFormClaimValues>();
   const [usernameValid, setUsernameValid] = useState<boolean>(false);
@@ -31,22 +34,24 @@ const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
 
   const debouncedUsername = useDebounce(values.username, 2000);
 
-  const handleCheckUsername = async (username: string) => {
-    setChecking(true);
-    setApiError(null);
-    try {
-      const response = await apiLinkCheck(username);
-      setUsernameValid(response.status === 200);
-    } catch (error: unknown) {
-      const apiError = error as ErrorApiResponseType;
-      setApiError(apiError?.data?.message);
-      setUsernameValid(false);
-    } finally {
-      setTimeout(() => {
+  const handleCheckUsername = useCallback(
+    async (username: string) => {
+      setChecking(true);
+      setApiError(null);
+
+      try {
+        const response = await apiLinkCheck(dispatch, username, false);
+        setUsernameValid(response.status === 200);
+      } catch (error: unknown) {
+        const apiError = error as ErrorApiResponseType;
+        setApiError(apiError?.data?.message);
+        setUsernameValid(false);
+      } finally {
         setChecking(false);
-      }, 500);
-    }
-  };
+      }
+    },
+    [dispatch],
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
@@ -71,7 +76,7 @@ const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
     if (!isValid) {
       setUsernameValid(false);
     }
-  }, [debouncedUsername, isValid]);
+  }, [debouncedUsername, isValid, handleCheckUsername]);
 
   return (
     <div className="flex flex-col gap-6">

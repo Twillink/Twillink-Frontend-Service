@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useFormikContext} from 'formik';
 import Input from '@/components/Input';
 import ErrorMessageField from '@/components/ErrorMessageField';
@@ -12,6 +12,7 @@ import useDebounce from '@/libs/hooks/useDebounce';
 import {apiAuthCheckEmail} from '@/libs/api';
 import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {IGeneralSubmit} from '@/libs/types/IGeneralSubmit';
+import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 
 interface IFormEmailValues {
   email: string;
@@ -25,6 +26,8 @@ interface IFormEmail {
 }
 
 const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
+  const dispatch = useAppDispatch();
+
   const {
     values,
     errors,
@@ -49,20 +52,24 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
     setIsTyping(true);
   };
 
-  const handleCheckEmail = async (email: string) => {
-    setChecking(true);
-    setApiError(null);
-    try {
-      const response = await apiAuthCheckEmail(email);
-      setEmailAvail(response.status === 200);
-    } catch (error: unknown) {
-      const apiError = error as ErrorApiResponseType;
-      setApiError(apiError?.data?.message);
-      setEmailAvail(false);
-    } finally {
-      setChecking(false);
-    }
-  };
+  const handleCheckEmail = useCallback(
+    async (email: string) => {
+      setChecking(true);
+      setApiError(null);
+
+      try {
+        await apiAuthCheckEmail(dispatch, email, false);
+        setEmailAvail(true);
+      } catch (error: unknown) {
+        const apiError = error as ErrorApiResponseType;
+        setApiError(apiError?.data?.message);
+        setEmailAvail(false);
+      } finally {
+        setChecking(false);
+      }
+    },
+    [dispatch],
+  );
 
   const handleGoogleSignUp = async () => {
     const username = values.username;
@@ -83,7 +90,7 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
       setEmailAvail(false);
       setApiError(null);
     }
-  }, [debouncedEmail, errors]);
+  }, [debouncedEmail, errors.email, handleCheckEmail]);
 
   return (
     <div className="flex flex-col gap-6">
