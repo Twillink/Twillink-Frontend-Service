@@ -54,7 +54,7 @@ const TwillinkPage: FC<ITwillinkPage> = async ({params}) => {
   return (
     <div data-theme="light" className="h-full bg-base-100">
       <div className="flex flex-col items-center justify-center">
-        <div className="h-screen max-w-[428px]">
+        <div className="h-screen max-w-[26.75rem]">
           <WidgetViewer dataWidget={data.dataWidget} />
         </div>
       </div>

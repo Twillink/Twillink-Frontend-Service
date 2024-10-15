@@ -12,8 +12,12 @@ import Image from 'next/image';
 import GoogleIcon from '@/assets/svgs/google-icon.svg';
 import {authLogin} from '@/libs/store/features/authSlice';
 import {useRouter} from 'next/navigation';
-import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import {apiAuthLogin} from '@/libs/api';
+import {showToast} from '@/libs/store/features/toastSlice';
+import {ToastType} from '@/libs/types/ToastType';
+import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
+import {useEffect} from 'react';
 
 type InitialData = {
   email: string;
@@ -27,34 +31,58 @@ const initialValue: InitialData = {
 
 const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
+  const generalSubmit = useAppSelector(state => state.generalSubmit);
+
   const router = useRouter();
+
   const schema = Yup.object({
     email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string()
       .required('Password is required')
-      .min(8, 'Password must be at least 8 characters'),
+      .min(6, 'Password must be at least 6 characters'),
   });
 
   const handleGoogleSignIn = async () => {
     window.open(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google-signin`,
       '_blank',
     );
   };
-  const handleSubmit = async (values: InitialData) => {
-    try {
-      const response = await apiAuthLogin(values.email, values.password);
 
-      if (response.status === 200 || response.status === 201) {
+  const handleSubmit = async (values: InitialData) => {
+    dispatch(setSubmitLoading(true));
+    const body = {
+      email: values.email,
+      password: values.password,
+    };
+
+    return apiAuthLogin(dispatch, body)
+      .then(response => {
         dispatch(authLogin(response.data));
         localStorage.setItem('authToken', response.data.accessToken);
         localStorage.setItem('user', JSON.stringify(response.data));
         router.push('/admin');
-      }
-    } catch (error) {
-      console.error('Login failed:', error);
-    }
+      })
+      .catch()
+      .finally(() => {
+        dispatch(setSubmitLoading(false));
+      });
   };
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const error = queryParams.get('error');
+
+    if (error) {
+      dispatch(
+        showToast({
+          title: 'Failed',
+          message: error,
+          type: ToastType.ERROR,
+        }),
+      );
+    }
+  }, [dispatch]);
 
   return (
     <div data-theme="skinLight">
@@ -76,13 +104,13 @@ const LoginPage: React.FC = () => {
             handleBlur,
             validateForm,
           }) => (
-            <Form>
-              <div className="stack">
+            <Form className="w-full">
+              <div className="stack w-full">
                 <div
-                  className="card bg-contras-high text-primary-content shadow-sm"
+                  className="card w-full max-w-[528px] bg-contras-high text-primary-content shadow-sm"
                   key="card_login">
-                  <div className="card-body px-[99px] py-[90px]">
-                    <div className="flex flex-col gap-6 w-full sm:w-[376px]">
+                  <div className="card-body w-full px-6 sm:px-[99px] py-10 sm:py-[90px]">
+                    <div className="flex flex-col gap-6 w-full">
                       <h3 className="card-title text-primary">Login</h3>
                       <div className="flex flex-col gap-6">
                         <div>
@@ -138,7 +166,9 @@ const LoginPage: React.FC = () => {
                                 }
                               }}
                               title="Login"
-                              disabled={!isValid || !dirty}
+                              disabled={
+                                !isValid || !dirty || generalSubmit.isLoading
+                              }
                               type="button"
                               size="md"
                             />

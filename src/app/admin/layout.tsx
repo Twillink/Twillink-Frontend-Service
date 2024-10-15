@@ -8,8 +8,8 @@ import SvgChartSquare from '@/assets/svgComponents/SvgChartSquare';
 import SvgLink from '@/assets/svgComponents/SvgLink';
 import SvgTwilmeetIcon from '@/assets/svgComponents/SvgTwilmeetIcon';
 import SvgUser from '@/assets/svgComponents/SvgUser';
-import {useSelector} from 'react-redux';
 import {RootState} from '@/libs/store/store';
+import {useAppSelector} from '@/libs/hooks/useReduxHook';
 
 const sidebarMenu: Menu[] = [
   {
@@ -43,8 +43,9 @@ const sidebarMenu: Menu[] = [
 export default function AdminLayout({children}: {children: React.ReactNode}) {
   const [initialized, setInitialized] = useState<boolean>(false);
 
-  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
-  console.log('User logged in:', isLoggedIn);
+  const isLoggedIn = useAppSelector(
+    (state: RootState) => state.auth.isLoggedIn,
+  );
 
   const router = useRouter();
   const pathname = usePathname();
@@ -59,16 +60,36 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
   }, [pathname]);
 
   useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (!isLoggedIn && !token) {
-      router.push('/');
-    } else {
-      setInitialized(true);
+    const queryParams = new URLSearchParams(window.location.search);
+    const authResString = queryParams.get('authRes');
+
+    if (authResString) {
+      try {
+        const authRes = JSON.parse(authResString);
+        localStorage.setItem('authToken', authRes.accessToken);
+        localStorage.setItem('user', JSON.stringify(authRes));
+      } catch (error) {
+        console.error('Error parsing authRes:', error);
+      }
     }
+
+    const checkAuth = () => {
+      const token = localStorage.getItem('authToken');
+      if (!isLoggedIn && !token) {
+        router.push('/');
+      } else {
+        setInitialized(true);
+      }
+    };
+    checkAuth();
   }, [isLoggedIn, router]);
 
   if (!initialized) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <span className="loading loading-ring w-20 text-general-med"></span>
+      </div>
+    );
   }
 
   return (

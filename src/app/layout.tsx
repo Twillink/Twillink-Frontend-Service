@@ -5,6 +5,7 @@ import {SkinProvider} from '@/libs/providers/SkinContext';
 import ReduxStoreProvider from '@/libs/providers/ReduxStoreProvider';
 import ClientAuthLayoutWrapper from '@/libs/providers/ClientAuthLayoutWrapper';
 import ClientThemeWrapper from '@/libs/providers/ClientSkinWrapper';
+import ToastProvider from '@/libs/providers/ToastProvider';
 
 import '@vime/core/themes/default.css';
 
@@ -33,7 +34,9 @@ export default function RootLayout({children}: IRootLayoutProps) {
         <ReduxStoreProvider>
           <ClientAuthLayoutWrapper>
             <SkinProvider>
-              <ClientThemeWrapper>{children}</ClientThemeWrapper>
+              <ClientThemeWrapper>
+                <ToastProvider>{children}</ToastProvider>
+              </ClientThemeWrapper>
             </SkinProvider>
           </ClientAuthLayoutWrapper>
         </ReduxStoreProvider>

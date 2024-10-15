@@ -11,18 +11,18 @@ const config: Config = {
   ],
   theme: {
     fontSize: {
-      tiny: '8px',
-      xs: '10px',
-      sm: '12px',
-      base: '14px',
-      xl: '16px',
-      h4: '16px',
-      h3: '20px',
-      h2: '24px',
-      h1: '32px',
-      '2xl': '36px',
-      '3xl': '48px',
-      '4xl': '64px',
+      tiny: '0.5rem',
+      xs: '0.625rem',
+      sm: '0.75rem',
+      base: '0.875rem',
+      xl: '1rem',
+      h4: '1rem',
+      h3: '1.25',
+      h2: '1.5rem',
+      h1: '2rem',
+      '2xl': '2.25',
+      '3xl': '3rem',
+      '4xl': '4rem',
     },
     extend: {
       colors: {
@@ -36,18 +36,15 @@ const config: Config = {
         'primary-disable': 'var(--primary-disabled)',
       },
       height: {
-        13: '52px',
+        13: '3.25rem',
       },
       padding: {
-        small: '4px 8px 4px 8px',
-        medium: '10px 16px 10px 16px',
+        small: '0.25rem 0.5rem 0.25rem 0.5rem',
+        medium: '0.625rem 1rem 0.625rem 1rem',
       },
       borderRadius: {
-        medium: '10px',
-        large: '14px',
-      },
-      width: {
-        '60px': '60px',
+        medium: '0.625rem',
+        large: '0.875rem',
       },
     },
   },
@@ -56,19 +53,19 @@ const config: Config = {
       addBase({
         h1: {
           fontSize: theme('fontSize.h1'),
-          lineHeight: '48px',
+          lineHeight: '3rem',
         },
         h2: {
           fontSize: theme('fontSize.h2'),
-          lineHeight: '40px',
+          lineHeight: '2.5rem',
         },
         h3: {
           fontSize: theme('fontSize.h3'),
-          lineHeight: '32px',
+          lineHeight: '2rem',
         },
         h4: {
           fontSize: theme('fontSize.h4'),
-          lineHeight: '28px',
+          lineHeight: '1.75rem',
         },
       });
     }),
