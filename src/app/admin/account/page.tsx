@@ -52,7 +52,6 @@ export default function Page() {
         )}
       </div>
 
-      {/* Tab panels */}
       <div className="pt-10">
         {activeTab === 0 && <MyProfile />}
         {activeTab === 1 && <Admin />}

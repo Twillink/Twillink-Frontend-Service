@@ -6,7 +6,10 @@ export interface IItemWidgetType {
   order: number;
   width: string;
   type: WidgetTypeEnum;
-  text: string;
-  url?: string;
-  image?: string | ArrayBuffer | null;
+  value?: {
+    url?: string;
+    title?: string;
+    image?: string;
+    text?: string;
+  } | null;
 }

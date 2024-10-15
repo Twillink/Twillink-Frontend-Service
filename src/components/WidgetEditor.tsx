@@ -12,20 +12,31 @@ import PopupWidgetText from '@/components/PopupWidgetText';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {generateUniqueString} from '@/utils/generateUniqueString';
+import Loader from './Loader';
+import {apiAddWidgetLink, apiAddWidgetText, apiRemoveWidget} from '@/libs/api';
+import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
+import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
 
 interface IWidgetEditor {
+  isLoading: boolean;
   dataWidget: IItemWidgetType[];
   setDataWidget?: React.Dispatch<React.SetStateAction<IItemWidgetType[]>>;
+  fetchData: (withLoading: boolean) => void;
   isEditingDisabled?: boolean;
 }
 
 type PopupState = 'none' | 'main' | WidgetTypeEnum;
 
 const WidgetEditor: React.FC<IWidgetEditor> = ({
+  isLoading,
   dataWidget,
   setDataWidget,
+  fetchData,
   isEditingDisabled = false,
 }) => {
+  const dispatch = useAppDispatch();
+  const isSubmitting = useAppSelector(state => state.generalSubmit.isLoading);
+
   const [dragId, setDragId] = useState<string | null>(null);
   const [popupState, setPopupState] = useState<PopupState>('none');
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -117,27 +128,51 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     setPopupState('main');
   };
 
-  const handleAdd = (
+  const handleAdd = async (
     type: WidgetTypeEnum,
-    title: string,
-    url: string,
-    image?: string | ArrayBuffer | null,
-  ) => {
-    if (setDataWidget) {
-      const newWidget: IItemWidgetType = {
-        id: Math.random(),
-        idEditor: generateUniqueString(),
-        order: dataWidget.length + 1,
-        width: '100%',
-        type,
-        url,
-        text: title,
-        image,
-      };
+    value: object,
+  ): Promise<boolean> => {
+    const newWidget: IItemWidgetType = {
+      id: Math.random(),
+      idEditor: generateUniqueString(),
+      order: dataWidget.length + 1,
+      width: '100%',
+      type,
+      value,
+    };
+    dispatch(setSubmitLoading(true));
 
-      setDataWidget([...dataWidget, newWidget]);
+    let apiCall;
+    let body = {};
+    switch (type) {
+      case WidgetTypeEnum.Link:
+        body = {
+          title: newWidget.value?.title,
+          url: newWidget.value?.url,
+        };
+        apiCall = apiAddWidgetLink(dispatch, body);
+        break;
+      case WidgetTypeEnum.Text:
+        body = {
+          text: newWidget.value?.text,
+        };
+        apiCall = apiAddWidgetText(dispatch, body);
+        break;
+      default:
+        return false;
     }
-    handleClosePopup();
+    return apiCall
+      .then(() => {
+        fetchData(false);
+        return true;
+      })
+      .catch(() => {
+        return false;
+      })
+      .finally(() => {
+        dispatch(setSubmitLoading(false));
+        handleClosePopup();
+      });
   };
 
   const handleMoveUp = (id: string) => {
@@ -148,13 +183,15 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       if (index > 0) {
         const newWidgets = [...prevWidgets];
 
-        const temp = newWidgets[index - 1];
-        newWidgets[index - 1] = newWidgets[index];
-        newWidgets[index] = temp;
+        [newWidgets[index - 1], newWidgets[index]] = [
+          newWidgets[index],
+          newWidgets[index - 1],
+        ];
 
-        newWidgets[index - 1].order = index;
-        newWidgets[index].order = index + 1;
-        return newWidgets;
+        return newWidgets.map((widget, i) => ({
+          ...widget,
+          order: i + 1,
+        }));
       }
       return prevWidgets;
     });
@@ -167,25 +204,30 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       const index = prevWidgets.findIndex(widget => widget.idEditor === id);
       if (index < prevWidgets.length - 1) {
         const newWidgets = [...prevWidgets];
+        [newWidgets[index], newWidgets[index + 1]] = [
+          newWidgets[index + 1],
+          newWidgets[index],
+        ];
 
-        const temp = newWidgets[index + 1];
-        newWidgets[index + 1] = newWidgets[index];
-        newWidgets[index] = temp;
-
-        newWidgets[index + 1].order = index + 2;
-        newWidgets[index].order = index + 1;
-        return newWidgets;
+        return newWidgets.map((widget, i) => ({
+          ...widget,
+          order: i + 1,
+        }));
       }
       return prevWidgets;
     });
   };
 
-  const handleDelete = (id: string) => {
-    if (setDataWidget) {
-      setDataWidget(prevWidgets =>
-        prevWidgets.filter(widget => widget.idEditor !== id),
-      );
-    }
+  const handleDelete = (id: number) => {
+    dispatch(setSubmitLoading(true));
+    apiRemoveWidget(dispatch, id)
+      .then(() => {
+        fetchData(false);
+      })
+      .catch()
+      .finally(() => {
+        dispatch(setSubmitLoading(false));
+      });
   };
 
   const handleResize = (id: string, width: string) => {
@@ -206,28 +248,34 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           className="artboard flex flex-col bg-base-100 h-full overflow-y-auto relative"
           ref={scrollContainerRef}
           onDragOver={ev => ev.preventDefault()}>
-          <ScrollHideHeader />
-          <UserProfile />
-          <div className="flex flex-wrap px-6">
-            <SocialContainer />
-            {dataWidget
-              .sort((a, b) => a.order - b.order)
-              .map(widget => (
-                <WidgetContainer
-                  key={widget.idEditor}
-                  values={widget}
-                  handleDrag={handleDrag}
-                  handleDrop={handleDrop}
-                  handleMoveUp={() => handleMoveUp(widget.idEditor)}
-                  handleMoveDown={() => handleMoveDown(widget.idEditor)}
-                  handleDelete={() => handleDelete(widget.idEditor)}
-                  handleResize={() =>
-                    handleResize(widget.idEditor, widget.width)
-                  }
-                />
-              ))}
-            <AddWidget onClick={() => setPopupState('main')} />
-          </div>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              <ScrollHideHeader />
+              <UserProfile />
+              <div className="flex flex-wrap px-6">
+                <SocialContainer />
+                {dataWidget
+                  .sort((a, b) => a.order - b.order)
+                  .map(widget => (
+                    <WidgetContainer
+                      key={widget.idEditor}
+                      values={widget}
+                      handleDrag={handleDrag}
+                      handleDrop={handleDrop}
+                      handleMoveUp={() => handleMoveUp(widget.idEditor)}
+                      handleMoveDown={() => handleMoveDown(widget.idEditor)}
+                      handleDelete={() => handleDelete(widget.id)}
+                      handleResize={() =>
+                        handleResize(widget.idEditor, widget.width)
+                      }
+                    />
+                  ))}
+                <AddWidget onClick={() => setPopupState('main')} />
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -241,12 +289,14 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
+        disabled={isSubmitting}
       />
       <PopupWidgetText
         isOpen={popupState === 'text'}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
+        disabled={isSubmitting}
       />
     </>
   );

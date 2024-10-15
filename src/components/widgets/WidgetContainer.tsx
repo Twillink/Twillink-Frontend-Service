@@ -34,10 +34,9 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       case WidgetTypeEnum.Link:
         return (
           <WidgetLink
-            url={values.url || '#'}
-            text={values.text}
-            image={values.image}
-            width={values.width}
+            url={values.value?.url || '#'}
+            text={values.value?.title || ''}
+            image={values.value?.image}
             onClick={e => {
               e.preventDefault();
             }}
@@ -46,7 +45,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       case WidgetTypeEnum.Text:
         return (
           <WidgetText
-            text={values.text}
+            text={values.value?.text || ''}
             onClick={e => {
               e.preventDefault();
             }}
