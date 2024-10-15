@@ -72,9 +72,6 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             text={values.text}
             url={values.url || '#'}
             image={values.image}
-            onClick={e => {
-              e.preventDefault();
-            }}
           />
         );
 

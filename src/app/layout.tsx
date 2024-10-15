@@ -7,10 +7,6 @@ import ClientAuthLayoutWrapper from '@/libs/providers/ClientAuthLayoutWrapper';
 import ClientThemeWrapper from '@/libs/providers/ClientSkinWrapper';
 import ToastProvider from '@/libs/providers/ToastProvider';
 
-import '@vime/core/themes/default.css';
-
-import '@vime/core/themes/light.css';
-
 const plusJakarta = Plus_Jakarta_Sans({subsets: ['latin']});
 
 export const metadata: Metadata = {
