@@ -5,14 +5,14 @@ import React, {useRef} from 'react';
 import isUrl from 'is-url';
 import {DefaultUi, Player, Video} from '@vime/react';
 
-interface IWidgetLink extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+interface IWidgetVideo extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   text: string;
   url: string;
   width?: string;
   image?: string | ArrayBuffer | null;
 }
 
-const WidgetVideo: React.FC<IWidgetLink> = ({
+const WidgetVideo: React.FC<IWidgetVideo> = ({
   text,
   url,
   image,

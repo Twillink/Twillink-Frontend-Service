@@ -8,6 +8,7 @@ import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import WidgetFrameEditor from './WidgetFrameEditor';
 import WidgetImage from './WidgetImage';
 import WidgetVideo from './WIdgetVideo';
+import WidgetCarousel from './WidgetCarousel';
 
 interface IWidgetContainer {
   handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;
@@ -76,6 +77,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             }}
           />
         );
+
       default:
         return null;
     }
@@ -88,6 +90,16 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
   const handleClose = () => {
     setIsMenuVisible(false);
   };
+
+  if (values.type === WidgetTypeEnum.Carousel) {
+    return (
+      <WidgetCarousel
+        text={values.text}
+        url={values.url || '#'}
+        images={values.images}
+      />
+    );
+  }
 
   return (
     <div
