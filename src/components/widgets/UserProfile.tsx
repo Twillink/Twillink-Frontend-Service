@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import ProfileImage from './ProfileImage';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import SvgMail from '@/assets/svgComponents/SvgMail';
@@ -10,7 +10,7 @@ interface IUserProfile {
   contact: IItemWidgetType[];
 }
 
-const UserProfile: React.FC<IUserProfile> = ({contact}) => {
+function UserProfile({contact}: IUserProfile) {
   const [isSticky, setIsSticky] = useState<boolean>(false);
   const [editingSection, setEditingSection] = useState<
     'none' | 'businessName' | 'caption'
@@ -135,6 +135,6 @@ const UserProfile: React.FC<IUserProfile> = ({contact}) => {
       </div>
     </div>
   );
-};
+}
 
 export default UserProfile;

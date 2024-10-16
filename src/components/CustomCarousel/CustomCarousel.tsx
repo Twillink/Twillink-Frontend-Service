@@ -8,11 +8,11 @@ import {
 
 import styles from './CustomCarousel.module.css';
 
-type PropType = {
+interface ICustomCarousel {
   slides: any[];
-};
+}
 
-const EmblaCarousel: React.FC<PropType> = props => {
+function CustomCarousel(props: ICustomCarousel) {
   const OPTIONS: EmblaOptionsType = {
     // align: 'center',
     // dragFree: true,
@@ -58,6 +58,6 @@ const EmblaCarousel: React.FC<PropType> = props => {
       </div>
     </section>
   );
-};
+}
 
-export default EmblaCarousel;
+export default CustomCarousel;
