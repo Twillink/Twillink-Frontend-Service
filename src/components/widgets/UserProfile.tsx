@@ -110,9 +110,9 @@ function UserProfile({contact}: IUserProfile) {
       <div className="flex justify-between gap-2 items-center">
         {contact?.map((item: IItemWidgetType) => (
           <>
-            {item.text && (
+            {item.value?.email && (
               <button
-                key={item.text}
+                key={item.value?.email}
                 className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
                   <SvgMail height={20} width={20} className="text-white" />
@@ -120,9 +120,9 @@ function UserProfile({contact}: IUserProfile) {
                 <p>Email</p>
               </button>
             )}
-            {item.url && (
+            {item.value?.phone && (
               <button
-                key={item.url}
+                key={item.value?.phone}
                 className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
                   <SvgPhoneCall height={20} width={20} className="text-white" />

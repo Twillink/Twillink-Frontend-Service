@@ -7,7 +7,7 @@ interface IWidgetCarousel {
   text: string;
   url?: string;
   width?: string;
-  images?: (string | ArrayBuffer | null)[];
+  images?: string[];
 }
 
 const WidgetCarousel: React.FC<IWidgetCarousel> = ({

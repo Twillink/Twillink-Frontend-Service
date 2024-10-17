@@ -5,6 +5,7 @@ import React from 'react';
 import Button from './Button';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
+import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 
 interface IPopupWidgetImage {
   isOpen: boolean;
@@ -12,10 +13,9 @@ interface IPopupWidgetImage {
   onBack: () => void;
   onAdd: (
     type: WidgetTypeEnum,
-    title: string,
-    url: string,
-    attachmentId?: string | null,
-  ) => void;
+    value: IItemWidgetTypeValues,
+  ) => Promise<boolean>;
+  disabled?: boolean;
 }
 
 const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
@@ -23,6 +23,7 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
   onClose,
   onBack,
   onAdd,
+  disabled = false,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -30,10 +31,16 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
       url: '',
     },
     validationSchema: AddWidgetImageSchema,
-    onSubmit: values => {
-      onAdd(WidgetTypeEnum.Image, values.title, values.url);
-      formik.resetForm();
-      onClose();
+    onSubmit: async values => {
+      const value = {
+        title: values.title,
+        url: values.url,
+      };
+      const success = await onAdd(WidgetTypeEnum.Image, value);
+      if (success) {
+        formik.resetForm();
+        onClose();
+      }
     },
   });
 
@@ -74,7 +81,12 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
         />
 
         <div className="flex justify-end">
-          <Button type="submit" className="w-max" title="Add" />
+          <Button
+            type="submit"
+            className="w-max"
+            title="Add"
+            disabled={disabled}
+          />
         </div>
       </form>
     </PopupContainer>

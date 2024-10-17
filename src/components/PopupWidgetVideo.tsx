@@ -5,6 +5,7 @@ import React from 'react';
 import Button from './Button';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
+import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 
 interface IPopupWidgetVideo {
   isOpen: boolean;
@@ -12,10 +13,9 @@ interface IPopupWidgetVideo {
   onBack: () => void;
   onAdd: (
     type: WidgetTypeEnum,
-    title: string,
-    url: string,
-    attachmentId?: string | null,
-  ) => void;
+    value: IItemWidgetTypeValues,
+  ) => Promise<boolean>;
+  disabled?: boolean;
 }
 
 const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
@@ -23,6 +23,7 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
   onClose,
   onBack,
   onAdd,
+  disabled = false,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -30,10 +31,17 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
       url: '',
     },
     validationSchema: AddWidgetVideoSchema,
-    onSubmit: values => {
-      onAdd(WidgetTypeEnum.Video, values.title, values.url);
-      formik.resetForm();
-      onClose();
+    onSubmit: async values => {
+      const value = {
+        title: values.title,
+        url: values.url,
+      };
+      const success = await onAdd(WidgetTypeEnum.Video, value);
+
+      if (success) {
+        formik.resetForm();
+        onClose();
+      }
     },
   });
 
@@ -74,7 +82,12 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
         />
 
         <div className="flex justify-end">
-          <Button type="submit" className="w-max" title="Add" />
+          <Button
+            type="submit"
+            className="w-max"
+            title="Add"
+            disabled={disabled}
+          />
         </div>
       </form>
     </PopupContainer>

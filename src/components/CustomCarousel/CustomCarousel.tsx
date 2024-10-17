@@ -9,7 +9,7 @@ import {
 import styles from './CustomCarousel.module.css';
 
 interface ICustomCarousel {
-  slides: any[];
+  slides: string[];
 }
 
 function CustomCarousel(props: ICustomCarousel) {

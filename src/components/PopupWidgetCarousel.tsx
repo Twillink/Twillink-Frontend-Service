@@ -6,6 +6,7 @@ import Button from './Button';
 import ImageSelectorWithSource from './ImageSelectorWithSource';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
+import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 
 interface IPopupWidgetCarousel {
   isOpen: boolean;
@@ -13,11 +14,9 @@ interface IPopupWidgetCarousel {
   onBack: () => void;
   onAdd: (
     type: WidgetTypeEnum,
-    title: string,
-    url: string,
-    image?: string | ArrayBuffer | null,
-    images?: (string | ArrayBuffer | null)[],
-  ) => void;
+    value: IItemWidgetTypeValues,
+  ) => Promise<boolean>;
+  disabled?: boolean;
 }
 
 const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
@@ -25,23 +24,26 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
   onClose,
   onBack,
   onAdd,
+  disabled = false,
 }) => {
   const formik = useFormik({
     initialValues: {
       title: '',
-      selectedImages: [] as (string | ArrayBuffer | null)[],
+      selectedImages: [] as string[],
     },
     validationSchema: AddWidgetCarouselSchema,
-    onSubmit: values => {
-      onAdd(
-        WidgetTypeEnum.Carousel,
-        values.title,
-        '',
-        null,
-        values.selectedImages,
-      );
-      formik.resetForm();
-      onClose();
+    onSubmit: async values => {
+      const value = {
+        title: values.title,
+        images: values.selectedImages,
+      };
+
+      const success = await onAdd(WidgetTypeEnum.Carousel, value);
+
+      if (success) {
+        formik.resetForm();
+        onClose();
+      }
     },
   });
 
@@ -126,7 +128,12 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
         </div>
 
         <div className="flex justify-end">
-          <Button type="submit" className="w-max" title="Add" />
+          <Button
+            type="submit"
+            className="w-max"
+            title="Add"
+            disabled={disabled}
+          />
         </div>
       </form>
     </PopupContainer>

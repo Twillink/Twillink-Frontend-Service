@@ -30,10 +30,12 @@ const SocialContainer: React.FC<ISocialContainer> = ({onClick, data}) => {
   return (
     <div className="flex flex-wrap justify-center py-4 px-8 w-full gap-2">
       {data.map(item => {
-        const Icon = socialButtons.find(btn => btn.name === item.text)?.icon;
+        const Icon = socialButtons.find(
+          btn => btn.name === item.value?.text,
+        )?.icon;
         if (!Icon) return null;
         return (
-          <div key={item.text} className="w-7 h-7 flex justify-center">
+          <div key={item.value?.text} className="w-7 h-7 flex justify-center">
             <Icon
               width={28}
               height={28}

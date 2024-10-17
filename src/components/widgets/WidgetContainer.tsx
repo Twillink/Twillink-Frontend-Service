@@ -37,10 +37,9 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       case WidgetTypeEnum.Link:
         return (
           <WidgetLink
-            url={values.url || '#'}
-            text={values.text}
-            image={values.image}
-            width={values.width}
+            url={values.value?.url || '#'}
+            text={values.value?.title || ''}
+            image={values.value?.image}
             onClick={e => {
               e.preventDefault();
             }}
@@ -49,7 +48,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       case WidgetTypeEnum.Text:
         return (
           <WidgetText
-            text={values.text}
+            text={values.value?.text || ''}
             onClick={e => {
               e.preventDefault();
             }}
@@ -58,9 +57,9 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       case WidgetTypeEnum.Image:
         return (
           <WidgetImage
-            text={values.text}
-            url={values.url || '#'}
-            image={values.image}
+            text={values.value?.text || ''}
+            url={values.value?.url || '#'}
+            image={values.value?.image}
             onClick={e => {
               e.preventDefault();
             }}
@@ -69,9 +68,9 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       case WidgetTypeEnum.Video:
         return (
           <WidgetVideo
-            text={values.text}
-            url={values.url || '#'}
-            image={values.image}
+            text={values.value?.text || ''}
+            url={values.value?.url || '#'}
+            image={values.value?.image}
           />
         );
 
@@ -91,9 +90,9 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
   if (values.type === WidgetTypeEnum.Carousel) {
     return (
       <WidgetCarousel
-        text={values.text}
-        url={values.url || '#'}
-        images={values.images}
+        text={values.value?.text || ''}
+        url={values.value?.url || '#'}
+        images={values.value?.images}
       />
     );
   }

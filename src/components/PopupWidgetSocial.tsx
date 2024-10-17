@@ -13,19 +13,24 @@ import React from 'react';
 import Button from './Button';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
+import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 
 interface IPopupWidgetSocial {
   isOpen: boolean;
   onClose: () => void;
   onAdd: (
     type: WidgetTypeEnum,
-    title: string,
-    url: string,
-    attachmentId?: string | null,
-  ) => void;
+    value: IItemWidgetTypeValues,
+  ) => Promise<boolean>;
+  disabled?: boolean;
 }
 
-export const socialButtons = [
+interface ISocialButton {
+  name: string;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
+}
+
+export const socialButtons: ISocialButton[] = [
   {
     name: 'Instagram',
     icon: SvgInstagram,
@@ -64,6 +69,7 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
   isOpen,
   onClose,
   onAdd,
+  disabled = false,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -71,10 +77,18 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
       url: '',
     },
     validationSchema: AddWidgetSocialSchema,
-    onSubmit: values => {
-      onAdd(WidgetTypeEnum.Social, values.title, values.url);
-      formik.resetForm();
-      onClose();
+    onSubmit: async values => {
+      const value = {
+        title: values.title,
+        url: values.url,
+      };
+
+      const success = await onAdd(WidgetTypeEnum.Social, value);
+
+      if (success) {
+        formik.resetForm();
+        onClose();
+      }
     },
   });
 
@@ -123,7 +137,12 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
         />
 
         <div className="flex justify-end">
-          <Button type="submit" className="w-max" title="Add" />
+          <Button
+            type="submit"
+            className="w-max"
+            title="Add"
+            disabled={disabled}
+          />
         </div>
       </form>
     </PopupContainer>

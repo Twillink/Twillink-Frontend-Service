@@ -7,6 +7,7 @@ import Button from './Button';
 import InputLabelWithIcon from './InputLabelWithIcon';
 import InputPhoneCountries from './InputPhoneCountries';
 import PopupContainer from './PopupContainer';
+import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 
 interface IPopupWidgetContact {
   isOpen: boolean;
@@ -14,10 +15,9 @@ interface IPopupWidgetContact {
   onBack: () => void;
   onAdd: (
     type: WidgetTypeEnum,
-    title: string,
-    url: string,
-    attachmentId?: string | null,
-  ) => void;
+    value: IItemWidgetTypeValues,
+  ) => Promise<boolean>;
+  disabled?: boolean;
 }
 
 const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
@@ -25,6 +25,7 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
   onClose,
   onBack,
   onAdd,
+  disabled = false,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -32,10 +33,17 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
       phone: '',
     },
     validationSchema: AddWidgetContactSchema,
-    onSubmit: values => {
-      onAdd(WidgetTypeEnum.Contact, values.email, values.phone);
-      formik.resetForm();
-      onClose();
+    onSubmit: async values => {
+      const value = {
+        email: values.email,
+        phone: values.phone,
+      };
+      const success = await onAdd(WidgetTypeEnum.Contact, value);
+
+      if (success) {
+        formik.resetForm();
+        onClose();
+      }
     },
   });
 
@@ -88,7 +96,12 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
         />
 
         <div className="flex justify-end">
-          <Button type="submit" className="w-max" title="Add" />
+          <Button
+            type="submit"
+            className="w-max"
+            title="Add"
+            disabled={disabled}
+          />
         </div>
       </form>
     </PopupContainer>

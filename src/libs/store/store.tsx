@@ -2,6 +2,7 @@ import {configureStore} from '@reduxjs/toolkit';
 import authReducer from './features/authSlice';
 import toastReducer from './features/toastSlice';
 import generalSubmitReducer from './features/generalSubmitSlice';
+import myWidgetReducer from './features/myWidgetSlice';
 
 export const makeStore = () => {
   return configureStore({
@@ -9,6 +10,7 @@ export const makeStore = () => {
       auth: authReducer,
       toast: toastReducer,
       generalSubmit: generalSubmitReducer,
+      myWidget: myWidgetReducer,
     },
   });
 };

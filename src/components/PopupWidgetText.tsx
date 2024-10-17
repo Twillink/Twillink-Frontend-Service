@@ -10,12 +10,8 @@ interface IPopupWidgetText {
   isOpen: boolean;
   onClose: () => void;
   onBack: () => void;
-  onAdd: (
-    type: WidgetTypeEnum,
-    title: string,
-    url: string,
-    image?: string | ArrayBuffer | null,
-  ) => void;
+  onAdd: (type: WidgetTypeEnum, value: object) => Promise<boolean>;
+  disabled?: boolean;
 }
 
 const PopupWidgetText: React.FC<IPopupWidgetText> = ({
@@ -23,6 +19,7 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
   onClose,
   onBack,
   onAdd,
+  disabled = false,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -31,15 +28,16 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
       selectedImage: null,
     },
     validationSchema: AddWidgetTextSchema,
-    onSubmit: values => {
-      onAdd(
-        WidgetTypeEnum.Text,
-        values.title,
-        values.url,
-        values.selectedImage,
-      );
-      formik.resetForm();
-      onClose();
+    onSubmit: async values => {
+      const value = {
+        text: values.title,
+      };
+
+      const success = await onAdd(WidgetTypeEnum.Text, value);
+      if (success) {
+        formik.resetForm();
+        onClose();
+      }
     },
   });
 
@@ -70,7 +68,12 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
           }
         />
         <div className="flex justify-end">
-          <Button type="submit" className="w-max" title="Add" />
+          <Button
+            type="submit"
+            className="w-max"
+            title="Add"
+            disabled={disabled}
+          />
         </div>
       </form>
     </PopupContainer>
