@@ -16,14 +16,14 @@ const WidgetContainerViewer: React.FC<IWidgetContainerViewer> = ({values}) => {
       case WidgetTypeEnum.Link:
         return (
           <WidgetLink
-            url={values.url || '#'}
-            text={values.text}
-            image={values.image}
+            url={values.value?.url || '#'}
+            text={values.value?.text || ''}
+            image={values.value?.image}
             width={''}
           />
         );
       case WidgetTypeEnum.Text:
-        return <WidgetText text={values.text} />;
+        return <WidgetText text={values.value?.text || ''} />;
       default:
         return null;
     }
