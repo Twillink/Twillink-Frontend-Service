@@ -21,6 +21,7 @@ import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import PopupWidgetSocial from './PopupWidgetSocial';
 import PopupWidgetCarousel from './PopupWidgetCarousel';
+import mockApiCall from '@/mock/mockApiCall';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -174,6 +175,13 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           text: newWidget.value?.text,
         };
         apiCall = apiAddWidgetText(dispatch, body);
+        break;
+      case WidgetTypeEnum.Image:
+      case WidgetTypeEnum.Video:
+      case WidgetTypeEnum.Contact:
+      case WidgetTypeEnum.Carousel:
+      case WidgetTypeEnum.Social:
+        apiCall = mockApiCall();
         break;
       default:
         return false;
