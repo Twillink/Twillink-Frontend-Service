@@ -49,11 +49,9 @@ export default function FormVerify({
       };
 
       return apiOtpValidate(dispatch, body)
-        .then(response => {
-          if (response.status === 200 || response.status === 201) {
-            setIsVerified(true);
-            handleSubmit();
-          }
+        .then(() => {
+          setIsVerified(true);
+          handleSubmit();
         })
         .catch((error: unknown) => {
           const apiError = error as ErrorApiResponseType;

@@ -9,12 +9,8 @@ interface IPopupWidgetLink {
   isOpen: boolean;
   onClose: () => void;
   onBack: () => void;
-  onAdd: (
-    type: WidgetTypeEnum,
-    title: string,
-    url: string,
-    image?: string | ArrayBuffer | null,
-  ) => void;
+  onAdd: (type: WidgetTypeEnum, value: object) => void;
+  disabled?: boolean;
 }
 
 const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
@@ -22,6 +18,7 @@ const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
   onClose,
   onBack,
   onAdd,
+  disabled = false,
 }) => {
   const [title, setTitle] = useState('');
   const [url, setUrl] = useState('');
@@ -30,7 +27,13 @@ const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
   >(null);
 
   const handleAdd = () => {
-    onAdd(WidgetTypeEnum.Link, title, url, selectedImage);
+    const value = {
+      title,
+      url,
+      image: selectedImage,
+    };
+
+    onAdd(WidgetTypeEnum.Link, value);
     setTitle('');
     setUrl('');
     setSelectedImage(null);
@@ -77,6 +80,7 @@ const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
             type="button"
             className="w-max"
             onClick={handleAdd}
+            disabled={disabled}
             title="Add"
           />
         </div>

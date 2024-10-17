@@ -8,12 +8,8 @@ interface IPopupWidgetText {
   isOpen: boolean;
   onClose: () => void;
   onBack: () => void;
-  onAdd: (
-    type: WidgetTypeEnum,
-    title: string,
-    url: string,
-    image?: string | ArrayBuffer | null,
-  ) => void;
+  onAdd: (type: WidgetTypeEnum, value: object) => Promise<boolean>;
+  disabled?: boolean;
 }
 
 const PopupWidgetText: React.FC<IPopupWidgetText> = ({
@@ -21,19 +17,20 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
   onClose,
   onBack,
   onAdd,
+  disabled = false,
 }) => {
   const [title, setTitle] = useState('');
-  const [url, setUrl] = useState('');
-  const [selectedImage, setSelectedImage] = useState<
-    string | ArrayBuffer | null
-  >(null);
 
-  const handleAdd = () => {
-    onAdd(WidgetTypeEnum.Text, title, url, selectedImage);
-    setTitle('');
-    setUrl('');
-    setSelectedImage(null);
-    onClose();
+  const handleAdd = async () => {
+    const value = {
+      text: title,
+    };
+
+    const success = await onAdd(WidgetTypeEnum.Text, value);
+    console.log('+++ success', success);
+    if (success) {
+      setTitle('');
+    }
   };
 
   return (
@@ -56,6 +53,7 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
             type="button"
             className="w-max"
             onClick={handleAdd}
+            disabled={disabled}
             title="Add"
           />
         </div>

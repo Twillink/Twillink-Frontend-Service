@@ -10,6 +10,7 @@ import SvgTwilmeetIcon from '@/assets/svgComponents/SvgTwilmeetIcon';
 import SvgUser from '@/assets/svgComponents/SvgUser';
 import {RootState} from '@/libs/store/store';
 import {useAppSelector} from '@/libs/hooks/useReduxHook';
+import Loader from '@/components/Loader';
 
 const sidebarMenu: Menu[] = [
   {
@@ -85,11 +86,7 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
   }, [isLoggedIn, router]);
 
   if (!initialized) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <span className="loading loading-ring w-20 text-general-med"></span>
-      </div>
-    );
+    return <Loader />;
   }
 
   return (

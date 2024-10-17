@@ -64,3 +64,38 @@ export const apiAuthLogout = async (
   const api = createApiClient(dispatch, showToasts);
   return await api.post('/api/v1/user-auth/logout');
 };
+
+export const apiGetWidgetData = async (
+  dispatch: AppDispatch,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.get('/api/v1/widget');
+};
+
+export const apiAddWidgetLink = async (
+  dispatch: AppDispatch,
+  body: any,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/widget-link', body);
+};
+
+export const apiAddWidgetText = async (
+  dispatch: AppDispatch,
+  body: any,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/widget-text', body);
+};
+
+export const apiRemoveWidget = async (
+  dispatch: AppDispatch,
+  id: any,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.delete(`/api/v1/widget/${id}`);
+};
