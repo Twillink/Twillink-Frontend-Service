@@ -1,5 +1,12 @@
 import {AppDispatch} from '../store/store';
 import createApiClient from './apiClient';
+import {
+  IAddWidgetContact,
+  IAddWidgetImage,
+  IAddWidgetLink,
+  IAddWidgetText,
+  IAddWidgetVideo,
+} from '@/libs/types/IAddWidgetData';
 
 export const apiAuthLogin = async (
   dispatch: AppDispatch,
@@ -75,7 +82,7 @@ export const apiGetWidgetData = async (
 
 export const apiAddWidgetLink = async (
   dispatch: AppDispatch,
-  body: any,
+  body: IAddWidgetLink,
   showToasts = true,
 ) => {
   const api = createApiClient(dispatch, showToasts);
@@ -84,11 +91,38 @@ export const apiAddWidgetLink = async (
 
 export const apiAddWidgetText = async (
   dispatch: AppDispatch,
-  body: any,
+  body: IAddWidgetText,
   showToasts = true,
 ) => {
   const api = createApiClient(dispatch, showToasts);
   return await api.post('/api/v1/widget-text', body);
+};
+
+export const apiAddWidgetImage = async (
+  dispatch: AppDispatch,
+  body: IAddWidgetImage,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/widget-image', body);
+};
+
+export const apiAddWidgetVideo = async (
+  dispatch: AppDispatch,
+  body: IAddWidgetVideo,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/widget-video', body);
+};
+
+export const apiAddWidgetContact = async (
+  dispatch: AppDispatch,
+  body: IAddWidgetContact,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/widget-contact', body);
 };
 
 export const apiRemoveWidget = async (
