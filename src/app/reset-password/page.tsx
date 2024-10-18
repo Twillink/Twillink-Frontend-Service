@@ -6,6 +6,13 @@ import * as Yup from 'yup';
 import Button from '@/components/Button';
 import ErrorMessageField from '@/components/ErrorMessageField';
 import Input from '@/components/Input';
+import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import {
+  setSubmitLoading,
+  setSubmitSuccess,
+} from '@/libs/store/features/generalSubmitSlice';
+import {apiResetPassword} from '@/libs/api';
+import {useRouter} from 'next/navigation';
 
 type InitialData = {
   password: string;
@@ -18,6 +25,10 @@ const initialValue: InitialData = {
 };
 
 const ResetPasswordPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  const router = useRouter();
+
   const schema = Yup.object({
     password: Yup.string()
       .required('Password is required')
@@ -27,8 +38,24 @@ const ResetPasswordPage: React.FC = () => {
       .required('Confirm Password is required'),
   });
 
-  const handleSubmit = (values: InitialData) => {
-    console.log('Form submitted:', values);
+  const handleSubmit = async (values: InitialData) => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const codeOtp = queryParams.get('resetcode');
+
+    dispatch(setSubmitLoading(true));
+
+    return apiResetPassword(dispatch, {...values, codeOtp})
+      .then(() => {
+        dispatch(setSubmitSuccess(true));
+        router.push('/login');
+        return true;
+      })
+      .catch(() => {
+        return false;
+      })
+      .finally(() => {
+        dispatch(setSubmitLoading(false));
+      });
   };
 
   return (

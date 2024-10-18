@@ -72,6 +72,15 @@ export const apiAuthLogout = async (
   return await api.post('/api/v1/user-auth/logout');
 };
 
+export const apiResetPassword = async (
+  dispatch: AppDispatch,
+  body: any,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post(`/api/v1/user-auth/forgot-password`, body);
+};
+
 export const apiGetWidgetData = async (
   dispatch: AppDispatch,
   showToasts = true,
