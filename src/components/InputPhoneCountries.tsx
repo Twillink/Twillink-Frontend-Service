@@ -56,7 +56,7 @@ const InputPhoneCountries: React.FC<IInputLabel> = ({
   const selectedCountry =
     options.find(option => option.value === currentCountryCode) || options[0];
 
-  const selectedCountryValue = selectedCountry.value || '';
+  const selectedCountryValue = selectedCountry?.value || '';
 
   return (
     <div className="flex flex-col w-full">
@@ -64,11 +64,13 @@ const InputPhoneCountries: React.FC<IInputLabel> = ({
       <div className="relative">
         <div className="absolute top-0 left-0 h-10 p-[1px]">
           <select
-            className="h-full flex items-center rounded-l-lg bg-contras-low text-primary border-r-2 border-general-low outline-none"
+            className="h-full min-w-20 cursor-pointer flex items-center rounded-l-lg bg-contras-low text-primary border-r-2 border-general-low outline-none"
             value={selectedCountryValue}
             onChange={handleCountryCodeChange}>
-            {options.map(option => (
-              <option key={option.value || ''} value={option.value || ''}>
+            {options.map((option, index) => (
+              <option
+                key={`${option.value}+${index}`}
+                value={option.value || ''}>
                 {option.emoji} {option.label}
               </option>
             ))}
@@ -76,7 +78,7 @@ const InputPhoneCountries: React.FC<IInputLabel> = ({
         </div>
         <input
           type={type}
-          className={`w-full input input-bordered h-10 rounded-l-lg pl-20 text-primary font-normal text-base bg-transparent ${className}`}
+          className={`w-full input input-bordered h-10 rounded-l-lg pl-24 text-primary font-normal text-base bg-transparent ${className}`}
           placeholder={placeholder}
           value={phoneNumber}
           onChange={handleInputChange}
