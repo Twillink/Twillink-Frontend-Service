@@ -7,12 +7,12 @@ const AddWidgetContactSchema = Yup.object().shape({
       'email-or-phone',
       'Either email or phone number is required',
       function (value) {
-        const {phone} = this.options.context || {};
-        return !!value || !!phone;
+        const {phoneNumber} = this.options.context || {};
+        return !!value || !!phoneNumber;
       },
     ),
 
-  phone: Yup.string()
+  phoneNumber: Yup.string()
     .matches(/^[0-9]+$/, 'Phone number must be digits only')
     .min(10, 'Phone number must be at least 10 digits')
     .test(
