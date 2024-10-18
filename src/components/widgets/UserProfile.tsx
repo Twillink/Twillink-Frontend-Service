@@ -120,9 +120,9 @@ function UserProfile({contact}: IUserProfile) {
                 <p>Email</p>
               </button>
             )}
-            {item.value?.phone && (
+            {item.value?.phoneNumber && (
               <button
-                key={item.value?.phone}
+                key={item.value?.phoneNumber}
                 className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
                   <SvgPhoneCall height={20} width={20} className="text-white" />

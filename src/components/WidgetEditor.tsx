@@ -15,13 +15,27 @@ import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {generateUniqueString} from '@/utils/generateUniqueString';
 import Loader from './Loader';
-import {apiAddWidgetLink, apiAddWidgetText, apiRemoveWidget} from '@/libs/api';
+import {
+  apiAddWidgetContact,
+  apiAddWidgetImage,
+  apiAddWidgetLink,
+  apiAddWidgetText,
+  apiAddWidgetVideo,
+  apiRemoveWidget,
+} from '@/libs/api';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
 import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import PopupWidgetSocial from './PopupWidgetSocial';
 import PopupWidgetCarousel from './PopupWidgetCarousel';
 import mockApiCall from '@/mock/mockApiCall';
+import {
+  IAddWidgetContact,
+  IAddWidgetImage,
+  IAddWidgetLink,
+  IAddWidgetText,
+  IAddWidgetVideo,
+} from '@/libs/types/IAddWidgetData';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -168,17 +182,37 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           title: newWidget.value?.title,
           url: newWidget.value?.url,
         };
-        apiCall = apiAddWidgetLink(dispatch, body);
+        apiCall = apiAddWidgetLink(dispatch, body as IAddWidgetLink);
         break;
       case WidgetTypeEnum.Text:
         body = {
-          text: newWidget.value?.text,
+          text: newWidget.value?.text as string,
         };
-        apiCall = apiAddWidgetText(dispatch, body);
+        apiCall = apiAddWidgetText(dispatch, body as IAddWidgetText);
         break;
       case WidgetTypeEnum.Image:
+        body = {
+          caption: newWidget.value?.caption as string,
+          url: newWidget.value?.url as string,
+          attachmentId: newWidget.value?.attachmentId,
+        };
+        apiCall = apiAddWidgetImage(dispatch, body as IAddWidgetImage);
+        break;
       case WidgetTypeEnum.Video:
+        body = {
+          caption: newWidget.value?.caption,
+          url: newWidget.value?.url,
+          attachmentId: newWidget.value?.attachmentId,
+        };
+        apiCall = apiAddWidgetVideo(dispatch, body as IAddWidgetVideo);
+        break;
       case WidgetTypeEnum.Contact:
+        body = {
+          email: newWidget.value?.email,
+          phoneNumber: newWidget.value?.phoneNumber,
+        };
+        apiCall = apiAddWidgetContact(dispatch, body as IAddWidgetContact);
+        break;
       case WidgetTypeEnum.Carousel:
       case WidgetTypeEnum.Social:
         apiCall = mockApiCall();

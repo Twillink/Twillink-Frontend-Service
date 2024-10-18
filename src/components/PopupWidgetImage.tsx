@@ -27,13 +27,14 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
 }) => {
   const formik = useFormik({
     initialValues: {
-      title: '',
+      caption: '',
       url: '',
+      attachmentId: null,
     },
     validationSchema: AddWidgetImageSchema,
     onSubmit: async values => {
       const value = {
-        title: values.title,
+        caption: values.caption,
         url: values.url,
       };
       const success = await onAdd(WidgetTypeEnum.Image, value);
@@ -56,14 +57,14 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
         onSubmit={formik.handleSubmit}>
         <InputLabel
           label="Image Caption"
-          name="title"
-          value={formik.values.title}
+          name="caption"
+          value={formik.values.caption}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           placeholder="Your caption image"
           error={
-            formik.touched.title && formik.errors.title
-              ? formik.errors.title
+            formik.touched.caption && formik.errors.caption
+              ? formik.errors.caption
               : ''
           }
         />

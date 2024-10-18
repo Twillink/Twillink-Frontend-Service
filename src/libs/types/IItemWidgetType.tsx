@@ -7,7 +7,9 @@ export interface IItemWidgetTypeValues {
   text?: string;
   images?: string[];
   email?: string;
-  phone?: string;
+  phoneNumber?: string;
+  caption?: string;
+  attachmentId?: string;
 }
 
 export interface IItemWidgetType {

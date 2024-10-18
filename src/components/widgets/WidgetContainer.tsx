@@ -57,7 +57,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       case WidgetTypeEnum.Image:
         return (
           <WidgetImage
-            text={values.value?.text || ''}
+            text={values.value?.caption || ''}
             url={values.value?.url || '#'}
             image={values.value?.image}
             onClick={e => {
