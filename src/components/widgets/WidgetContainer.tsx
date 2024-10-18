@@ -6,6 +6,9 @@ import WidgetText from '@/components/widgets/WidgetText';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import WidgetFrameEditor from './WidgetFrameEditor';
+import WidgetImage from './WidgetImage';
+import WidgetVideo from './WIdgetVideo';
+import WidgetCarousel from './WidgetCarousel';
 
 interface IWidgetContainer {
   handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;
@@ -51,6 +54,26 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             }}
           />
         );
+      case WidgetTypeEnum.Image:
+        return (
+          <WidgetImage
+            text={values.value?.text || ''}
+            url={values.value?.url || '#'}
+            image={values.value?.image}
+            onClick={e => {
+              e.preventDefault();
+            }}
+          />
+        );
+      case WidgetTypeEnum.Video:
+        return (
+          <WidgetVideo
+            text={values.value?.text || ''}
+            url={values.value?.url || '#'}
+            image={values.value?.image}
+          />
+        );
+
       default:
         return null;
     }
@@ -63,6 +86,16 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
   const handleClose = () => {
     setIsMenuVisible(false);
   };
+
+  if (values.type === WidgetTypeEnum.Carousel) {
+    return (
+      <WidgetCarousel
+        text={values.value?.text || ''}
+        url={values.value?.url || '#'}
+        images={values.value?.images}
+      />
+    );
+  }
 
   return (
     <div

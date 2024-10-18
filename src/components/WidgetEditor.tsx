@@ -1,21 +1,27 @@
 'use client';
 
-import React, {useEffect, useRef, useState, useCallback} from 'react';
-import WidgetContainer from '@/components/widgets/WidgetContainer';
-import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
-import UserProfile from '@/components/widgets/UserProfile';
-import SocialContainer from '@/components/widgets/SocialContainer';
-import AddWidget from '@/components/widgets/AddWidget';
 import PopupWidget from '@/components/PopupWidget';
+import PopupWidgetContact from '@/components/PopupWidgetContact';
+import PopupWidgetImage from '@/components/PopupWidgetImage';
 import PopupWidgetLink from '@/components/PopupWidgetLink';
 import PopupWidgetText from '@/components/PopupWidgetText';
-import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
+import PopupWidgetVideo from '@/components/PopupWidgetVideo';
+import AddWidget from '@/components/widgets/AddWidget';
+import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
+import SocialContainer from '@/components/widgets/SocialContainer';
+import UserProfile from '@/components/widgets/UserProfile';
+import WidgetContainer from '@/components/widgets/WidgetContainer';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
+import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {generateUniqueString} from '@/utils/generateUniqueString';
 import Loader from './Loader';
 import {apiAddWidgetLink, apiAddWidgetText, apiRemoveWidget} from '@/libs/api';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
+import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import PopupWidgetSocial from './PopupWidgetSocial';
+import PopupWidgetCarousel from './PopupWidgetCarousel';
+import mockApiCall from '@/mock/mockApiCall';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -111,6 +117,18 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       case WidgetTypeEnum.Text:
         setPopupState(WidgetTypeEnum.Text);
         break;
+      case WidgetTypeEnum.Image:
+        setPopupState(WidgetTypeEnum.Image);
+        break;
+      case WidgetTypeEnum.Video:
+        setPopupState(WidgetTypeEnum.Video);
+        break;
+      case WidgetTypeEnum.Contact:
+        setPopupState(WidgetTypeEnum.Contact);
+        break;
+      case WidgetTypeEnum.Carousel:
+        setPopupState(WidgetTypeEnum.Carousel);
+        break;
       case 'main':
         setPopupState('main');
         break;
@@ -157,6 +175,13 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           text: newWidget.value?.text,
         };
         apiCall = apiAddWidgetText(dispatch, body);
+        break;
+      case WidgetTypeEnum.Image:
+      case WidgetTypeEnum.Video:
+      case WidgetTypeEnum.Contact:
+      case WidgetTypeEnum.Carousel:
+      case WidgetTypeEnum.Social:
+        apiCall = mockApiCall();
         break;
       default:
         return false;
@@ -241,6 +266,21 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     }
   };
 
+  const dataContact = useMemo(() => {
+    return dataWidget.filter(item => item.type === WidgetTypeEnum.Contact);
+  }, [dataWidget]);
+
+  const dataWidgetFiltered = useMemo(() => {
+    return dataWidget.filter(
+      item =>
+        ![WidgetTypeEnum.Contact, WidgetTypeEnum.Social].includes(item.type),
+    );
+  }, [dataWidget]);
+
+  const dataSocial = useMemo(() => {
+    return dataWidget.filter(item => item.type === WidgetTypeEnum.Social);
+  }, [dataWidget]);
+
   return (
     <>
       <div data-theme="light" className="h-full max-w-[428px]">
@@ -253,10 +293,13 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           ) : (
             <>
               <ScrollHideHeader />
-              <UserProfile />
+              <UserProfile contact={dataContact} />
               <div className="flex flex-wrap px-6">
-                <SocialContainer />
-                {dataWidget
+                <SocialContainer
+                  onClick={() => setPopupState(WidgetTypeEnum.Social)}
+                  data={dataSocial}
+                />
+                {dataWidgetFiltered
                   .sort((a, b) => a.order - b.order)
                   .map(widget => (
                     <WidgetContainer
@@ -285,16 +328,54 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         onAddAction={handleAddAction}
       />
       <PopupWidgetLink
-        isOpen={popupState === 'link'}
+        isOpen={popupState === WidgetTypeEnum.Link}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
         disabled={isSubmitting}
       />
       <PopupWidgetText
-        isOpen={popupState === 'text'}
+        isOpen={popupState === WidgetTypeEnum.Text}
         onClose={handleClosePopup}
         onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+      <PopupWidgetImage
+        isOpen={popupState === WidgetTypeEnum.Image}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetVideo
+        isOpen={popupState === WidgetTypeEnum.Video}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetContact
+        isOpen={popupState === WidgetTypeEnum.Contact}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetCarousel
+        isOpen={popupState === WidgetTypeEnum.Carousel}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetSocial
+        isOpen={popupState === WidgetTypeEnum.Social}
+        onClose={handleClosePopup}
         onAdd={handleAdd}
         disabled={isSubmitting}
       />

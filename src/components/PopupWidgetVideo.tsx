@@ -1,20 +1,24 @@
-import AddWidgetTextSchema from '@/libs/schema/Widget/WidgetText.shcema';
+import AddWidgetVideoSchema from '@/libs/schema/Widget/WidgetVideo.schema';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {useFormik} from 'formik';
 import React from 'react';
 import Button from './Button';
+import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
-import TextAreaLabel from './TextAreaLabel';
+import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 
-interface IPopupWidgetText {
+interface IPopupWidgetVideo {
   isOpen: boolean;
   onClose: () => void;
   onBack: () => void;
-  onAdd: (type: WidgetTypeEnum, value: object) => Promise<boolean>;
+  onAdd: (
+    type: WidgetTypeEnum,
+    value: IItemWidgetTypeValues,
+  ) => Promise<boolean>;
   disabled?: boolean;
 }
 
-const PopupWidgetText: React.FC<IPopupWidgetText> = ({
+const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
   isOpen,
   onClose,
   onBack,
@@ -25,15 +29,15 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
     initialValues: {
       title: '',
       url: '',
-      selectedImage: null,
     },
-    validationSchema: AddWidgetTextSchema,
+    validationSchema: AddWidgetVideoSchema,
     onSubmit: async values => {
       const value = {
-        text: values.title,
+        title: values.title,
+        url: values.url,
       };
+      const success = await onAdd(WidgetTypeEnum.Video, value);
 
-      const success = await onAdd(WidgetTypeEnum.Text, value);
       if (success) {
         formik.resetForm();
         onClose();
@@ -43,7 +47,7 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
 
   return (
     <PopupContainer
-      title="Add Text"
+      title="Add Video"
       onClose={onClose}
       onBack={onBack}
       isOpen={isOpen}>
@@ -51,22 +55,32 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
         method="dialog"
         className="modal-backdrop flex flex-col gap-5"
         onSubmit={formik.handleSubmit}>
-        <TextAreaLabel
-          label="Text"
+        <InputLabel
+          label="Video Caption"
           name="title"
           value={formik.values.title}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          placeholder="Input Text..."
-          rows={5}
+          placeholder="Your video caption"
           error={
-            formik.touched.title &&
-            formik.errors.title &&
-            formik.submitCount > 0
+            formik.touched.title && formik.errors.title
               ? formik.errors.title
               : ''
           }
         />
+        <InputLabel
+          type="url"
+          label="Input URL Video"
+          name="url"
+          value={formik.values.url}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          placeholder="https://www."
+          error={
+            formik.touched.url && formik.errors.url ? formik.errors.url : ''
+          }
+        />
+
         <div className="flex justify-end">
           <Button
             type="submit"
@@ -80,4 +94,4 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
   );
 };
 
-export default PopupWidgetText;
+export default PopupWidgetVideo;

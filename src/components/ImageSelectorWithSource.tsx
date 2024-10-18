@@ -1,61 +1,45 @@
 import SvgPlus from '@/assets/svgComponents/SvgPlus';
-import React, {useState, useEffect} from 'react';
 import Image from 'next/image';
+import React from 'react';
 
-interface IImageSelector extends React.InputHTMLAttributes<HTMLInputElement> {
+interface IImageSelectorWithSource
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
+  image: string | ArrayBuffer | null;
   reset?: boolean;
+  name: string;
 }
 
-const ImageSelector: React.FC<IImageSelector> = ({
+const ImageSelectorWithSource: React.FC<IImageSelectorWithSource> = ({
   onChange,
   disabled = false,
-  reset = false,
+  name,
+  image,
   ...restProps
 }) => {
-  const [selectedImage, setSelectedImage] = useState<
-    string | ArrayBuffer | null
-  >(null);
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-
+    // const file = event.target.files?.[0];
+    // if (file) {
+    //   const reader = new FileReader();
+    //   reader.onloadend = () => {};
+    //   reader.readAsDataURL(file);
+    // }
+    console.log('onhandleFileChange');
     if (onChange) {
+      console.log('onchange inner');
       onChange(event);
     }
   };
 
-  useEffect(() => {
-    if (reset) {
-      setSelectedImage(null);
-    }
-  }, [reset]);
-
   return (
-    <div className="h-[120px] p-[6px] w-full">
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        disabled={disabled}
-        className="hidden"
-        id="image-selector"
-        {...restProps}
-      />
-      <label htmlFor="image-selector">
+    <div className="h-[120px] p-[6px] w-full min-w-60">
+      <label htmlFor={name ?? 'image-selector'}>
         <div className="h-full cursor-pointer flex flex-col items-center w-full border-2 border-contras-low rounded-2xl bg-contras-med">
-          {selectedImage ? (
+          {image ? (
             <div className="w-full relative h-full">
               <Image
-                src={selectedImage as string}
+                src={image as string}
                 alt="Selected"
                 fill
                 style={{objectFit: 'cover'}}
@@ -70,8 +54,17 @@ const ImageSelector: React.FC<IImageSelector> = ({
           )}
         </div>
       </label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleFileChange}
+        disabled={disabled}
+        className="hidden"
+        id={name ?? 'image-selector'}
+        {...restProps}
+      />
     </div>
   );
 };
 
-export default ImageSelector;
+export default ImageSelectorWithSource;

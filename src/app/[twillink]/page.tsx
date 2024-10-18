@@ -16,10 +16,13 @@ interface IMockUsers {
 }
 
 const fetchUserByUsername = async (username: string): Promise<IUser | null> => {
-  const dataWidget = dummyWidget.map(widget => ({
-    ...widget,
-    idEditor: generateUniqueString('widget'),
-  }));
+  const dataWidget = dummyWidget.map(
+    widget =>
+      ({
+        ...widget,
+        idEditor: generateUniqueString('widget'),
+      }) as IItemWidgetType,
+  );
 
   const mockUsers: IMockUsers = {
     johndoe: {

@@ -5,6 +5,7 @@ interface IInputLabel extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur: (event: FocusEvent<HTMLInputElement>) => void;
+  error?: string;
 }
 
 const InputLabel: React.FC<IInputLabel> = ({
@@ -16,13 +17,14 @@ const InputLabel: React.FC<IInputLabel> = ({
   autoComplete,
   className,
   label,
+  error,
   ...rest
 }) => (
   <div className="flex flex-col">
     <label className="mb-1 text-general-med text-sm">{label}</label>
     <input
       type={type}
-      className={`input input-bordered h-10 rounded-lg p-3 w-full text-primary font-normal text-base bg-contras-high ${className}`}
+      className={`input input-bordered h-10 rounded-lg p-3 w-full text-primary font-normal text-base bg-contras-high ${className} ${error ? 'border-red-500' : ''}`}
       placeholder={placeholder}
       value={value}
       onChange={onChange}
@@ -30,6 +32,7 @@ const InputLabel: React.FC<IInputLabel> = ({
       autoComplete={autoComplete}
       {...rest}
     />
+    {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
   </div>
 );
 

@@ -1,15 +1,17 @@
-import React, {useState} from 'react';
-import InputLabel from './InputLabel';
-import ImageSelector from './ImageSelector';
-import Button from './Button';
-import PopupContainer from './PopupContainer';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
+import {useFormik} from 'formik';
+import React from 'react';
+import Button from './Button';
+import ImageSelector from './ImageSelector';
+import InputLabel from './InputLabel';
+import PopupContainer from './PopupContainer';
+import AddWidgetLinkSchema from '@/libs/schema/Widget/WidgetLink.schema';
 
 interface IPopupWidgetLink {
   isOpen: boolean;
   onClose: () => void;
   onBack: () => void;
-  onAdd: (type: WidgetTypeEnum, value: object) => void;
+  onAdd: (type: WidgetTypeEnum, value: object) => Promise<boolean>;
   disabled?: boolean;
 }
 
@@ -20,25 +22,27 @@ const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
   onAdd,
   disabled = false,
 }) => {
-  const [title, setTitle] = useState('');
-  const [url, setUrl] = useState('');
-  const [selectedImage, setSelectedImage] = useState<
-    string | ArrayBuffer | null
-  >(null);
+  const formik = useFormik({
+    initialValues: {
+      title: '',
+      url: '',
+      selectedImage: null,
+    },
+    validationSchema: AddWidgetLinkSchema,
+    onSubmit: async values => {
+      const value = {
+        title: values.title,
+        url: values.url,
+        image: values.selectedImage,
+      };
 
-  const handleAdd = () => {
-    const value = {
-      title,
-      url,
-      image: selectedImage,
-    };
-
-    onAdd(WidgetTypeEnum.Link, value);
-    setTitle('');
-    setUrl('');
-    setSelectedImage(null);
-    onClose();
-  };
+      const success = await onAdd(WidgetTypeEnum.Link, value);
+      if (success) {
+        formik.resetForm();
+        onClose();
+      }
+    },
+  });
 
   return (
     <PopupContainer
@@ -46,21 +50,38 @@ const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
       onClose={onClose}
       onBack={onBack}
       isOpen={isOpen}>
-      <form method="dialog" className="modal-backdrop flex flex-col gap-5">
+      <form
+        method="dialog"
+        className="modal-backdrop flex flex-col gap-5"
+        onSubmit={formik.handleSubmit}>
         <InputLabel
           label="Link Title"
-          value={title}
-          onChange={e => setTitle(e.target.value)}
-          onBlur={() => console.log('Input blurred')}
+          name="title"
+          value={formik.values.title}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           placeholder="Input link title"
+          error={
+            formik.touched.title &&
+            formik.errors.title &&
+            formik.submitCount > 0
+              ? formik.errors.title
+              : ''
+          }
         />
         <InputLabel
           type="url"
+          name="url"
           label="URL Link"
-          value={url}
-          onChange={e => setUrl(e.target.value)}
-          onBlur={() => console.log('Input blurred')}
+          value={formik.values.url}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           placeholder="https://www."
+          error={
+            formik.touched.url && formik.errors.url && formik.submitCount > 0
+              ? formik.errors.url
+              : ''
+          }
         />
         <ImageSelector
           onChange={e => {
@@ -68,20 +89,19 @@ const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
             if (file) {
               const reader = new FileReader();
               reader.onloadend = () => {
-                setSelectedImage(reader.result);
+                formik.setFieldValue('selectedImage', reader.result);
               };
               reader.readAsDataURL(file);
             }
           }}
-          reset={selectedImage === null}
+          reset={formik.values.selectedImage === null}
         />
         <div className="flex justify-end">
           <Button
-            type="button"
+            type="submit"
             className="w-max"
-            onClick={handleAdd}
-            disabled={disabled}
             title="Add"
+            disabled={disabled}
           />
         </div>
       </form>
