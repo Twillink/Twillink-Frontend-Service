@@ -30,13 +30,13 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
   const formik = useFormik({
     initialValues: {
       email: '',
-      phone: '',
+      phoneNumber: '',
     },
     validationSchema: AddWidgetContactSchema,
     onSubmit: async values => {
       const value = {
         email: values.email,
-        phone: values.phone,
+        phoneNumber: values.phoneNumber,
       };
       const success = await onAdd(WidgetTypeEnum.Contact, value);
 
@@ -83,14 +83,14 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
             {value: '+81', label: '+81', emoji: '🇯🇵'},
           ]}
           label="Phone Number"
-          name="phone"
-          value={formik.values.phone}
+          name="phoneNumber"
+          value={formik.values.phoneNumber}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           placeholder="87111122222"
           error={
-            formik.touched.phone && formik.errors.phone
-              ? formik.errors.phone
+            formik.touched.phoneNumber && formik.errors.phoneNumber
+              ? formik.errors.phoneNumber
               : ''
           }
         />

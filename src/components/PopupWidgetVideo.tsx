@@ -27,13 +27,14 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
 }) => {
   const formik = useFormik({
     initialValues: {
-      title: '',
+      caption: '',
       url: '',
+      attachmentId: null,
     },
     validationSchema: AddWidgetVideoSchema,
     onSubmit: async values => {
       const value = {
-        title: values.title,
+        caption: values.caption,
         url: values.url,
       };
       const success = await onAdd(WidgetTypeEnum.Video, value);
@@ -57,14 +58,14 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
         onSubmit={formik.handleSubmit}>
         <InputLabel
           label="Video Caption"
-          name="title"
-          value={formik.values.title}
+          name="caption"
+          value={formik.values.caption}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           placeholder="Your video caption"
           error={
-            formik.touched.title && formik.errors.title
-              ? formik.errors.title
+            formik.touched.caption && formik.errors.caption
+              ? formik.errors.caption
               : ''
           }
         />
