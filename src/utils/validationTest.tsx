@@ -1,4 +1,7 @@
 export const testValidUsername = (username: string): boolean => {
+  if (!username) {
+    return true;
+  }
   const regex = /^[a-zA-Z0-9._-]+$/;
   return regex.test(username);
 };

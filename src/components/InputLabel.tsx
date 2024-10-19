@@ -3,8 +3,8 @@ import React, {ChangeEvent, FocusEvent, InputHTMLAttributes} from 'react';
 interface IInputLabel extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   label: string;
-  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (event: FocusEvent<HTMLInputElement>) => void;
+  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
   error?: string;
 }
 

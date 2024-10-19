@@ -3,14 +3,16 @@
 import NavBar from '@/components/NavBar';
 import Sidebar, {Menu} from '@/components/Sidebar';
 import {usePathname, useRouter} from 'next/navigation';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import SvgChartSquare from '@/assets/svgComponents/SvgChartSquare';
 import SvgLink from '@/assets/svgComponents/SvgLink';
 import SvgTwilmeetIcon from '@/assets/svgComponents/SvgTwilmeetIcon';
 import SvgUser from '@/assets/svgComponents/SvgUser';
 import {RootState} from '@/libs/store/store';
-import {useAppSelector} from '@/libs/hooks/useReduxHook';
+import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import Loader from '@/components/Loader';
+import {apiGetUserProfile} from '@/libs/api';
+import {setUserProfile} from '@/libs/store/features/userProfileSlice';
 
 const sidebarMenu: Menu[] = [
   {
@@ -42,7 +44,11 @@ const sidebarMenu: Menu[] = [
 ];
 
 export default function AdminLayout({children}: {children: React.ReactNode}) {
+  const dispatch = useAppDispatch();
+  const userProfile = useAppSelector((state: RootState) => state.userProfile);
+
   const [initialized, setInitialized] = useState<boolean>(false);
+  const isFetchingRef = useRef(false);
 
   const isLoggedIn = useAppSelector(
     (state: RootState) => state.auth.isLoggedIn,
@@ -74,16 +80,28 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
       }
     }
 
-    const checkAuth = () => {
+    const fetchUserProfile = () => {
+      apiGetUserProfile(dispatch, false)
+        .then(response => {
+          dispatch(setUserProfile(response.data));
+        })
+        .catch();
+    };
+
+    const checkAuth = async () => {
       const token = localStorage.getItem('authToken');
       if (!isLoggedIn && !token) {
         router.push('/');
       } else {
+        if (!userProfile.profile && !isFetchingRef.current) {
+          isFetchingRef.current = true;
+          fetchUserProfile();
+        }
         setInitialized(true);
       }
     };
     checkAuth();
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn, router, dispatch, userProfile]);
 
   if (!initialized) {
     return <Loader />;
