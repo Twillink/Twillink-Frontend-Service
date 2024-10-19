@@ -4,6 +4,7 @@ import React from 'react';
 
 import isUrl from 'is-url';
 import ReactPlayer from 'react-player';
+import Link from 'next/link';
 
 interface IWidgetVideo extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   text: string;
@@ -19,7 +20,7 @@ const WidgetVideo: React.FC<IWidgetVideo> = ({
   ...restProps
 }) => {
   return (
-    <a
+    <Link
       href={url}
       className="border-base-300 border-2 rounded-2xl h-full w-full flex items-center"
       {...restProps}>
@@ -32,7 +33,7 @@ const WidgetVideo: React.FC<IWidgetVideo> = ({
           <ReactPlayer url={url} height={'100%'} width={'100%'} light />
         )}
       </div>
-    </a>
+    </Link>
   );
 };
 
