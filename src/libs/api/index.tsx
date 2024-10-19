@@ -133,3 +133,46 @@ export const apiRemoveWidget = async (
   const api = createApiClient(dispatch, showToasts);
   return await api.delete(`/api/v1/widget/${id}`);
 };
+
+export const apiGetUserProfile = async (
+  dispatch: AppDispatch,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.get('/api/v1/profile');
+};
+export interface IChangePasswordBody {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export const apiChangePassword = async (
+  dispatch: AppDispatch,
+  body: IChangePasswordBody,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/user-auth/change-password', body);
+};
+
+export interface IUpdateUserProfileBody {
+  fullName: string;
+  phoneNumber: string;
+}
+
+export const apiUpdateUserProfile = async (
+  dispatch: AppDispatch,
+  body: IUpdateUserProfileBody,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.put('/api/v1/profile', body);
+};
+
+export const apiGetCountry = async (
+  dispatch: AppDispatch,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.get('/api/v1/country');
+};
