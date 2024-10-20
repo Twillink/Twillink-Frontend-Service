@@ -9,6 +9,7 @@ import Admin from './AccountTabPanels/Admin';
 import Billing from './AccountTabPanels/Billing';
 import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 import {authLogout} from '@/libs/store/features/authSlice';
+import {clearUserProfile} from '@/libs/store/features/userProfileSlice';
 
 export default function Page() {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function Page() {
   ];
   const handleLogout = () => {
     dispatch(authLogout());
+    dispatch(clearUserProfile());
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     router.push('/');
