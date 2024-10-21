@@ -21,6 +21,7 @@ import {StepsEnum} from '@/libs/types/StepsEnum';
 import {AnimatePresence, motion} from 'framer-motion';
 import FormEmailForgotPassword from '@/app/forgot-password/Forms/FormEmailForgotPassword';
 import FormVerifyForgotPassword from '@/app/forgot-password/Forms/FormVerifyForgotPassword';
+import {setForgotPassword} from '@/libs/store/features/forgotPasswordSlice';
 
 export interface IForgotPasswordInitialData {
   email: string;
@@ -92,7 +93,6 @@ function ForgotPasswordPage() {
 
     if (currentSeq === 1) {
       const success = await handleSendOtp(values);
-      console.log(success);
 
       if (!success) {
         return;
@@ -149,7 +149,6 @@ function ForgotPasswordPage() {
   };
 
   const handleSendOtp = async (values: IForgotPasswordInitialData) => {
-    console.log('Form submitted forgot:', values);
     dispatch(setSubmitLoading(true));
     const body = {
       email: values.email,
@@ -176,7 +175,8 @@ function ForgotPasswordPage() {
     return apiOtpValidate(dispatch, values)
       .then(() => {
         dispatch(setSubmitSuccess(true));
-        router.push(`/reset-password?resetcode=${values.codeOtp}`);
+        dispatch(setForgotPassword(values));
+        router.push(`/reset-password`);
         return true;
       })
       .catch(() => {

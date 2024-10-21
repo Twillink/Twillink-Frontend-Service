@@ -24,7 +24,7 @@ function FormEmailForgotPassword({
 
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
-  const debouncedEmail = useDebounce(values.email);
+  const debouncedEmail = useDebounce(values.email, 1000);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;

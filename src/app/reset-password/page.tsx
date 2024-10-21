@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import Button from '@/components/Button';
 import ErrorMessageField from '@/components/ErrorMessageField';
 import Input from '@/components/Input';
-import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import {
   setSubmitLoading,
   setSubmitSuccess,
@@ -27,6 +27,8 @@ const initialValue: InitialData = {
 const ResetPasswordPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
+  const forgotPassword = useAppSelector(state => state.forgotPassword);
+
   const router = useRouter();
 
   const schema = Yup.object({
@@ -39,12 +41,12 @@ const ResetPasswordPage: React.FC = () => {
   });
 
   const handleSubmit = async (values: InitialData) => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const codeOtp = queryParams.get('resetcode');
-
     dispatch(setSubmitLoading(true));
 
-    return apiResetPassword(dispatch, {...values, codeOtp})
+    return apiResetPassword(dispatch, {
+      ...values,
+      codeOtp: forgotPassword.codeOtp,
+    })
       .then(() => {
         dispatch(setSubmitSuccess(true));
         router.push('/login');
