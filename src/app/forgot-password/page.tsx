@@ -23,12 +23,12 @@ import FormEmailForgotPassword from '@/app/forgot-password/Forms/FormEmailForgot
 import FormVerifyForgotPassword from '@/app/forgot-password/Forms/FormVerifyForgotPassword';
 import {setForgotPassword} from '@/libs/store/features/forgotPasswordSlice';
 
-export type IForgotPasswordInitialData = {
+export type ForgotPasswordInitialData = {
   email: string;
   codeOtp: string;
 };
 
-const initialValue: IForgotPasswordInitialData = {
+const initialValue: ForgotPasswordInitialData = {
   email: '',
   codeOtp: '',
 };
@@ -80,8 +80,8 @@ function ForgotPasswordPage() {
 
   const handleNext = async (
     currentSeq: number,
-    validateForm: () => Promise<FormikErrors<IForgotPasswordInitialData>>,
-    values: IForgotPasswordInitialData,
+    validateForm: () => Promise<FormikErrors<ForgotPasswordInitialData>>,
+    values: ForgotPasswordInitialData,
   ) => {
     dispatch(resetSubmitState());
     dispatch(resetToastState());
@@ -124,8 +124,8 @@ function ForgotPasswordPage() {
   const renderForm = (
     step: StepsEnum,
     onNext: () => void,
-    handleSubmit: (data: IForgotPasswordInitialData) => void,
-    formValues: IForgotPasswordInitialData,
+    handleSubmit: (data: ForgotPasswordInitialData) => void,
+    formValues: ForgotPasswordInitialData,
   ) => {
     switch (step) {
       case StepsEnum.EMAIL:
@@ -148,7 +148,7 @@ function ForgotPasswordPage() {
     }
   };
 
-  const handleSendOtp = async (values: IForgotPasswordInitialData) => {
+  const handleSendOtp = async (values: ForgotPasswordInitialData) => {
     dispatch(setSubmitLoading(true));
     const body = {
       email: values.email,
@@ -169,7 +169,7 @@ function ForgotPasswordPage() {
       });
   };
 
-  const handleSubmit = async (values: IForgotPasswordInitialData) => {
+  const handleSubmit = async (values: ForgotPasswordInitialData) => {
     dispatch(setSubmitLoading(true));
 
     return apiOtpValidate(dispatch, values)

@@ -6,7 +6,7 @@ import Input from '@/components/Input';
 import ErrorMessageField from '@/components/ErrorMessageField';
 import Button from '@/components/Button';
 
-type IFormEmailForgotPasswordValues = {
+type FormEmailForgotPasswordValues = {
   email: string;
 };
 
@@ -20,7 +20,7 @@ function FormEmailForgotPassword({
   generalSubmit,
 }: IFormEmailForgotPassword) {
   const {values, errors, touched, setFieldValue, handleBlur, isValid, dirty} =
-    useFormikContext<IFormEmailForgotPasswordValues>();
+    useFormikContext<FormEmailForgotPasswordValues>();
 
   const [isTyping, setIsTyping] = useState<boolean>(false);
 

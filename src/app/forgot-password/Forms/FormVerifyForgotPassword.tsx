@@ -1,14 +1,14 @@
-import {IForgotPasswordInitialData} from '@/app/forgot-password/page';
 import ErrorMessageField from '@/components/ErrorMessageField';
 import {IGeneralSubmit} from '@/libs/types/IGeneralSubmit';
 import {useFormikContext} from 'formik';
 import {useEffect} from 'react';
 import OtpInput from 'react-otp-input';
+import {ForgotPasswordInitialData} from '../page';
 
 interface IFormVerifyForgotPassword {
-  handleSubmit: (data: IForgotPasswordInitialData) => void;
+  handleSubmit: (data: ForgotPasswordInitialData) => void;
   generalSubmit: IGeneralSubmit;
-  formValues: IForgotPasswordInitialData;
+  formValues: ForgotPasswordInitialData;
 }
 
 const NUMINPUT: number = 4;
@@ -19,7 +19,7 @@ function FormVerifyForgotPassword({
   formValues,
 }: IFormVerifyForgotPassword) {
   const {values, errors, touched, setFieldValue, setFieldTouched} =
-    useFormikContext<IForgotPasswordInitialData>();
+    useFormikContext<ForgotPasswordInitialData>();
 
   useEffect(() => {
     if (values.codeOtp.length === NUMINPUT && !generalSubmit.isLoading) {
