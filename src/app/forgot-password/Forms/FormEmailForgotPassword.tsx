@@ -6,9 +6,9 @@ import Input from '@/components/Input';
 import ErrorMessageField from '@/components/ErrorMessageField';
 import Button from '@/components/Button';
 
-interface IFormEmailForgotPasswordValues {
+type IFormEmailForgotPasswordValues = {
   email: string;
-}
+};
 
 interface IFormEmailForgotPassword {
   onNext: () => void;
@@ -24,7 +24,7 @@ function FormEmailForgotPassword({
 
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
-  const debouncedEmail = useDebounce(values.email, 1000);
+  const debouncedEmail = useDebounce(values.email);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;

@@ -13,6 +13,9 @@ import {
 } from '@/libs/store/features/generalSubmitSlice';
 import {apiResetPassword} from '@/libs/api';
 import {useRouter} from 'next/navigation';
+import {useEffect} from 'react';
+import {showToast} from '@/libs/store/features/toastSlice';
+import {ToastType} from '@/libs/types/ToastType';
 
 type InitialData = {
   password: string;
@@ -59,6 +62,19 @@ const ResetPasswordPage: React.FC = () => {
         dispatch(setSubmitLoading(false));
       });
   };
+
+  useEffect(() => {
+    if (!forgotPassword.codeOtp) {
+      dispatch(
+        showToast({
+          title: 'Failed',
+          message: 'Invalid OTP code, Please request new OTP code',
+          type: ToastType.ERROR,
+        }),
+      );
+      router.push('/forgot-password');
+    }
+  }, [forgotPassword.codeOtp]);
 
   return (
     <div data-theme="skinLight">

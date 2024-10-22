@@ -23,10 +23,10 @@ import FormEmailForgotPassword from '@/app/forgot-password/Forms/FormEmailForgot
 import FormVerifyForgotPassword from '@/app/forgot-password/Forms/FormVerifyForgotPassword';
 import {setForgotPassword} from '@/libs/store/features/forgotPasswordSlice';
 
-export interface IForgotPasswordInitialData {
+export type IForgotPasswordInitialData = {
   email: string;
   codeOtp: string;
-}
+};
 
 const initialValue: IForgotPasswordInitialData = {
   email: '',
