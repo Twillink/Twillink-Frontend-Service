@@ -37,7 +37,7 @@ const ResetPasswordPage: React.FC = () => {
   const schema = Yup.object({
     password: Yup.string()
       .required('Password is required')
-      .min(8, 'Password must be at least 8 characters'),
+      .min(6, 'Password must be at least 6 characters'),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref('password'), undefined], 'Passwords must match')
       .required('Confirm Password is required'),
