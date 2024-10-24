@@ -5,6 +5,7 @@ import toastReducer from './features/toastSlice';
 import generalSubmitReducer from './features/generalSubmitSlice';
 import myWidgetReducer from './features/myWidgetSlice';
 import countryReducer from './features/countrySlice';
+import forgotPasswordReducer from './features/forgotPasswordSlice';
 
 export const makeStore = () => {
   return configureStore({
@@ -15,6 +16,7 @@ export const makeStore = () => {
       generalSubmit: generalSubmitReducer,
       myWidget: myWidgetReducer,
       country: countryReducer,
+      forgotPassword: forgotPasswordReducer,
     },
   });
 };

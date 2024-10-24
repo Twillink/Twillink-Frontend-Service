@@ -6,6 +6,16 @@ import * as Yup from 'yup';
 import Button from '@/components/Button';
 import ErrorMessageField from '@/components/ErrorMessageField';
 import Input from '@/components/Input';
+import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
+import {
+  setSubmitLoading,
+  setSubmitSuccess,
+} from '@/libs/store/features/generalSubmitSlice';
+import {apiResetPassword} from '@/libs/api';
+import {useRouter} from 'next/navigation';
+import {useEffect} from 'react';
+import {showToast} from '@/libs/store/features/toastSlice';
+import {ToastType} from '@/libs/types/ToastType';
 
 type InitialData = {
   password: string;
@@ -18,6 +28,12 @@ const initialValue: InitialData = {
 };
 
 const ResetPasswordPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+
+  const forgotPassword = useAppSelector(state => state.forgotPassword);
+
+  const router = useRouter();
+
   const schema = Yup.object({
     password: Yup.string()
       .required('Password is required')
@@ -27,9 +43,38 @@ const ResetPasswordPage: React.FC = () => {
       .required('Confirm Password is required'),
   });
 
-  const handleSubmit = (values: InitialData) => {
-    console.log('Form submitted:', values);
+  const handleSubmit = async (values: InitialData) => {
+    dispatch(setSubmitLoading(true));
+
+    return apiResetPassword(dispatch, {
+      ...values,
+      codeOtp: forgotPassword.codeOtp,
+    })
+      .then(() => {
+        dispatch(setSubmitSuccess(true));
+        router.push('/login');
+        return true;
+      })
+      .catch(() => {
+        return false;
+      })
+      .finally(() => {
+        dispatch(setSubmitLoading(false));
+      });
   };
+
+  useEffect(() => {
+    if (!forgotPassword.codeOtp) {
+      dispatch(
+        showToast({
+          title: 'Failed',
+          message: 'Invalid OTP code, Please request new OTP code',
+          type: ToastType.ERROR,
+        }),
+      );
+      router.push('/forgot-password');
+    }
+  }, [forgotPassword.codeOtp]);
 
   return (
     <div data-theme="skinLight">
