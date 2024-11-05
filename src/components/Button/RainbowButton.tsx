@@ -33,7 +33,7 @@ export function RainbowButton({
           // base
           'absolute z-1 top-1/2 left-1/2 h-[90%] w-[100%] rounded-lg animate-pulse -translate-x-1/2 -translate-y-1/2',
           // bg color
-          'before:absolute before:-z-10 before:left-1/2  before:h-[100%] before:w-[100%] before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg,hsl(var(--color-1)),hsl(var(--color-5)),hsl(var(--color-3)),hsl(var(--color-4)),hsl(var(--color-2)))] before:bg-[length:200%] before:[filter:blur(calc(0.8*1rem))]',
+          'before:absolute before:-z-10 before:left-1/2  before:h-[100%] before:w-[100%] before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg,hsl(var(--color-1)),hsl(var(--color-5)),hsl(var(--color-3)),hsl(var(--color-4)),hsl(var(--color-2)))] before:bg-[length:200%] before:[filter:blur(calc(0.4*1rem))]',
 
           'dark:bg-[linear-gradient(#121213,#121213),linear-gradient(#121213_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,hsl(var(--color-1)),hsl(var(--color-5)),hsl(var(--color-3)),hsl(var(--color-4)),hsl(var(--color-2)))]',
 
