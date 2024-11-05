@@ -11,8 +11,9 @@ import SvgUser from '@/assets/svgComponents/SvgUser';
 import {RootState} from '@/libs/store/store';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import Loader from '@/components/Loader';
-import {apiGetUserProfile} from '@/libs/api';
+import {apiGetCountry, apiGetUserProfile} from '@/libs/api';
 import {setUserProfile} from '@/libs/store/features/userProfileSlice';
+import {setCountries} from '@/libs/store/features/countrySlice';
 
 const sidebarMenu: Menu[] = [
   {
@@ -46,6 +47,7 @@ const sidebarMenu: Menu[] = [
 export default function AdminLayout({children}: {children: React.ReactNode}) {
   const dispatch = useAppDispatch();
   const userProfile = useAppSelector((state: RootState) => state.userProfile);
+  const country = useAppSelector((state: RootState) => state.country);
 
   const [initialized, setInitialized] = useState<boolean>(false);
   const isFetchingRef = useRef(false);
@@ -85,7 +87,14 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
         .then(response => {
           dispatch(setUserProfile(response.data));
         })
-        .catch();
+        .catch(error => {
+          console.log(error?.status, 'error');
+          if (error?.status === 401) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            router.push('/');
+          }
+        });
     };
 
     const checkAuth = async () => {
@@ -93,10 +102,16 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
       if (!isLoggedIn && !token) {
         router.push('/');
       } else {
+        if (country.countries.length === 0 && !isFetchingRef.current) {
+          apiGetCountry(dispatch, false).then(response => {
+            dispatch(setCountries(response.data));
+          });
+        }
         if (!userProfile.profile && !isFetchingRef.current) {
           isFetchingRef.current = true;
           fetchUserProfile();
         }
+
         setInitialized(true);
       }
     };

@@ -1,11 +1,15 @@
 import {AppDispatch} from '../store/store';
+import {IAddAttachment} from '../types/IAttachmentData';
 import createApiClient from './apiClient';
 import {
+  IAddWidgetCarousel,
   IAddWidgetContact,
   IAddWidgetImage,
   IAddWidgetLink,
   IAddWidgetText,
   IAddWidgetVideo,
+  IChangeOrderWidgetItem,
+  IChangeWidthWidget,
 } from '@/libs/types/IAddWidgetData';
 
 export const apiAuthLogin = async (
@@ -125,6 +129,18 @@ export const apiAddWidgetVideo = async (
   return await api.post('/api/v1/widget-video', body);
 };
 
+export const apiAddWidgetCarousel = async (
+  dispatch: AppDispatch,
+  body: IAddWidgetCarousel,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/widget-carousel', {
+    ...body,
+    attachmentIds: body.attachmentIds,
+  });
+};
+
 export const apiAddWidgetContact = async (
   dispatch: AppDispatch,
   body: IAddWidgetContact,
@@ -184,4 +200,45 @@ export const apiGetCountry = async (
 ) => {
   const api = createApiClient(dispatch, showToasts);
   return await api.get('/api/v1/country');
+};
+
+export const apiChangeWidthWidget = async (
+  dispatch: AppDispatch,
+  body: IChangeWidthWidget,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.put(`/api/v1/widget/change-width/${body.id}`, body);
+};
+
+export const apiChangeOrderWidget = async (
+  dispatch: AppDispatch,
+  body: IChangeOrderWidgetItem[],
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post(`/api/v1/widget/order`, JSON.stringify(body));
+};
+
+export const apiAddAttachment = async (
+  dispatch: AppDispatch,
+  body: IAddAttachment,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts, true);
+  const formData = new FormData();
+  for (let i = 0; i < body.files.length; i++) {
+    formData.append('file', body.files[i]);
+  }
+
+  return await api.post('/api/v1/attachment/Upload', formData);
+};
+
+export const apiGetAttachmentById = async (
+  dispatch: AppDispatch,
+  id: number,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.get(`/api/v1/attachment/${id}`);
 };

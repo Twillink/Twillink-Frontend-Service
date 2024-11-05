@@ -15,20 +15,23 @@ interface IWidgetViewer {
 const WidgetViewer: React.FC<IWidgetViewer> = ({dataWidget}) => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const dataContact = useMemo(() => {
-    return dataWidget.filter(item => item.type === WidgetTypeEnum.Contact);
+  const [dataWidgetFiltered, dataContact, dataSocial] = useMemo(() => {
+    const filtered = [];
+    let contact;
+    const social = [];
+    for (let i = 0; i < dataWidget.length; i++) {
+      const item = dataWidget[i];
+      if (item.type === WidgetTypeEnum.Contact) {
+        contact = item;
+      } else if (item.type === WidgetTypeEnum.Social) {
+        social.push(item);
+      } else {
+        filtered.push(item);
+      }
+    }
+    return [filtered, contact, social];
   }, [dataWidget]);
 
-  const dataWidgetFiltered = useMemo(() => {
-    return dataWidget.filter(
-      item =>
-        ![WidgetTypeEnum.Contact, WidgetTypeEnum.Social].includes(item.type),
-    );
-  }, [dataWidget]);
-
-  const dataSocial = useMemo(() => {
-    return dataWidget.filter(item => item.type === WidgetTypeEnum.Social);
-  }, [dataWidget]);
   return (
     <>
       <div data-theme="light" className="h-full max-w-[428px]">

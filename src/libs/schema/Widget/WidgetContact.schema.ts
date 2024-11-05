@@ -13,7 +13,7 @@ const AddWidgetContactSchema = Yup.object().shape({
     ),
 
   phoneNumber: Yup.string()
-    .matches(/^[0-9]+$/, 'Phone number must be digits only')
+    .matches(/^[0-9+]*$/, 'Phone number must be digits or "+" only')
     .min(10, 'Phone number must be at least 10 digits')
     .test(
       'email-or-phone',

@@ -88,11 +88,17 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
   };
 
   if (values.type === WidgetTypeEnum.Carousel) {
+    const attachmentIds =
+      values.value?.widgetCarouselAttachment?.map(data => data.attachmentId) ||
+      [];
+    console.log(attachmentIds, 'from editor');
+
     return (
       <WidgetCarousel
         text={values.value?.text || ''}
         url={values.value?.url || '#'}
         images={values.value?.images}
+        attachmentIds={attachmentIds}
       />
     );
   }
@@ -104,7 +110,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       onDragStart={handleDrag}
       onDrop={handleDrop}
       onDragOver={ev => ev.preventDefault()}
-      className="relative flex align-middle items-center justify-center p-[6px] h-[120px] cursor-move"
+      className="relative flex align-middle items-center justify-center p-[6px] h-[120px] cursor-move z-20"
       style={{width: values.width}}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}>

@@ -8,7 +8,7 @@ export const formatWidgetData = (item: IFetchedWidgetData): IItemWidgetType => {
     id: item.id,
     idEditor: generateUniqueString(),
     order: item.sequence,
-    width: '100%',
+    width: item.width ?? '100%',
     type: mapWidgetType(item.typeWidget),
     value: mapWidgetValue(item),
   };
@@ -21,6 +21,7 @@ const mapWidgetType = (typeWidget: string): WidgetTypeEnum => {
     [WidgetTypeEnum.Image]: WidgetTypeEnum.Image,
     [WidgetTypeEnum.Video]: WidgetTypeEnum.Video,
     [WidgetTypeEnum.Contact]: WidgetTypeEnum.Contact,
+    [WidgetTypeEnum.Carousel]: WidgetTypeEnum.Carousel,
   };
 
   const type = widgetTypeMap[typeWidget];
@@ -36,6 +37,7 @@ const mapWidgetValue = (item: IFetchedWidgetData) => {
     widgetImage,
     widgetVideo,
     widgetContact,
+    widgetCarousel,
   } = item;
 
   switch (typeWidget) {
@@ -49,6 +51,8 @@ const mapWidgetValue = (item: IFetchedWidgetData) => {
       return widgetVideo ? widgetVideo : undefined;
     case WidgetTypeEnum.Contact:
       return widgetContact ? widgetContact : undefined;
+    case WidgetTypeEnum.Carousel:
+      return widgetCarousel ? widgetCarousel : undefined;
     default:
       return undefined;
   }

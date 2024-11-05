@@ -18,6 +18,8 @@ import {showToast} from '@/libs/store/features/toastSlice';
 import {ToastType} from '@/libs/types/ToastType';
 import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
 import {useEffect} from 'react';
+import ButtonIcon from '@/components/ButtonIcon';
+import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
 
 type InitialData = {
   email: string;
@@ -111,6 +113,14 @@ const LoginPage: React.FC = () => {
                   key="card_login">
                   <div className="card-body w-full px-6 sm:px-[99px] py-10 sm:py-[90px]">
                     <div className="flex flex-col gap-6 w-full">
+                      <ButtonIcon
+                        icon={
+                          <SvgArrowLeft className="stroke-primary hover:stroke-general-med" />
+                        }
+                        onClick={() => router.back()}
+                        type="button"
+                        className="flex justify-start w-max"
+                      />
                       <h3 className="card-title text-primary">Login</h3>
                       <div className="flex flex-col gap-6">
                         <div>

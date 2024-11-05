@@ -50,6 +50,7 @@ const Page = () => {
             isLoading={isLoading}
             dataWidget={dataWidget}
             fetchData={fetchData}
+            setDataWidget={setDataWidget}
           />
         </div>
       </div>

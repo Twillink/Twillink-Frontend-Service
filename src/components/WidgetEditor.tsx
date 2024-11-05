@@ -16,11 +16,15 @@ import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {generateUniqueString} from '@/utils/generateUniqueString';
 import Loader from './Loader';
 import {
+  apiAddAttachment,
+  apiAddWidgetCarousel,
   apiAddWidgetContact,
   apiAddWidgetImage,
   apiAddWidgetLink,
   apiAddWidgetText,
   apiAddWidgetVideo,
+  apiChangeOrderWidget,
+  apiChangeWidthWidget,
   apiRemoveWidget,
 } from '@/libs/api';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
@@ -30,12 +34,17 @@ import PopupWidgetSocial from './PopupWidgetSocial';
 import PopupWidgetCarousel from './PopupWidgetCarousel';
 import mockApiCall from '@/mock/mockApiCall';
 import {
+  IAddWidgetCarousel,
   IAddWidgetContact,
   IAddWidgetImage,
   IAddWidgetLink,
   IAddWidgetText,
   IAddWidgetVideo,
+  IChangeOrderWidgetItem,
+  TypeWidthWidgetEnum,
 } from '@/libs/types/IAddWidgetData';
+import PopupWidgetBlog from '@/components/PopupWidgetBlog';
+import {AxiosResponse} from 'axios';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -143,6 +152,9 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       case WidgetTypeEnum.Carousel:
         setPopupState(WidgetTypeEnum.Carousel);
         break;
+      case WidgetTypeEnum.Blog:
+        setPopupState(WidgetTypeEnum.Blog);
+        break;
       case 'main':
         setPopupState('main');
         break;
@@ -214,6 +226,22 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         apiCall = apiAddWidgetContact(dispatch, body as IAddWidgetContact);
         break;
       case WidgetTypeEnum.Carousel:
+        const files = newWidget.value?.images ?? [];
+        const apiAttachments: Promise<AxiosResponse<any, any>>[] = [];
+
+        for (let i = 0; i < files.length; i++) {
+          apiAttachments.push(apiAddAttachment(dispatch, {files: [files[i]]}));
+        }
+
+        apiCall = Promise.all(apiAttachments).then(data => {
+          body = {
+            caption: newWidget.value?.caption,
+            attachmentIds: (data ?? []).map((item: any) => item?.data?.id),
+          };
+
+          return apiAddWidgetCarousel(dispatch, body as IAddWidgetCarousel);
+        });
+        break;
       case WidgetTypeEnum.Social:
         apiCall = mockApiCall();
         break;
@@ -234,8 +262,27 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       });
   };
 
-  const handleMoveUp = (id: string) => {
+  const handleOrderWidget = async (body: IItemWidgetType[]) => {
+    const orderWidget: IChangeOrderWidgetItem[] = body.map(item => ({
+      id: item.id,
+      sequence: item.order,
+    }));
+
+    dispatch(setSubmitLoading(true));
+    apiChangeOrderWidget(dispatch, orderWidget)
+      .then(() => {
+        fetchData(false);
+      })
+      .catch()
+      .finally(() => {
+        dispatch(setSubmitLoading(false));
+      });
+  };
+
+  const handleMoveUp = async (id: string) => {
     if (!setDataWidget) return;
+
+    let newDataWidget: IItemWidgetType[] = [];
 
     setDataWidget(prevWidgets => {
       const index = prevWidgets.findIndex(widget => widget.idEditor === id);
@@ -247,17 +294,26 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           newWidgets[index - 1],
         ];
 
-        return newWidgets.map((widget, i) => ({
+        newDataWidget = newWidgets.map((widget, i) => ({
           ...widget,
           order: i + 1,
         }));
+
+        return newDataWidget;
       }
+
       return prevWidgets;
     });
+
+    if (newDataWidget.length > 0) {
+      await handleOrderWidget(newDataWidget);
+    }
   };
 
-  const handleMoveDown = (id: string) => {
+  const handleMoveDown = async (id: string) => {
     if (!setDataWidget) return;
+
+    let newDataWidget: IItemWidgetType[] = [];
 
     setDataWidget(prevWidgets => {
       const index = prevWidgets.findIndex(widget => widget.idEditor === id);
@@ -268,13 +324,19 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           newWidgets[index],
         ];
 
-        return newWidgets.map((widget, i) => ({
+        newDataWidget = newWidgets.map((widget, i) => ({
           ...widget,
           order: i + 1,
         }));
+
+        return newDataWidget;
       }
       return prevWidgets;
     });
+
+    if (newDataWidget.length > 0) {
+      await handleOrderWidget(newDataWidget);
+    }
   };
 
   const handleDelete = (id: number) => {
@@ -289,30 +351,53 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       });
   };
 
-  const handleResize = (id: string, width: string) => {
-    const newWidth = width === '50%' ? '100%' : '50%';
+  const handleResize = async (id: string, width: string) => {
+    const newWidth =
+      width === TypeWidthWidgetEnum.Half
+        ? TypeWidthWidgetEnum.Full
+        : TypeWidthWidgetEnum.Half;
+
     if (setDataWidget) {
+      let widgetId: number | undefined;
       setDataWidget(prevWidgets =>
-        prevWidgets.map(widget =>
-          widget.idEditor === id ? {...widget, width: newWidth} : widget,
-        ),
+        prevWidgets.map(widget => {
+          if (widget.idEditor === id) {
+            widgetId = widget.id;
+            return {...widget, width: newWidth};
+          }
+          return widget;
+        }),
       );
+
+      if (widgetId) {
+        dispatch(setSubmitLoading(true));
+        apiChangeWidthWidget(dispatch, {id: widgetId, width: newWidth})
+          .then(() => {
+            fetchData(false);
+          })
+          .catch()
+          .finally(() => {
+            dispatch(setSubmitLoading(false));
+          });
+      }
     }
   };
 
-  const dataContact = useMemo(() => {
-    return dataWidget.filter(item => item.type === WidgetTypeEnum.Contact);
-  }, [dataWidget]);
-
-  const dataWidgetFiltered = useMemo(() => {
-    return dataWidget.filter(
-      item =>
-        ![WidgetTypeEnum.Contact, WidgetTypeEnum.Social].includes(item.type),
-    );
-  }, [dataWidget]);
-
-  const dataSocial = useMemo(() => {
-    return dataWidget.filter(item => item.type === WidgetTypeEnum.Social);
+  const [dataWidgetFiltered, dataContact, dataSocial] = useMemo(() => {
+    const filtered = [];
+    let contact;
+    const social = [];
+    for (let i = 0; i < dataWidget.length; i++) {
+      const item = dataWidget[i];
+      if (item.type === WidgetTypeEnum.Contact) {
+        contact = item;
+      } else if (item.type === WidgetTypeEnum.Social) {
+        social.push(item);
+      } else {
+        filtered.push(item);
+      }
+    }
+    return [filtered, contact, social];
   }, [dataWidget]);
 
   return (
@@ -353,6 +438,12 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
               </div>
             </>
           )}
+          <div
+            className={'sticky bg-base-100 w-full h-full bottom-0 py-2 z-30'}>
+            <p className={'text-sm font-medium text-center'}>
+              Powered By Twilink
+            </p>
+          </div>
         </div>
       </div>
 
@@ -397,6 +488,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         onBack={handleBack}
         onAdd={handleAdd}
         disabled={isSubmitting}
+        dataContact={dataContact}
       />
 
       <PopupWidgetCarousel
@@ -410,6 +502,14 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       <PopupWidgetSocial
         isOpen={popupState === WidgetTypeEnum.Social}
         onClose={handleClosePopup}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetBlog
+        isOpen={popupState === WidgetTypeEnum.Blog}
+        onClose={handleClosePopup}
+        onBack={handleBack}
         onAdd={handleAdd}
         disabled={isSubmitting}
       />

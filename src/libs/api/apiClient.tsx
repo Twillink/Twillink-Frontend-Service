@@ -5,11 +5,17 @@ import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {AppDispatch} from '@/libs/store/store';
 
 const defaultTimeout = 1000 * 90;
-const createApiClient = (dispatch: AppDispatch, showToasts = true) => {
+const createApiClient = (
+  dispatch: AppDispatch,
+  showToasts = true,
+  isMultipart = false,
+) => {
   const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     timeout: defaultTimeout,
-    headers: {'Content-Type': 'application/json'},
+    headers: {
+      'Content-Type': isMultipart ? 'multipart/form-data' : 'application/json',
+    },
   });
 
   axiosInstance.interceptors.request.use(

@@ -2,7 +2,7 @@
 
 import GradientBg from '@/components/GradientBg';
 import {Form, Formik, FormikErrors} from 'formik';
-import {motion, AnimatePresence} from 'framer-motion';
+import {AnimatePresence, motion} from 'framer-motion';
 import {useEffect, useState} from 'react';
 import * as Yup from 'yup';
 import FormClaim from './Forms/FormClaim';
@@ -23,6 +23,7 @@ import {
 } from '@/libs/store/features/generalSubmitSlice';
 import {resetToastState, showToast} from '@/libs/store/features/toastSlice';
 import {ToastType} from '@/libs/types/ToastType';
+import {useRouter} from 'next/navigation';
 
 interface IItemStepSignup {
   title: string;
@@ -64,6 +65,7 @@ const SCALE_FACTOR = 0.06;
 
 const SignupPage: React.FC = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const [cards, setCards] = useState<IItemStepSignup[]>(dataSteps);
   const [currentSeqActive, setCurrentSeqActive] = useState<number>(1);
@@ -129,6 +131,8 @@ const SignupPage: React.FC = () => {
     if (previousCard) {
       setCards([previousCard, ...cards]);
       setCurrentSeqActive(targetSeq);
+    } else {
+      router.back();
     }
     if (currentSeq === 3) {
       setFieldValue('otp', '');
@@ -251,18 +255,15 @@ const SignupPage: React.FC = () => {
                       transition={{duration: 0.3, ease: [0, 0.71, 0.2, 1.01]}}>
                       <div className="card-body px-6 sm:px-[99px] py-14 sm:py-[90px]">
                         <div className="flex flex-col gap-6 w-full">
-                          {item.seq !== dataSteps[0].seq && (
-                            <ButtonIcon
-                              icon={
-                                <SvgArrowLeft className="stroke-primary hover:stroke-general-med" />
-                              }
-                              onClick={() =>
-                                handleBack(item.seq, setFieldValue)
-                              }
-                              type="button"
-                              className="flex justify-start w-max"
-                            />
-                          )}
+                          <ButtonIcon
+                            icon={
+                              <SvgArrowLeft className="stroke-primary hover:stroke-general-med" />
+                            }
+                            onClick={() => handleBack(item.seq, setFieldValue)}
+                            type="button"
+                            className="flex justify-start w-max"
+                          />
+
                           <h3 className="card-title text-primary">
                             {item.title}
                           </h3>
