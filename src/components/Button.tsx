@@ -1,22 +1,24 @@
 import React from 'react';
+
 interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   title?: string;
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
   loading?: boolean;
-  color?: 'primary' | 'error' | 'success';
+  color?: 'primary' | 'error' | 'success' | 'outline';
   size?: 'lg' | 'md' | 'sm' | 'xs';
   outline?: boolean;
   className?: string;
 }
 
-type ColorVariant = 'primary' | 'error' | 'success';
+type ColorVariant = 'primary' | 'error' | 'success' | 'outline';
 type SizeVariant = 'lg' | 'md' | 'sm' | 'xs';
 
 const colorVariants: Record<ColorVariant, string> = {
   primary: 'btn-primary',
   error: 'btn-error',
   success: 'btn-success',
+  outline: 'btn-outline',
 };
 
 const sizeVariants: Record<SizeVariant, string> = {
