@@ -15,7 +15,9 @@ const Home: React.FC = () => {
   return (
     <div
       data-theme={'skinLight'}
-      className={'p-16 flex h-screen justify-center items-center gap-[20%]'}>
+      className={
+        "p-16 flex h-screen justify-center items-center gap-[20%] bg-[url('/images/bg-intro.webp')] bg-cover"
+      }>
       <MotionDiv
         initial={{opacity: 0, x: -100}}
         whileInView={{opacity: 1, x: 0}}
@@ -24,7 +26,7 @@ const Home: React.FC = () => {
           duration: 1,
           delay: 1,
         }}
-        data-theme="skinLight"
+        // data-theme="skinLight"
         className="flex flex-col items-start justify-center px-2 gap-4">
         <SvgTwillinkLogo height={30} className="fill-logo" />
         <h1 className="text-start text-4xl font-bold text-primary leading-relaxed">
@@ -68,7 +70,7 @@ const Home: React.FC = () => {
                 duration: 1,
                 delay: 1,
               }}
-              src="/images/Mobile Preview.png"
+              src="/images/Mobile Preview.webp"
               alt="Preview"
               className={'w-80'}
             />
@@ -96,7 +98,7 @@ const Home: React.FC = () => {
                 ease: 'easeInOut',
                 delay: 3,
               }}
-              src="/images/calendar.png"
+              src="/images/calendar.webp"
               alt="Preview"
               className={'w-60 '}
             />
@@ -124,7 +126,7 @@ const Home: React.FC = () => {
                 ease: 'easeInOut',
                 delay: 3,
               }}
-              src="/images/blog.png"
+              src="/images/blog.webp"
               alt="Preview"
               className="h-[168px]"
             />

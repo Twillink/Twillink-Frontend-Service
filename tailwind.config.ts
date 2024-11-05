@@ -60,6 +60,9 @@ const config: Config = {
           '100%': {'background-position': '200%'},
         },
       },
+      backgroundImage: {
+        'intro-pattern': "url('/images/bg-intro.webp')",
+      },
     },
   },
   plugins: [
