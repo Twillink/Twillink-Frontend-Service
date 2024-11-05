@@ -1,4 +1,5 @@
 import {WidgetTypeEnum} from './WidgetTypeEnum';
+import {WidgetCarouselAttachment} from '@/libs/types/IFetchedWidgetData';
 
 export interface IItemWidgetTypeValues {
   url?: string;
@@ -10,6 +11,7 @@ export interface IItemWidgetTypeValues {
   phoneNumber?: string;
   caption?: string;
   attachmentId?: string;
+  widgetCarouselAttachment?: WidgetCarouselAttachment[];
 }
 
 export interface IItemWidgetType {

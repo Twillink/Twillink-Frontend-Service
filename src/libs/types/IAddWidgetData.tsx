@@ -20,6 +20,11 @@ export interface IAddWidgetVideo {
   attachmentId?: string;
 }
 
+export interface IAddWidgetCarousel {
+  caption: string;
+  attachmentIds: number[];
+}
+
 interface IAddWidgetContactEmail {
   email: string;
   phoneNumber?: string;
@@ -33,3 +38,18 @@ interface IAddWidgetContactPhoneNumber {
 export type IAddWidgetContact =
   | IAddWidgetContactEmail
   | IAddWidgetContactPhoneNumber;
+
+export enum TypeWidthWidgetEnum {
+  Full = '100%',
+  Half = '50%',
+}
+
+export interface IChangeWidthWidget {
+  id: number;
+  width: TypeWidthWidgetEnum;
+}
+
+export interface IChangeOrderWidgetItem {
+  id: number;
+  sequence: number;
+}

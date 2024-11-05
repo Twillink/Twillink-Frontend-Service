@@ -28,14 +28,15 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
 }) => {
   const formik = useFormik({
     initialValues: {
-      title: '',
+      caption: '',
       selectedImages: [] as string[],
+      images: [],
     },
     validationSchema: AddWidgetCarouselSchema,
     onSubmit: async values => {
       const value = {
-        title: values.title,
-        images: values.selectedImages,
+        caption: values.caption,
+        images: values.images,
       };
 
       const success = await onAdd(WidgetTypeEnum.Carousel, value);
@@ -64,14 +65,14 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
         onSubmit={formik.handleSubmit}>
         <InputLabel
           label="Caption"
-          name="title"
-          value={formik.values.title}
+          name="caption"
+          value={formik.values.caption}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           placeholder="Your caption carousel"
           error={
-            formik.touched.title && formik.errors.title
-              ? formik.errors.title
+            formik.touched.caption && formik.errors.caption
+              ? formik.errors.caption
               : ''
           }
         />
@@ -112,6 +113,10 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
                     formik.setFieldValue(
                       `selectedImages[${imageIndex}]`,
                       reader.result,
+                    );
+                    formik.setFieldValue(
+                      `images[${formik.values.selectedImages.length}]`,
+                      file,
                     );
                   };
                   reader.readAsDataURL(file);

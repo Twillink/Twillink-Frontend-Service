@@ -52,8 +52,8 @@ const buttons = [
     title: 'Blog Content',
     action: WidgetTypeEnum.Blog,
     icon: <SvgWidgetBlog className="stroke-general-med" />,
-    isComingSoon: true,
-    disabled: true,
+    isComingSoon: false,
+    disabled: false,
   },
   {
     title: 'Add Contact',

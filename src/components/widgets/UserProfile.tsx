@@ -7,7 +7,7 @@ import SvgMail from '@/assets/svgComponents/SvgMail';
 import SvgPhoneCall from '@/assets/svgComponents/SvgPhoneCall';
 
 interface IUserProfile {
-  contact: IItemWidgetType[];
+  contact?: IItemWidgetType;
 }
 
 function UserProfile({contact}: IUserProfile) {
@@ -108,11 +108,11 @@ function UserProfile({contact}: IUserProfile) {
         </div>
       </div>
       <div className="flex justify-between gap-2 items-center">
-        {contact?.map((item: IItemWidgetType) => (
+        {!isSticky && (
           <>
-            {item.value?.email && (
+            {contact?.value?.email && (
               <button
-                key={item.value?.email}
+                key={contact?.value?.email}
                 className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
                   <SvgMail height={20} width={20} className="text-white" />
@@ -120,9 +120,9 @@ function UserProfile({contact}: IUserProfile) {
                 <p>Email</p>
               </button>
             )}
-            {item.value?.phoneNumber && (
+            {contact?.value?.phoneNumber && (
               <button
-                key={item.value?.phoneNumber}
+                key={contact?.value?.phoneNumber}
                 className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
                   <SvgPhoneCall height={20} width={20} className="text-white" />
@@ -131,7 +131,7 @@ function UserProfile({contact}: IUserProfile) {
               </button>
             )}
           </>
-        ))}
+        )}
       </div>
     </div>
   );

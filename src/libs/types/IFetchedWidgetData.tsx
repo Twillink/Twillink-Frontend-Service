@@ -27,6 +27,18 @@ export interface IFetchedWidgetContact {
   phoneNumber: string;
 }
 
+export interface WidgetCarouselAttachment {
+  id: number;
+  widgetCarouselId: number;
+  attachmentId: number;
+}
+
+export interface IFetchedWidgetCarousel {
+  id: number;
+  caption: string;
+  widgetCarouselAttachment: WidgetCarouselAttachment[];
+}
+
 export interface IFetchedWidgetData {
   id: number;
   sequence: number;
@@ -36,4 +48,6 @@ export interface IFetchedWidgetData {
   widgetImage?: IFetchedWidgetImage | null;
   widgetVideo?: IFetchedWidgetVideo | null;
   widgetContact?: IFetchedWidgetContact | null;
+  widgetCarousel?: IFetchedWidgetCarousel | null;
+  width: string;
 }

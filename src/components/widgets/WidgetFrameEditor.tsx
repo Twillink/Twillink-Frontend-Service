@@ -7,6 +7,7 @@ import SvgWidgetHalf from '@/assets/svgComponents/SvgWidgetHalf';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import SvgOrderDown from '@/assets/svgComponents/SvgOrderDown';
 import SvgOrderUp from '@/assets/svgComponents/SvgOrderUp';
+import {TypeWidthWidgetEnum} from '@/libs/types/IAddWidgetData';
 
 interface IWidgetFrameEditor {
   children: React.ReactNode;
@@ -53,7 +54,7 @@ const WidgetFrameEditor: React.FC<IWidgetFrameEditor> = ({
                 <SvgOrderDown className="stroke-base-100" height={16} />
               </div>
               <div onClick={handleResize} className="cursor-pointer">
-                {values.width === '50%' ? (
+                {values.width === TypeWidthWidgetEnum.Half ? (
                   <SvgWidgetFull className="stroke-base-100" height={16} />
                 ) : (
                   <SvgWidgetHalf className="stroke-base-100" height={16} />

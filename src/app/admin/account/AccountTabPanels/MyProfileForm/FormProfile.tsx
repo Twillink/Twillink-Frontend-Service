@@ -33,11 +33,11 @@ const FormProfile: React.FC<FormProfileProps> = ({onSubmit}) => {
     if (formikRef.current) {
       formikRef.current.setFieldValue(
         'name',
-        userProfile.profile?.profile.fullName || '',
+        userProfile.profile?.profile?.fullName || '',
       );
       formikRef.current.setFieldValue(
         'phoneNumber',
-        userProfile.profile?.profile.phoneNumber || '+62',
+        userProfile.profile?.profile?.phoneNumber || '+62',
       );
       formikRef.current.setFieldValue(
         'username',
