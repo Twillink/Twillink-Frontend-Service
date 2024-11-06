@@ -179,7 +179,7 @@ const LoginPage: React.FC = () => {
                               disabled={
                                 !isValid || !dirty || generalSubmit.isLoading
                               }
-                              type="button"
+                              type="submit"
                               size="md"
                             />
                           </div>
