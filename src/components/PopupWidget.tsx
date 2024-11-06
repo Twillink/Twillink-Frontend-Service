@@ -73,22 +73,24 @@ const buttons = [
     title: 'Add Map',
     action: WidgetTypeEnum.Map,
     icon: <SvgWidgetMap className="stroke-general-med" />,
-    isComingSoon: true,
-    disabled: true,
+    isComingSoon: false,
+    disabled: false,
   },
   {
     title: 'Add Webinar',
     action: WidgetTypeEnum.Webinar,
     icon: <SvgWidgetWebinar className="stroke-general-med" />,
-    isComingSoon: true,
-    disabled: true,
+    isComingSoon: false,
+    disabled: false,
+    isPro: true,
   },
   {
     title: 'Add Schedule',
     action: WidgetTypeEnum.Schedule,
     icon: <SvgWidgetSchedule className="stroke-general-med" />,
-    isComingSoon: true,
-    disabled: true,
+    isComingSoon: false,
+    disabled: false,
+    isPro: true,
   },
 ];
 
@@ -107,6 +109,7 @@ const PopupWidget: React.FC<IPopupWidget> = ({
               icon={button.icon}
               title={button.title}
               isComingSoon={button.isComingSoon}
+              isPro={button.isPro}
               disabled={button.disabled}
               onClick={() => {
                 if (!button.isComingSoon) {
