@@ -114,10 +114,10 @@ const Home: React.FC = () => {
             className={' absolute bottom-[8%] right-[-30%]'}>
             <MotionImg
               initial={{
-                transform: 'translateZ(8px) translateY(-2px)',
+                transform: 'translateZ(8px) translateY(0px)',
               }}
               animate={{
-                transform: 'translateZ(32px) translateY(-8px)',
+                transform: 'translateZ(32px) translateY(-6px)',
               }}
               transition={{
                 repeat: Infinity,
