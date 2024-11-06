@@ -8,6 +8,7 @@ import Image from 'next/image';
 import twilmeetAds from '@/assets/gifs/twilmeet-ads.gif';
 import SvgTwilmeetIcon from '@/assets/svgComponents/SvgTwilmeetIcon';
 import Link from 'next/link';
+
 export interface ISidebar {
   menus?: Menu[];
 }
@@ -105,7 +106,7 @@ const Sidebar: React.FC<ISidebar> = ({menus = []}) => {
                   </div>
                 </div>
                 <div className="text-sm font-semibold text-white">
-                  One Click Consultation
+                  One Click Webinar Tool
                 </div>
               </div>
             </div>
