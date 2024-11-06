@@ -6,6 +6,8 @@ interface IInputLabel extends InputHTMLAttributes<HTMLInputElement> {
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: FocusEvent<HTMLInputElement>) => void;
   error?: string;
+  showLength?: boolean;
+  showOptional?: boolean;
 }
 
 const InputLabel: React.FC<IInputLabel> = ({
@@ -18,6 +20,8 @@ const InputLabel: React.FC<IInputLabel> = ({
   className,
   label,
   error,
+  showLength = false,
+  showOptional = false,
   ...rest
 }) => (
   <div className="flex flex-col">
@@ -32,6 +36,23 @@ const InputLabel: React.FC<IInputLabel> = ({
       autoComplete={autoComplete}
       {...rest}
     />
+    {(showOptional || showLength) && (
+      <div className={'flex justify-between mt-1'}>
+        <div>
+          <span
+            className={`${showOptional ? 'block' : 'hidden'} text-xs text-general-med`}>
+            Optional
+          </span>
+        </div>
+        <div>
+          <span
+            className={`${showLength ? 'block' : 'hidden'} text-xs text-general-med`}>
+            {value.length} / {rest?.maxLength ? rest.maxLength : 100}
+          </span>
+        </div>
+      </div>
+    )}
+
     {error && <span className="text-red-500 text-sm mt-1">{error}</span>}
   </div>
 );
