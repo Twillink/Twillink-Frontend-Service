@@ -9,6 +9,8 @@ interface IImageSelectorWithSource
   image: string | ArrayBuffer | null;
   reset?: boolean;
   name: string;
+  label?: string;
+  error?: string;
 }
 
 const ImageSelectorWithSource: React.FC<IImageSelectorWithSource> = ({
@@ -16,6 +18,8 @@ const ImageSelectorWithSource: React.FC<IImageSelectorWithSource> = ({
   disabled = false,
   name,
   image,
+  error,
+  label,
   ...restProps
 }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +53,7 @@ const ImageSelectorWithSource: React.FC<IImageSelectorWithSource> = ({
           ) : (
             <div className="h-full flex text-general-med items-center gap-3 font-normal text-base">
               <SvgPlus height={16} className="stroke-general-med" />
-              <div>Add Thumbnail Image</div>
+              <div>{label ? label : 'Add Thumbnail Image'}</div>
             </div>
           )}
         </div>
@@ -63,6 +67,7 @@ const ImageSelectorWithSource: React.FC<IImageSelectorWithSource> = ({
         id={name ?? 'image-selector'}
         {...restProps}
       />
+      {error ? <span className="text-red-500 text-sm">{error}</span> : null}
     </div>
   );
 };
