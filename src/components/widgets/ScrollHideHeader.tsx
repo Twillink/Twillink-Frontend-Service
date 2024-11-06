@@ -60,7 +60,7 @@ const ScrollHideHeader: React.FC = () => {
         transform: `translateY(-${scrollOffset}px)`,
         transition: 'transform 0.1s ease-out',
       }}
-      className={`sticky z-[5] w-full bg-base-200 cursor-pointer shadow-md rounded-2xl`}>
+      className={`sticky z-10 w-full bg-base-200 cursor-pointer shadow-md rounded-2xl`}>
       <label htmlFor="file-upload-header" className="cursor-pointer">
         <input
           type="file"
