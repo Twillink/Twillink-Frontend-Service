@@ -110,7 +110,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       onDragStart={handleDrag}
       onDrop={handleDrop}
       onDragOver={ev => ev.preventDefault()}
-      className="relative flex align-middle items-center justify-center p-[6px] h-[120px] cursor-move z-10"
+      className="relative flex align-middle items-center justify-center p-[6px] h-[120px] cursor-move"
       style={{width: values.width}}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}>
