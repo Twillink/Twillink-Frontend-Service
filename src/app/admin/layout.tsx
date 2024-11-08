@@ -12,8 +12,12 @@ import {RootState} from '@/libs/store/store';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import Loader from '@/components/Loader';
 import {apiGetCountry, apiGetUserProfile} from '@/libs/api';
-import {setUserProfile} from '@/libs/store/features/userProfileSlice';
+import {
+  clearUserProfile,
+  setUserProfile,
+} from '@/libs/store/features/userProfileSlice';
 import {setCountries} from '@/libs/store/features/countrySlice';
+import {authLogout} from '@/libs/store/features/authSlice';
 
 const sidebarMenu: Menu[] = [
   {
@@ -90,6 +94,8 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
         .catch(error => {
           console.log(error?.status, 'error');
           if (error?.status === 401) {
+            dispatch(authLogout());
+            dispatch(clearUserProfile());
             localStorage.removeItem('authToken');
             localStorage.removeItem('user');
             router.push('/');

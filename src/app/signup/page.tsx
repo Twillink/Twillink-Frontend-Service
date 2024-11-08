@@ -132,7 +132,7 @@ const SignupPage: React.FC = () => {
       setCards([previousCard, ...cards]);
       setCurrentSeqActive(targetSeq);
     } else {
-      router.back();
+      router.push('/');
     }
     if (currentSeq === 3) {
       setFieldValue('otp', '');

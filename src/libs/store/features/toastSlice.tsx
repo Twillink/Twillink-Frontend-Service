@@ -1,7 +1,7 @@
 import {ToastType} from '@/libs/types/ToastType';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-interface IToastState {
+export interface IToastState {
   isVisible: boolean;
   title: string;
   message: string | object;

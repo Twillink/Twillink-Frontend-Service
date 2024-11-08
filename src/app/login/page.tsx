@@ -14,12 +14,12 @@ import {authLogin} from '@/libs/store/features/authSlice';
 import {useRouter} from 'next/navigation';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import {apiAuthLogin} from '@/libs/api';
-import {showToast} from '@/libs/store/features/toastSlice';
 import {ToastType} from '@/libs/types/ToastType';
 import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
 import {useEffect} from 'react';
 import ButtonIcon from '@/components/ButtonIcon';
 import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
+import {handleShowToast} from '@/utils/toast';
 
 type InitialData = {
   email: string;
@@ -76,12 +76,13 @@ const LoginPage: React.FC = () => {
     const error = queryParams.get('error');
 
     if (error) {
-      dispatch(
-        showToast({
+      handleShowToast(
+        {
           title: 'Failed',
           message: error,
           type: ToastType.ERROR,
-        }),
+        },
+        dispatch,
       );
     }
   }, [dispatch]);
@@ -117,7 +118,7 @@ const LoginPage: React.FC = () => {
                         icon={
                           <SvgArrowLeft className="stroke-primary hover:stroke-general-med" />
                         }
-                        onClick={() => router.back()}
+                        onClick={() => router.push('/')}
                         type="button"
                         className="flex justify-start w-max"
                       />
