@@ -27,7 +27,7 @@ export const apiLinkCheck = async (
   showToasts = true,
 ) => {
   const api = createApiClient(dispatch, showToasts);
-  return await api.get(`/api/v1/link/check?userName=${username}`);
+  return await api.get(`/api/v1/link/check/${username}`);
 };
 
 export const apiAuthCheckEmail = async (
@@ -36,9 +36,7 @@ export const apiAuthCheckEmail = async (
   showToasts = true,
 ) => {
   const api = createApiClient(dispatch, showToasts);
-  return await api.get(
-    `/api/v1/user-auth/check-mail-registered?email=${email}`,
-  );
+  return await api.get(`/api/v1/user-auth/check-mail-registered/${email}`);
 };
 
 export const apiOtpSend = async (
@@ -164,7 +162,7 @@ export const apiGetUserProfile = async (
   showToasts = true,
 ) => {
   const api = createApiClient(dispatch, showToasts);
-  return await api.get('/api/v1/profile');
+  return await api.get('/api/v1/user-auth/verifySessions');
 };
 export interface IChangePasswordBody {
   currentPassword: string;
@@ -231,7 +229,7 @@ export const apiAddAttachment = async (
     formData.append('file', body.files[i]);
   }
 
-  return await api.post('/api/v1/attachment/Upload', formData);
+  return await api.post('/api/v1/Attachment/Upload', formData);
 };
 
 export const apiGetAttachmentById = async (

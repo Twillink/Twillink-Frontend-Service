@@ -9,10 +9,10 @@ import ButtonSocialAuth from '@/components/ButtonSocialAuth';
 import Image from 'next/image';
 import GoogleIcon from '@/assets/svgs/google-icon.svg';
 import useDebounce from '@/libs/hooks/useDebounce';
-import {apiAuthCheckEmail} from '@/libs/api';
 import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {IGeneralSubmit} from '@/libs/types/IGeneralSubmit';
 import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import {apiAuthCheckEmail} from '@/libs/api';
 
 interface IFormEmailValues {
   email: string;

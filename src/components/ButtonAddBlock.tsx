@@ -1,5 +1,6 @@
 import React, {ComponentProps} from 'react';
 import ComingSoon from './ComingSoon';
+import ProIndicator from '@/components/ProIndicator';
 
 interface IButtonAddBlock extends ComponentProps<'button'> {
   onClick?: () => void;
@@ -7,6 +8,7 @@ interface IButtonAddBlock extends ComponentProps<'button'> {
   title: string;
   disabled?: boolean;
   isComingSoon?: boolean;
+  isPro?: boolean;
 }
 
 const ButtonAddBlock: React.FC<IButtonAddBlock> = ({
@@ -15,6 +17,7 @@ const ButtonAddBlock: React.FC<IButtonAddBlock> = ({
   title,
   disabled = false,
   isComingSoon = false,
+  isPro = false,
   ...restProps
 }) => {
   return (
@@ -29,6 +32,11 @@ const ButtonAddBlock: React.FC<IButtonAddBlock> = ({
       {isComingSoon && (
         <span className="absolute top-0 right-1">
           <ComingSoon />
+        </span>
+      )}
+      {isPro && (
+        <span className="absolute top-[-10%] right-[-2%]">
+          <ProIndicator />
         </span>
       )}
     </button>

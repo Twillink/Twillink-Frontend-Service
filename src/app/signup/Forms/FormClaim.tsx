@@ -4,7 +4,6 @@ import SvgCheck from '@/assets/svgComponents/SvgCheck';
 import Button from '@/components/Button';
 import ErrorMessageField from '@/components/ErrorMessageField';
 import InputWithLabel from '@/components/InputWithLabel';
-import {apiLinkCheck} from '@/libs/api';
 import useDebounce from '@/libs/hooks/useDebounce';
 import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {useFormikContext} from 'formik';
@@ -13,6 +12,7 @@ import validIcon from '@/assets/gifs/valid-green.gif';
 import Image from 'next/image';
 import {testValidUsername} from '@/utils/validationTest';
 import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import {apiLinkCheck} from '@/libs/api';
 
 interface IFormClaimValues {
   username: string;
@@ -40,10 +40,11 @@ const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
       setApiError(null);
 
       try {
-        const response = await apiLinkCheck(dispatch, username, false);
-        setUsernameValid(response.status === 200);
+        await apiLinkCheck(dispatch, username, false);
+        setUsernameValid(true);
       } catch (error: unknown) {
         const apiError = error as ErrorApiResponseType;
+
         setApiError(apiError?.data?.message);
         setUsernameValid(false);
       } finally {

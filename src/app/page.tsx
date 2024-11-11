@@ -1,12 +1,11 @@
 'use client';
 
 import Button from '@/components/Button';
-import SvgTwillinkLogo from '@/assets/svgComponents/SvgTwillinkLogo';
 import Link from 'next/link';
 import {useAppSelector} from '@/libs/hooks/useReduxHook';
 import {RootState} from '@/libs/store/store';
 import {RainbowButton} from '@/components/Button/RainbowButton';
-import {MotionDiv, MotionImg} from '@/libs/motion/motion';
+import {MotionDiv, MotionImg, MotionSpan} from '@/libs/motion/motion';
 
 const Home: React.FC = () => {
   const isLoggedIn = useAppSelector(
@@ -16,33 +15,71 @@ const Home: React.FC = () => {
     <div
       data-theme={'skinLight'}
       className={
-        "p-16 flex h-screen justify-center items-center gap-[20%] bg-[url('/images/bg-intro.webp')] bg-cover"
+        "p-16 flex h-screen max-w-screen-xl justify-between mx-auto items-center gap-[20%] bg-[url('/images/bg-intro.webp')] bg-cover"
       }>
-      <MotionDiv
-        initial={{opacity: 0, x: -100}}
-        whileInView={{opacity: 1, x: 0}}
-        transition={{
-          ease: 'easeInOut',
-          duration: 1,
-          delay: 1,
-        }}
+      <div
         // data-theme="skinLight"
         className="flex flex-col items-start justify-center px-2 gap-4">
-        <SvgTwillinkLogo height={30} className="fill-logo" />
+        {/*<SvgTwillinkLogo height={30} className="fill-logo" />*/}
+
         <h1 className="text-start text-4xl font-bold text-primary leading-relaxed">
-          Your exceptional <span className={'block'}>Link in Bio</span>
+          <MotionSpan
+            initial={{opacity: 0, y: 50}}
+            whileInView={{opacity: 1, y: 0}}
+            transition={{
+              ease: 'easeInOut',
+              duration: 0.25,
+            }}
+            className={'block'}>
+            Your exceptional{' '}
+          </MotionSpan>
+          <MotionSpan
+            initial={{opacity: 0, y: 50}}
+            whileInView={{opacity: 1, y: 0}}
+            transition={{
+              ease: 'easeInOut',
+              duration: 0.25,
+              delay: 0.25,
+            }}
+            className={'block'}>
+            Link in Bio
+          </MotionSpan>
         </h1>
-        <h2 className="text-primary text-[20px] font-normal leading-relaxed mb-4">
-          Claim your username now
-        </h2>
+        <MotionDiv
+          initial={{opacity: 0, y: 50}}
+          whileInView={{opacity: 1, y: 0}}
+          transition={{
+            ease: 'easeInOut',
+            duration: 0.25,
+            delay: 0.75,
+          }}>
+          <h2 className="text-primary text-[20px] font-normal leading-relaxed mb-4">
+            Claim your username now
+          </h2>
+        </MotionDiv>
         {isLoggedIn ? (
-          <div>
+          <MotionDiv
+            initial={{opacity: 0, y: 50}}
+            whileInView={{opacity: 1, y: 0}}
+            transition={{
+              ease: 'easeInOut',
+              duration: 0.25,
+              delay: 1,
+            }}>
             <Link href="/admin">
-              <Button title="Go to Admin" />
+              <RainbowButton>Go to Admin</RainbowButton>
             </Link>
-          </div>
+          </MotionDiv>
         ) : (
-          <div className={'flex flex-row  items-center gap-4'}>
+          <MotionDiv
+            initial={{opacity: 0, y: 50}}
+            whileInView={{opacity: 1, y: 0}}
+            transition={{
+              ease: 'easeInOut',
+              duration: 0.25,
+              delay: 1,
+            }}
+            className={'flex flex-row  items-center gap-4'}>
             <div>
               <Link href="/signup">
                 <RainbowButton>Create your Twillink</RainbowButton>
@@ -56,18 +93,18 @@ const Home: React.FC = () => {
                 <Button title={'Login'} color={'outline'} />
               </Link>
             </div>
-          </div>
+          </MotionDiv>
         )}
-      </MotionDiv>
+      </div>
       <div>
         <div className={'relative'}>
           <div>
             <MotionImg
-              initial={{opacity: 0, y: 100}}
+              initial={{opacity: 0, y: 50}}
               whileInView={{opacity: 1, y: 0}}
               transition={{
                 ease: 'easeInOut',
-                duration: 1,
+                duration: 0.5,
                 delay: 1,
               }}
               src="/images/Mobile Preview.webp"
@@ -81,7 +118,7 @@ const Home: React.FC = () => {
             transition={{
               ease: 'easeInOut',
               duration: 1,
-              delay: 2,
+              delay: 1,
             }}
             className={'absolute top-[14%] left-[-50%]'}>
             <MotionImg
@@ -96,7 +133,7 @@ const Home: React.FC = () => {
                 repeatType: 'mirror',
                 duration: 2,
                 ease: 'easeInOut',
-                delay: 3,
+                delay: 1,
               }}
               src="/images/calendar.webp"
               alt="Preview"
@@ -104,27 +141,27 @@ const Home: React.FC = () => {
             />
           </MotionDiv>
           <MotionDiv
-            initial={{opacity: 0, y: 10, scale: 0.5}}
+            initial={{opacity: 0, y: 100, scale: 0.8}}
             whileInView={{opacity: 1, y: 0, scale: 1}}
             transition={{
               ease: 'easeInOut',
               duration: 1,
-              delay: 2,
+              delay: 1,
             }}
             className={' absolute bottom-[8%] right-[-30%]'}>
             <MotionImg
               initial={{
-                transform: 'translateZ(8px) translateY(-2px)',
+                transform: 'translateZ(8px) translateY(0px)',
               }}
               animate={{
-                transform: 'translateZ(32px) translateY(-8px)',
+                transform: 'translateZ(32px) translateY(-6px)',
               }}
               transition={{
                 repeat: Infinity,
                 repeatType: 'mirror',
                 duration: 2,
                 ease: 'easeInOut',
-                delay: 3,
+                delay: 1,
               }}
               src="/images/blog.webp"
               alt="Preview"

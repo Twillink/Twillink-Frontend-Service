@@ -1,8 +1,8 @@
 import axios from 'axios';
-import {showToast} from '@/libs/store/features/toastSlice';
 import {ToastType} from '@/libs/types/ToastType';
 import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {AppDispatch} from '@/libs/store/store';
+import {handleShowToast} from '@/utils/toast';
 
 const defaultTimeout = 1000 * 90;
 const createApiClient = (
@@ -34,12 +34,13 @@ const createApiClient = (
   axiosInstance.interceptors.response.use(
     response => {
       if (showToasts) {
-        dispatch(
-          showToast({
+        handleShowToast(
+          {
             title: 'Success',
             message: response.data.message || 'Action completed successfully.',
             type: ToastType.SUCCESS,
-          }),
+          },
+          dispatch,
         );
       }
       return response;
@@ -47,13 +48,14 @@ const createApiClient = (
     error => {
       const formattedError = getError(error);
       if (showToasts) {
-        dispatch(
-          showToast({
+        handleShowToast(
+          {
             title: 'Error',
             message:
               formattedError.message || 'Something went wrong. Please retry.',
             type: ToastType.ERROR,
-          }),
+          },
+          dispatch,
         );
       }
       return Promise.reject(formattedError);
@@ -61,10 +63,21 @@ const createApiClient = (
   );
 
   function getError(error: any): ErrorApiResponseType {
-    const code = error?.response?.status ?? null;
-    let message = error?.response?.data?.message ?? 'An unknown error occurred';
+    const code = error?.response?.code ?? null;
+    let message =
+      error?.response?.data?.errorMessage ?? 'An unknown error occurred';
 
-    const validationMap = error?.response?.data?.message || [];
+    if (typeof message === 'object' && message !== null) {
+      let newMessage = '';
+      for (const key in message) {
+        if (message.hasOwnProperty(key)) {
+          newMessage += `${message[key] || ''}`.trim() + ' ';
+        }
+      }
+      message = newMessage;
+    }
+
+    const validationMap = error?.response?.data?.errorMessage || [];
     if (Array.isArray(validationMap) && validationMap.length > 0) {
       const arrayMsg = validationMap.join('<br />');
       message = arrayMsg || message;

@@ -6,6 +6,7 @@ import Button from './Button';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
 import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
+import ImageSelectorWithSource from '@/components/ImageSelectorWithSource';
 
 interface IPopupWidgetImage {
   isOpen: boolean;
@@ -30,6 +31,8 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
       caption: '',
       url: '',
       attachmentId: null,
+      selectedImage: '',
+      image: null,
     },
     validationSchema: AddWidgetImageSchema,
     onSubmit: async values => {
@@ -55,31 +58,74 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
         method="dialog"
         className="modal-backdrop flex flex-col gap-5"
         onSubmit={formik.handleSubmit}>
-        <InputLabel
-          label="Image Caption"
-          name="caption"
-          value={formik.values.caption}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          placeholder="Your caption image"
-          error={
-            formik.touched.caption && formik.errors.caption
-              ? formik.errors.caption
-              : ''
-          }
-        />
-        <InputLabel
-          type="url"
-          label="Input URL Image"
-          name="url"
-          value={formik.values.url}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          placeholder="https://www."
-          error={
-            formik.touched.url && formik.errors.url ? formik.errors.url : ''
-          }
-        />
+        <div>
+          <InputLabel
+            label="Image Caption"
+            name="caption"
+            value={formik.values.caption}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="Your caption image"
+            showLength
+            showOptional
+            maxLength={100}
+            error={
+              formik.touched.caption && formik.errors.caption
+                ? formik.errors.caption
+                : ''
+            }
+          />
+        </div>
+        {!formik.values.selectedImage && (
+          <div>
+            <InputLabel
+              type="url"
+              label="Input URL Image"
+              name="url"
+              value={formik.values.url}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              placeholder="https://www."
+              error={
+                formik.touched.url && formik.errors.url ? formik.errors.url : ''
+              }
+            />
+          </div>
+        )}
+
+        {!formik.values.selectedImage && !formik.values.url && (
+          <div>
+            <p className={'text-center text-primary'}>or</p>
+          </div>
+        )}
+
+        {!formik.values.url && (
+          <div>
+            <ImageSelectorWithSource
+              image={formik.values.selectedImage}
+              name={`image`}
+              label={'Browse Image'}
+              onChange={e => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    formik.setFieldValue('selectedImage', reader.result);
+                  };
+                  formik.setFieldValue(`image`, file);
+                  formik.setFieldValue('url', '');
+                  reader.readAsDataURL(file);
+                }
+              }}
+              reset={formik.values.selectedImage === null}
+              error={
+                formik.touched.selectedImage && formik.errors.selectedImage
+                  ? formik.errors.selectedImage
+                  : ''
+              }
+            />
+          </div>
+        )}
 
         <div className="flex justify-end">
           <Button

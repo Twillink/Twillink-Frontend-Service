@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useContext, useMemo, useState} from 'react';
 import WidgetLink from '@/components/widgets/WidgetLink';
 import WidgetText from '@/components/widgets/WidgetText';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
@@ -9,6 +9,10 @@ import WidgetFrameEditor from './WidgetFrameEditor';
 import WidgetImage from './WidgetImage';
 import WidgetVideo from './WIdgetVideo';
 import WidgetCarousel from './WidgetCarousel';
+import {
+  PreviewContext,
+  PreviewTypeEnum,
+} from '@/libs/providers/PreviewProvider';
 
 interface IWidgetContainer {
   handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;
@@ -32,6 +36,13 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
 
+  const {preview, isMobileScreen} = useContext(PreviewContext);
+
+  const isDesktop = useMemo(
+    () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
+    [preview, isMobileScreen],
+  );
+
   const renderWidget = () => {
     switch (values.type) {
       case WidgetTypeEnum.Link:
@@ -40,9 +51,9 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             url={values.value?.url || '#'}
             text={values.value?.title || ''}
             image={values.value?.image}
-            onClick={e => {
-              e.preventDefault();
-            }}
+            // onClick={e => {
+            //   e.preventDefault();
+            // }}
           />
         );
       case WidgetTypeEnum.Text:
@@ -68,7 +79,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       case WidgetTypeEnum.Video:
         return (
           <WidgetVideo
-            text={values.value?.text || ''}
+            text={values.value?.caption || ''}
             url={values.value?.url || '#'}
             image={values.value?.image}
           />
@@ -86,6 +97,13 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
   const handleClose = () => {
     setIsMenuVisible(false);
   };
+
+  const widgetWidth = useMemo(() => {
+    if (isDesktop) {
+      return values.width === '100%' ? '50%' : '25%';
+    }
+    return values.width;
+  }, [values?.width]);
 
   if (values.type === WidgetTypeEnum.Carousel) {
     const attachmentIds =
@@ -110,8 +128,8 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       onDragStart={handleDrag}
       onDrop={handleDrop}
       onDragOver={ev => ev.preventDefault()}
-      className="relative flex align-middle items-center justify-center p-[6px] h-[120px] cursor-move z-20"
-      style={{width: values.width}}
+      className={`relative flex bg-green-200 align-middle items-center justify-center p-[6px] ${isDesktop ? 'h-40' : 'h-[120px]'} cursor-move`}
+      style={{width: widgetWidth}}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}>
       <WidgetFrameEditor
