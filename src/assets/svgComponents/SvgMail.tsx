@@ -1,20 +1,20 @@
 import React from 'react';
+
 const SvgMail: React.FunctionComponent<React.SVGProps<SVGSVGElement>> = ({
   height = 24,
   width,
   className,
 }) => (
   <svg
-    height={height}
     width={width}
+    height={height}
     className={className}
-    viewBox="0 0 20 20"
+    viewBox="0 0 14 11"
     fill="none"
     xmlns="http://www.w3.org/2000/svg">
     <path
-      d="M5 8.33341L9.62732 10.6471C9.86193 10.7644 10.1381 10.7644 10.3727 10.6471L15 8.33341M5 15.8334H15C16.3807 15.8334 17.5 14.7141 17.5 13.3334V6.66675C17.5 5.28604 16.3807 4.16675 15 4.16675H5C3.61929 4.16675 2.5 5.28604 2.5 6.66675V13.3334C2.5 14.7141 3.61929 15.8334 5 15.8334Z"
-      stroke="#94A3B8"
-      strokeWidth="1.5"
+      d="M3 4.16683L6.70186 6.01776C6.88954 6.1116 7.11046 6.1116 7.29814 6.01776L11 4.16683M3 10.1668H11C12.1046 10.1668 13 9.2714 13 8.16683V2.8335C13 1.72893 12.1046 0.833496 11 0.833496H3C1.89543 0.833496 1 1.72893 1 2.8335V8.16683C1 9.2714 1.89543 10.1668 3 10.1668Z"
+      stroke="white"
       strokeLinecap="round"
     />
   </svg>

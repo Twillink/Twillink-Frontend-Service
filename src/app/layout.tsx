@@ -6,6 +6,7 @@ import ReduxStoreProvider from '@/libs/providers/ReduxStoreProvider';
 import ClientAuthLayoutWrapper from '@/libs/providers/ClientAuthLayoutWrapper';
 import ClientThemeWrapper from '@/libs/providers/ClientSkinWrapper';
 import ToastProvider from '@/libs/providers/ToastProvider';
+import {PreviewProvider} from '@/libs/providers/PreviewProvider';
 
 const plusJakarta = Plus_Jakarta_Sans({subsets: ['latin']});
 
@@ -30,9 +31,11 @@ export default function RootLayout({children}: IRootLayoutProps) {
         <ReduxStoreProvider>
           <ClientAuthLayoutWrapper>
             <SkinProvider>
-              <ClientThemeWrapper>
-                <ToastProvider>{children}</ToastProvider>
-              </ClientThemeWrapper>
+              <PreviewProvider>
+                <ClientThemeWrapper>
+                  <ToastProvider>{children}</ToastProvider>
+                </ClientThemeWrapper>
+              </PreviewProvider>
             </SkinProvider>
           </ClientAuthLayoutWrapper>
         </ReduxStoreProvider>

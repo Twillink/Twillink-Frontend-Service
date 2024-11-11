@@ -4,6 +4,7 @@ import SvgBurgerMenu from '@/assets/svgComponents/SvgBurgerMenu';
 import SvgLink from '@/assets/svgComponents/SvgLink';
 import ButtonLink from './ButtonLink';
 import SvgBurgerMenu2 from '@/assets/svgComponents/SvgBurgerMenu2';
+import PreviewController from '@/components/PreviewController';
 
 interface INavBar {
   title?: string;
@@ -23,6 +24,8 @@ const NavBar: React.FC<INavBar> = ({title = 'My Twillink'}) => (
     </div>
     <div className="hidden sm:block">
       <div className="flex items-center gap-6">
+        <PreviewController />
+        <div className="hidden xl:block border-[1px] h-6"></div>
         <SkinController />
         <ButtonLink
           title="Share My Link"

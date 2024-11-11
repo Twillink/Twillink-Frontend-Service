@@ -34,9 +34,11 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({dataWidget}) => {
 
   return (
     <>
-      <div data-theme="light" className="h-full max-w-[428px]">
+      <div
+        data-theme="light"
+        className="h-full max-w-[428px] overflow-hidden [&::-webkit-scrollbar]:w-2">
         <div
-          className="artboard flex flex-col bg-base-100 h-full overflow-y-auto relative"
+          className="artboard  flex flex-col bg-base-100 h-full overflow-y-auto relative"
           ref={scrollContainerRef}>
           <ScrollHideHeader />
           <UserProfile contact={dataContact} />

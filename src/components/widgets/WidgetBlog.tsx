@@ -6,14 +6,14 @@ import SvgGlobe from '@/assets/svgComponents/SvgGlobe';
 import Button from '@/components/Button';
 import Link from 'next/link';
 
-interface IWidgetLink {
+interface IWidgetBlog {
   text: string;
   url: string;
   width?: string;
   image?: string | ArrayBuffer | null;
 }
 
-const WidgetLink: React.FC<IWidgetLink> = ({
+const WidgetBlog: React.FC<IWidgetBlog> = ({
   text,
   url,
   image,
@@ -57,4 +57,4 @@ const WidgetLink: React.FC<IWidgetLink> = ({
   );
 };
 
-export default WidgetLink;
+export default WidgetBlog;

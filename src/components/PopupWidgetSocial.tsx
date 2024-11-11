@@ -93,7 +93,7 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
   });
 
   return (
-    <PopupContainer title="Add Image" onClose={onClose} isOpen={isOpen}>
+    <PopupContainer title="Add Social" onClose={onClose} isOpen={isOpen}>
       <form
         method="dialog"
         className="modal-backdrop flex flex-col gap-5"

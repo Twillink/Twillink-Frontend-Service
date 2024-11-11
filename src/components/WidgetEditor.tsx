@@ -29,7 +29,14 @@ import {
 } from '@/libs/api';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
-import {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import PopupWidgetSocial from './PopupWidgetSocial';
 import PopupWidgetCarousel from './PopupWidgetCarousel';
 import mockApiCall from '@/mock/mockApiCall';
@@ -45,6 +52,12 @@ import {
 } from '@/libs/types/IAddWidgetData';
 import PopupWidgetBlog from '@/components/PopupWidgetBlog';
 import {AxiosResponse} from 'axios';
+import {
+  PreviewContext,
+  PreviewTypeEnum,
+} from '@/libs/providers/PreviewProvider';
+import Button from '@/components/Button';
+import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -71,11 +84,18 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const scrollSpeed = 10;
 
+  const {preview, isMobileScreen} = useContext(PreviewContext);
+
+  const isDesktop = useMemo(
+    () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
+    [preview, isMobileScreen],
+  );
+
   const handleDrag = (ev: React.DragEvent<HTMLDivElement>) => {
     setDragId(ev.currentTarget.id);
   };
 
-  const handleDrop = (ev: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = async (ev: React.DragEvent<HTMLDivElement>) => {
     ev.preventDefault();
     if (!dragId || isEditingDisabled) return;
 
@@ -97,6 +117,10 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
       if (setDataWidget) {
         setDataWidget(newWidgetState);
+      }
+
+      if (newWidgetState.length > 0) {
+        await handleOrderWidget(newWidgetState);
       }
     }
 
@@ -402,9 +426,13 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
   return (
     <>
-      <div data-theme="light" className="h-full max-w-[428px]">
+      <div
+        className={`h-full flex ${isDesktop ? 'gap-4' : ''} scrollbar-thin`}
+        style={{
+          scrollbarWidth: 'thin',
+        }}>
         <div
-          className="artboard flex flex-col bg-base-100 h-full overflow-y-auto relative"
+          className={`artboard flex flex-col ${isDesktop ? ' rounded-[50px] max-w-[200px]' : 'max-w-[428px] gap-6'} bg-primary-content h-full min-w-[300px] overflow-y-auto relative`}
           ref={scrollContainerRef}
           onDragOver={ev => ev.preventDefault()}>
           {isLoading ? (
@@ -418,33 +446,77 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
                   onClick={() => setPopupState(WidgetTypeEnum.Social)}
                   data={dataSocial}
                 />
-                {dataWidgetFiltered
-                  .sort((a, b) => a.order - b.order)
-                  .map(widget => (
-                    <WidgetContainer
-                      key={widget.idEditor}
-                      values={widget}
-                      handleDrag={handleDrag}
-                      handleDrop={handleDrop}
-                      handleMoveUp={() => handleMoveUp(widget.idEditor)}
-                      handleMoveDown={() => handleMoveDown(widget.idEditor)}
-                      handleDelete={() => handleDelete(widget.id)}
-                      handleResize={() =>
-                        handleResize(widget.idEditor, widget.width)
-                      }
-                    />
-                  ))}
-                <AddWidget onClick={() => setPopupState('main')} />
+                {!isDesktop &&
+                  dataWidgetFiltered
+                    .sort((a, b) => a.order - b.order)
+                    .map(widget => (
+                      <WidgetContainer
+                        key={widget.idEditor}
+                        values={widget}
+                        handleDrag={handleDrag}
+                        handleDrop={handleDrop}
+                        handleMoveUp={() => handleMoveUp(widget.idEditor)}
+                        handleMoveDown={() => handleMoveDown(widget.idEditor)}
+                        handleDelete={() => handleDelete(widget.id)}
+                        handleResize={() =>
+                          handleResize(widget.idEditor, widget.width)
+                        }
+                      />
+                    ))}
+                {!isDesktop && (
+                  <AddWidget onClick={() => setPopupState('main')} />
+                )}
               </div>
+              {isDesktop && (
+                <div>
+                  <div
+                    className={'absolute left-0 right-0 bottom-2 py-2 z-30 '}>
+                    <div className={'px-6 mb-4'}>
+                      <Button
+                        size={'md'}
+                        className={'w-full h-8'}
+                        title={'Go Pro'}
+                        icon={
+                          <SvgSparkle
+                            width={20}
+                            height={20}
+                            className={'stroke-primary-content'}
+                          />
+                        }
+                      />
+                    </div>
+                    <p className={'text-sm font-medium text-center'}>
+                      Powered By Twilink
+                    </p>
+                  </div>
+                </div>
+              )}
             </>
           )}
-          <div
-            className={'sticky bg-base-100 w-full h-full bottom-0 py-2 z-30'}>
-            <p className={'text-sm font-medium text-center'}>
-              Powered By Twilink
-            </p>
-          </div>
         </div>
+        {isDesktop && (
+          <div
+            className={' flex w-full flex-wrap'}
+            style={{rowGap: '0px', columnGap: '0px'}}>
+            {dataWidgetFiltered
+              .sort((a, b) => a.order - b.order)
+              .map(widget => (
+                <WidgetContainer
+                  key={widget.idEditor}
+                  values={widget}
+                  handleDrag={handleDrag}
+                  handleDrop={handleDrop}
+                  handleMoveUp={() => handleMoveUp(widget.idEditor)}
+                  handleMoveDown={() => handleMoveDown(widget.idEditor)}
+                  handleDelete={() => handleDelete(widget.id)}
+                  handleResize={() =>
+                    handleResize(widget.idEditor, widget.width)
+                  }
+                />
+              ))}
+          </div>
+        )}
+        {isDesktop && <AddWidget onClick={() => setPopupState('main')} />}
       </div>
 
       <PopupWidget

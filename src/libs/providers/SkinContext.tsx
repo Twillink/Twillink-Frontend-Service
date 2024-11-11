@@ -1,7 +1,7 @@
 'use client';
 
 import {SkinTypeEnum} from '@/libs/types/SkinTypeEnum';
-import React, {createContext, useEffect, useState, ReactNode} from 'react';
+import React, {createContext, ReactNode, useEffect, useState} from 'react';
 
 interface ISkinContext {
   skin: SkinTypeEnum;
@@ -18,24 +18,44 @@ interface SkinProviderProps {
 }
 
 export const SkinProvider: React.FC<SkinProviderProps> = ({children}) => {
+  const [isInitialized, setIsInitialized] = useState(false);
   const [skin, setSkin] = useState<SkinTypeEnum>(SkinTypeEnum.LIGHT);
 
+  // Initialize on mount
   useEffect(() => {
-    const storedSkin = localStorage.getItem('skin') as SkinTypeEnum | null;
-    if (storedSkin) {
-      setSkin(storedSkin);
+    if (typeof window !== 'undefined') {
+      const storedSkin = localStorage.getItem('skin') as SkinTypeEnum;
+      if (storedSkin) {
+        setSkin(storedSkin);
+      }
+      setIsInitialized(true);
     }
   }, []);
 
+  // Save to localStorage and update styles whenever skin changes
   useEffect(() => {
+    if (!isInitialized) return;
+
     localStorage.setItem('skin', skin);
-  }, [skin]);
+
+    // Update document styles
+    if (skin === SkinTypeEnum.DARK) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [skin, isInitialized]);
 
   const changeSkin = () => {
     setSkin(prevSkin =>
       prevSkin === SkinTypeEnum.DARK ? SkinTypeEnum.LIGHT : SkinTypeEnum.DARK,
     );
   };
+
+  // Don't render children until we've initialized
+  if (!isInitialized) {
+    return null; // or a loading spinner if you prefer
+  }
 
   return (
     <SkinContext.Provider value={{skin, changeSkin}}>

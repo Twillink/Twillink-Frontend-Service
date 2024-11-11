@@ -63,8 +63,9 @@ const createApiClient = (
   );
 
   function getError(error: any): ErrorApiResponseType {
-    const code = error?.response?.status ?? null;
-    let message = error?.response?.data?.message ?? 'An unknown error occurred';
+    const code = error?.response?.code ?? null;
+    let message =
+      error?.response?.data?.errorMessage ?? 'An unknown error occurred';
 
     if (typeof message === 'object' && message !== null) {
       let newMessage = '';
@@ -76,7 +77,7 @@ const createApiClient = (
       message = newMessage;
     }
 
-    const validationMap = error?.response?.data?.message || [];
+    const validationMap = error?.response?.data?.errorMessage || [];
     if (Array.isArray(validationMap) && validationMap.length > 0) {
       const arrayMsg = validationMap.join('<br />');
       message = arrayMsg || message;

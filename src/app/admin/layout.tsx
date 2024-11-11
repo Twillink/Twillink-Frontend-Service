@@ -92,8 +92,8 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
           dispatch(setUserProfile(response.data));
         })
         .catch(error => {
-          console.log(error?.status, 'error');
-          if (error?.status === 401) {
+          console.log(error?.data, 'error');
+          if (error?.data?.code === 401) {
             dispatch(authLogout());
             dispatch(clearUserProfile());
             localStorage.removeItem('authToken');
@@ -122,7 +122,7 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
       }
     };
     checkAuth();
-  }, [isLoggedIn, router, dispatch, userProfile]);
+  }, [isLoggedIn, router, dispatch, userProfile, country?.countries?.length]);
 
   if (!initialized) {
     return <Loader />;

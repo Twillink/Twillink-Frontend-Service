@@ -44,6 +44,7 @@ const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
         setUsernameValid(true);
       } catch (error: unknown) {
         const apiError = error as ErrorApiResponseType;
+
         setApiError(apiError?.data?.message);
         setUsernameValid(false);
       } finally {
