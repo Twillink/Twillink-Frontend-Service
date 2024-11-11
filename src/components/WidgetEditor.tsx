@@ -514,9 +514,9 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
                   }
                 />
               ))}
+            {isDesktop && <AddWidget onClick={() => setPopupState('main')} />}
           </div>
         )}
-        {isDesktop && <AddWidget onClick={() => setPopupState('main')} />}
       </div>
 
       <PopupWidget
