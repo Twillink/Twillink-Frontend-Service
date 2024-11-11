@@ -496,8 +496,8 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         </div>
         {isDesktop && (
           <div
-            className={' flex w-full flex-wrap'}
-            style={{rowGap: '0px', columnGap: '0px'}}>
+            className={' flex w-full flex-wrap overflow-y-auto'}
+            style={{rowGap: '0px', columnGap: '0px', scrollbarWidth: 'thin'}}>
             {dataWidgetFiltered
               .sort((a, b) => a.order - b.order)
               .map(widget => (
