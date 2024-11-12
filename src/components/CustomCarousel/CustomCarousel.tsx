@@ -9,8 +9,8 @@ import Image from 'next/image';
 import styles from './CustomCarousel.module.css';
 
 interface ICustomCarousel {
-  slides: string[];
-  attachmentIds?: number[];
+  slides?: string[];
+  attachmentIds?: string[];
 }
 
 function CustomCarousel({slides}: ICustomCarousel) {
@@ -26,13 +26,14 @@ function CustomCarousel({slides}: ICustomCarousel) {
   // const dispatch = useAppDispatch();
 
   const renderSlides = () =>
-    slides.map((url, index) => (
+    (slides ?? []).map((url, index) => (
       <div className={styles.embla__slide} key={url}>
         <div className={styles.embla__slide__number}>
           <Image
             className={styles['embla__slide__img']}
             src={url}
             alt={`image-${index}`}
+            layout={'fill'}
           />
         </div>
       </div>
@@ -66,7 +67,7 @@ function CustomCarousel({slides}: ICustomCarousel) {
     <section className={styles.embla}>
       <div className={styles.embla__viewport} ref={emblaRef}>
         <div className={styles.embla__container}>
-          {slides?.length > 0 && renderSlides()}
+          {slides && slides?.length > 0 && renderSlides()}
         </div>
       </div>
 

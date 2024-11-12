@@ -32,7 +32,6 @@
     object-fit: cover;
 }
 .embla__controls {
-
     margin-top: 0.8rem;
 }
 .embla__dots {
@@ -75,6 +74,6 @@
     border-radius: 20px;
     object-fit: cover;
     display: block;
-    height: 100px;
+    height: auto;
     width: 100%;
 }

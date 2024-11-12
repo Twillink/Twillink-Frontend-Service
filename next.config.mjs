@@ -8,25 +8,8 @@ const nextConfig = {
         pathname: '**',
       },
       {
-        protocol: 'https',
-        hostname: 'api.dev.twillink.com',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'api.twillink.com',
-        pathname: '**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'img.freepik.com',
-        port: '',
-      },
-      {
-        protocol: 'https',
-        hostname: 'youtube.com',
-        port: '',
-      },
+        hostname: '*',
+      }
     ],
   },
   env: {

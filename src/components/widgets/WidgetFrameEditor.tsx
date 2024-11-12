@@ -41,7 +41,7 @@ const WidgetFrameEditor: React.FC<IWidgetFrameEditor> = ({
       <div className="absolute right-[-2px] top-1/2 transform -translate-y-1/2 h-6 w-1.5 bg-transparent group-hover:bg-base-100 group-hover:border-primary group-hover:border-2 rounded-full"></div>
       <div className="h-full">{children}</div>
       {isHovered && (
-        <div className="absolute flex items-center justify-center -top-1 -right-1 w-max rounded-full p-[6px] bg-primary z-10">
+        <div className="absolute flex items-center justify-center -top-1 -right-1 w-max rounded-full p-[6px] bg-primary">
           {isMenuVisible ? (
             <div className="flex items-center justify-center gap-[10px]">
               <div onClick={handleDelete} className="cursor-pointer">

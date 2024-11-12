@@ -47,7 +47,7 @@ const ResetPasswordPage: React.FC = () => {
     dispatch(setSubmitLoading(true));
 
     return apiResetPassword(dispatch, {
-      ...values,
+      password: values.password,
       codeOtp: forgotPassword.codeOtp,
     })
       .then(() => {

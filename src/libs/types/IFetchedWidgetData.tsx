@@ -28,9 +28,9 @@ export interface IFetchedWidgetContact {
 }
 
 export interface WidgetCarouselAttachment {
-  id: number;
-  widgetCarouselId: number;
-  attachmentId: number;
+  id: string;
+  widgetCarouselId: string;
+  attachmentId: string;
 }
 
 export interface IFetchedWidgetCarousel {

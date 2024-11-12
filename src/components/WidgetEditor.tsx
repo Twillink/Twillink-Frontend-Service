@@ -58,6 +58,7 @@ import {
 } from '@/libs/providers/PreviewProvider';
 import Button from '@/components/Button';
 import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
+import PopupWidgetSchedule from '@/components/PopupWidgetSchedule';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -179,6 +180,9 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       case WidgetTypeEnum.Blog:
         setPopupState(WidgetTypeEnum.Blog);
         break;
+      case WidgetTypeEnum.Schedule:
+        setPopupState(WidgetTypeEnum.Schedule);
+        break;
       case 'main':
         setPopupState('main');
         break;
@@ -212,12 +216,24 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
     let apiCall;
     let body = {};
+    let file = '';
     switch (type) {
       case WidgetTypeEnum.Link:
-        body = {
-          title: newWidget.value?.title,
-          url: newWidget.value?.url,
-        };
+        file = newWidget.value?.image ?? '';
+        if (file) {
+          const response = await apiAddAttachment(dispatch, {files: [file]});
+
+          body = {
+            title: newWidget.value?.title,
+            url: newWidget.value?.url,
+            urlThumbnail: response?.data?.path,
+          };
+        } else {
+          body = {
+            title: newWidget.value?.title,
+            url: newWidget.value?.url,
+          };
+        }
         apiCall = apiAddWidgetLink(dispatch, body as IAddWidgetLink);
         break;
       case WidgetTypeEnum.Text:
@@ -227,11 +243,21 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         apiCall = apiAddWidgetText(dispatch, body as IAddWidgetText);
         break;
       case WidgetTypeEnum.Image:
-        body = {
-          caption: newWidget.value?.caption as string,
-          url: newWidget.value?.url as string,
-          attachmentId: newWidget.value?.attachmentId,
-        };
+        file = newWidget.value?.image ?? '';
+        console.log(newWidget.value, ' from image');
+
+        if (file) {
+          const response = await apiAddAttachment(dispatch, {files: [file]});
+          body = {
+            caption: newWidget.value?.caption,
+            url: response?.data?.path,
+          };
+        } else {
+          body = {
+            caption: newWidget.value?.caption,
+            url: newWidget.value?.url,
+          };
+        }
         apiCall = apiAddWidgetImage(dispatch, body as IAddWidgetImage);
         break;
       case WidgetTypeEnum.Video:
@@ -260,8 +286,10 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         apiCall = Promise.all(apiAttachments).then(data => {
           body = {
             caption: newWidget.value?.caption,
-            attachmentIds: (data ?? []).map((item: any) => item?.data?.id),
+            attachmentIds: (data ?? []).map((item: any) => item?.data?.path),
           };
+
+          console.log(body, 'body');
 
           return apiAddWidgetCarousel(dispatch, body as IAddWidgetCarousel);
         });
@@ -496,7 +524,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         </div>
         {isDesktop && (
           <div
-            className={' flex w-full flex-wrap overflow-y-auto'}
+            className={'flex w-full flex-wrap overflow-y-auto'}
             style={{rowGap: '0px', columnGap: '0px', scrollbarWidth: 'thin'}}>
             {dataWidgetFiltered
               .sort((a, b) => a.order - b.order)
@@ -580,6 +608,14 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
       <PopupWidgetBlog
         isOpen={popupState === WidgetTypeEnum.Blog}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetSchedule
+        isOpen={popupState === WidgetTypeEnum.Schedule}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
