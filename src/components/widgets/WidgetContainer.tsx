@@ -144,7 +144,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       onDragStart={handleDrag}
       onDrop={handleDrop}
       onDragOver={ev => ev.preventDefault()}
-      className={`relative flex z-[2] align-middle items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-[120px]'} cursor-move`}
+      className={`relative flex z-[2] align-middle items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}
       style={{width: widgetWidth}}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}>

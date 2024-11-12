@@ -1,10 +1,14 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useMemo, useState} from 'react';
 import Image from 'next/image';
 import SvgGlobe from '@/assets/svgComponents/SvgGlobe';
 import Button from '@/components/Button';
 import Link from 'next/link';
+import {
+  PreviewContext,
+  PreviewTypeEnum,
+} from '@/libs/providers/PreviewProvider';
 
 interface IWidgetLink {
   text: string;
@@ -24,6 +28,14 @@ const WidgetLink: React.FC<IWidgetLink> = ({
   ...restProps
 }) => {
   const [isDivWideEnough, setIsDivWideEnough] = useState(true);
+
+  const {preview, isMobileScreen} = useContext(PreviewContext);
+
+  const isDesktop = useMemo(
+    () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
+    [preview, isMobileScreen],
+  );
+
   useEffect(() => {
     const handleResize = () => {
       if (document) {
@@ -48,9 +60,9 @@ const WidgetLink: React.FC<IWidgetLink> = ({
     <div
       className="border-base-300 border-2 rounded-2xl h-full w-full p-2 flex items-center"
       {...restProps}>
-      <div className="flex justify-between items-start w-full gap-2">
+      <div className="flex justify-between items-center w-full gap-2">
         <div
-          className={'flex flex-col justify-between items-start h-full gap-2'}>
+          className={'flex flex-col justify-between items-start h-full gap-1'}>
           <div>
             <SvgGlobe width={32} height={32} />
           </div>
@@ -74,7 +86,7 @@ const WidgetLink: React.FC<IWidgetLink> = ({
         {isDivWideEnough && (
           <div
             id={'image-div'}
-            className={`relative w-full h-[120px] rounded-lg overflow-hidden `}>
+            className={`relative  ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} rounded-lg overflow-hidden`}>
             {urlThumbnail && (
               <Image
                 src={urlThumbnail}
