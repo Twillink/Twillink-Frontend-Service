@@ -564,6 +564,11 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
                         }
                       />
                     ))}
+                {!isDesktop && (
+                  <div
+                    className={`${isDesktop ? 'h-20 min-w-[160px]' : 'h-[20px] w-full mb-10'} p-[6px]`}
+                  />
+                )}
               </div>
               {isDesktop && (
                 <div>
@@ -614,6 +619,11 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
                   }
                 />
               ))}
+            {isDesktop && (
+              <div
+                className={`${isDesktop ? 'h-20 min-w-[160px]' : 'h-[20px] w-full mb-10'} p-[6px]`}
+              />
+            )}
           </div>
         )}
       </div>
