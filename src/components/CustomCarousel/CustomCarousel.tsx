@@ -7,6 +7,12 @@ import useEmblaCarousel from 'embla-carousel-react';
 
 import Image from 'next/image';
 import styles from './CustomCarousel.module.css';
+import {cn} from '@/utils/formater';
+import {useContext, useMemo} from 'react';
+import {
+  PreviewContext,
+  PreviewTypeEnum,
+} from '@/libs/providers/PreviewProvider';
 
 interface ICustomCarousel {
   slides?: string[];
@@ -23,14 +29,23 @@ function CustomCarousel({slides}: ICustomCarousel) {
 
   const {selectedIndex, scrollSnaps, onDotButtonClick} = useDotButton(emblaApi);
 
-  // const dispatch = useAppDispatch();
+  const {preview, isMobileScreen} = useContext(PreviewContext);
+
+  const isDesktop = useMemo(
+    () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
+    [preview, isMobileScreen],
+  );
 
   const renderSlides = () =>
     (slides ?? []).map((url, index) => (
       <div className={styles.embla__slide} key={url}>
-        <div className={styles.embla__slide__number}>
+        <div
+          className={cn([
+            styles.embla__slide__number,
+            `${isDesktop ? 'h-20 lg:h-24' : 'h-20'}`,
+          ])}>
           <Image
-            className={styles['embla__slide__img']}
+            className={cn([styles['embla__slide__img'], 'object-cover'])}
             src={url}
             alt={`image-${index}`}
             layout={'fill'}
@@ -39,34 +54,10 @@ function CustomCarousel({slides}: ICustomCarousel) {
       </div>
     ));
 
-  // const renderSlidesWithAttachmentIds = useMemo(async () => {
-  //   if (!attachmentIds) return null;
-
-  //   const attachmentsData = Promise.all(
-  //     attachmentIds.map(id => {
-  //       return apiGetAttachmentById(dispatch, id);
-  //     }),
-  //   ).then(data => {
-  //     console.log(data);
-  //     return;
-  //   });
-
-  //   return attachmentsData;
-  //   // return <div className={styles.embla__slide} key={id}>
-  //   //   <div className={styles.embla__slide__number}>
-  //   //     <img
-  //   //       className={styles['embla__slide__img']}
-  //   //       src={url}
-  //   //       alt={`image-${index}`}
-  //   //     />
-  //   //   </div>
-  //   // </div>
-  // }, [attachmentIds]);
-
   return (
     <section className={styles.embla}>
       <div className={styles.embla__viewport} ref={emblaRef}>
-        <div className={styles.embla__container}>
+        <div className={cn([styles.embla__container])}>
           {slides && slides?.length > 0 && renderSlides()}
         </div>
       </div>

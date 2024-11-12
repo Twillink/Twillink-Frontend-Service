@@ -3,7 +3,7 @@
     margin: auto;
     --slide-height: 19rem;
     --slide-spacing: 0.5rem;
-    --slide-size: 80%;
+    --slide-size: 60%;
 }
 .embla__viewport {
     overflow: hidden;
@@ -12,6 +12,8 @@
     display: flex;
     touch-action: pan-y pinch-zoom;
     margin-left: calc(var(--slide-spacing) * -1);
+
+
 }
 .embla__slide {
     transform: translate3d(0, 0, 0);
@@ -21,18 +23,18 @@
 }
 .embla__slide__number {
     /*box-shadow: inset 0 0 0 0.2rem grey;*/
-    border-radius: 1.8rem;
+    position: relative;
+    /*border-radius: 1.8rem;*/
     display: flex;
     align-items: center;
     justify-content: center;
     /*height: var(--slide-height);*/
     user-select: none;
     width: 100%;
-    height: 100px;
     object-fit: cover;
 }
 .embla__controls {
-    margin-top: 0.8rem;
+    margin-top: 0.4rem;
 }
 .embla__dots {
     width: 100%;
@@ -40,7 +42,7 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 0.1rem;
+    gap: 0.2rem;
     margin-left: auto;
     margin-right: auto;
     /*margin-right: calc((2.6rem - 1.4rem) / 2 * -1);*/
@@ -56,17 +58,17 @@
     padding: 0;
     margin: 0;
     width: 0.4rem;
-    height: 0.4rem;
+    height: 0.2rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 20%;
+    border-radius: 20px;
     background-color: darkgrey;
 }
 
 .embla__dot--selected {
-    background-color: darkgrey;
-    width: 1.2rem;
+    background-color: black;
+    width: 0.8rem;
 }
 
 .embla__slide__img {
