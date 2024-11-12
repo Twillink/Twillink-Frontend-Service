@@ -20,6 +20,7 @@ import {
 } from '@/libs/providers/PreviewProvider';
 import {GradientDiv} from '@/components/GradientDiv';
 import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
+import {IWigetProfile} from '@/libs/types/IWigetProfile';
 
 const Page = () => {
   const dispatch = useAppDispatch();
@@ -28,6 +29,10 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dataWidget, setDataWidget] = useState<IItemWidgetType[]>([]);
   const [dataSocial, setDataSocial] = useState<IAddWidgetSocial[]>([]);
+  const [dataProfile, setDataProfile] = useState<IWigetProfile>({
+    username: '',
+    email: '',
+  });
   const {preview, isMobileScreen} = useContext(PreviewContext);
 
   const isDesktop = useMemo(
@@ -43,10 +48,14 @@ const Page = () => {
         .then(response => {
           const data = response.data?.data?.widgetList;
           const social = response.data?.data?.sosmed;
+          const profile = response?.data?.data?.profile;
           const formattedData: IItemWidgetType[] = data.map(formatWidgetData);
+
           dispatch(setWidgetData(formattedData));
+
           setDataWidget([...formattedData]);
           setDataSocial([...social]);
+          setDataProfile({...profile});
         })
         .catch()
         .finally(() => {
@@ -79,6 +88,7 @@ const Page = () => {
                 fetchData={fetchData}
                 setDataWidget={setDataWidget}
                 dataSocial={dataSocial}
+                dataProfile={dataProfile}
               />
             </div>
           </div>
@@ -94,6 +104,7 @@ const Page = () => {
               fetchData={fetchData}
               setDataWidget={setDataWidget}
               dataSocial={dataSocial}
+              dataProfile={dataProfile}
             />
             <div className={'sticky bg-base-100 bottom-0 py-2 z-30 '}>
               <p className={'text-sm font-medium text-center'}>

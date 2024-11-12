@@ -200,7 +200,9 @@ export const apiChangePassword = async (
 
 export interface IUpdateUserProfileBody {
   fullName: string;
-  phoneNumber: string;
+  description: string;
+  urlBanner: string;
+  urlImageProfile: string;
 }
 
 export const apiUpdateUserProfile = async (
@@ -209,7 +211,7 @@ export const apiUpdateUserProfile = async (
   showToasts = true,
 ) => {
   const api = createApiClient(dispatch, showToasts);
-  return await api.put('/api/v1/profile', body);
+  return await api.post('/api/v1/widget-profile', body);
 };
 
 export const apiGetCountry = async (

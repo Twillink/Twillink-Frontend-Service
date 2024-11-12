@@ -63,6 +63,7 @@ import {
 import Button from '@/components/Button';
 import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
 import PopupWidgetSchedule from '@/components/PopupWidgetSchedule';
+import {IWigetProfile} from '@/libs/types/IWigetProfile';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -71,6 +72,7 @@ interface IWidgetEditor {
   setDataWidget?: React.Dispatch<React.SetStateAction<IItemWidgetType[]>>;
   fetchData: (withLoading: boolean) => void;
   isEditingDisabled?: boolean;
+  dataProfile: IWigetProfile;
 }
 
 type PopupState = 'none' | 'main' | WidgetTypeEnum;
@@ -81,6 +83,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
   setDataWidget,
   fetchData,
   dataSocial,
+  dataProfile,
   isEditingDisabled = false,
 }) => {
   const dispatch = useAppDispatch();
@@ -509,7 +512,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           ) : (
             <>
               <ScrollHideHeader />
-              <UserProfile contact={dataContact} />
+              <UserProfile contact={dataContact} dataProfile={dataProfile} />
               <div className="flex flex-wrap px-6">
                 <SocialContainer
                   onClick={() => setPopupState(WidgetTypeEnum.Social)}
