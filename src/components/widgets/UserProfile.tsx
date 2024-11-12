@@ -5,19 +5,30 @@ import ProfileImage from './ProfileImage';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import SvgMail from '@/assets/svgComponents/SvgMail';
 import SvgPhoneCall from '@/assets/svgComponents/SvgPhoneCall';
+import Input from '@/components/Input';
+import {IWigetProfile} from '@/libs/types/IWigetProfile';
+import {apiUpdateUserProfile, IUpdateUserProfileBody} from '@/libs/api';
+import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 
 interface IUserProfile {
   contact?: IItemWidgetType;
+  dataProfile: IWigetProfile;
 }
 
-function UserProfile({contact}: IUserProfile) {
+function UserProfile({contact, dataProfile}: IUserProfile) {
   const [isSticky, setIsSticky] = useState<boolean>(false);
   const [editingSection, setEditingSection] = useState<
     'none' | 'businessName' | 'caption'
   >('none');
-  const [businessName, setBusinessName] = useState('Walter White');
-  const [caption, setCaption] = useState('Chemistry Master');
+  const [businessName, setBusinessName] = useState(
+    dataProfile?.fullName ?? 'Walter White',
+  );
+  const [caption, setCaption] = useState(
+    dataProfile?.description ?? 'Chemistry Master',
+  );
   const profileRef = useRef<HTMLDivElement | null>(null);
+
+  const dispatch = useAppDispatch();
 
   const handleScroll = () => {
     const scrollContainer = profileRef.current?.parentElement;
@@ -52,8 +63,16 @@ function UserProfile({contact}: IUserProfile) {
     }
   };
 
-  const handleBlur = () => {
+  const handleBlur = async () => {
     setEditingSection('none');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const newProfile: IUpdateUserProfileBody = {
+      fullName: businessName,
+      description: caption,
+      urlBanner: dataProfile?.urlBanner ?? '',
+      urlImageProfile: dataProfile?.urlImage ?? '',
+    };
+    await apiUpdateUserProfile(dispatch, newProfile);
   };
 
   return (
@@ -72,12 +91,13 @@ function UserProfile({contact}: IUserProfile) {
           onClick={() => handleEditClick('businessName')}
           className="cursor-pointer">
           {editingSection === 'businessName' ? (
-            <input
+            <Input
               type="text"
               value={businessName}
               onChange={e => handleInputChange(e, 'businessName')}
               onBlur={handleBlur}
               autoFocus
+              onKeyDown={e => e.key === 'Enter' && handleBlur()}
               className="border border-gray-300 p-1"
             />
           ) : (
@@ -91,12 +111,13 @@ function UserProfile({contact}: IUserProfile) {
           onClick={() => handleEditClick('caption')}
           className="cursor-pointer">
           {editingSection === 'caption' ? (
-            <input
+            <Input
               type="text"
               value={caption}
               onChange={e => handleInputChange(e, 'caption')}
               onBlur={handleBlur}
               autoFocus
+              onKeyDown={e => e.key === 'Enter' && handleBlur()}
               className="border border-gray-300 p-1"
             />
           ) : (

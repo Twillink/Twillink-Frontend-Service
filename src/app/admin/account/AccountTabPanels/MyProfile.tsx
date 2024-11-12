@@ -25,12 +25,12 @@ const MyProfile: React.FC = () => {
 
   const handleProfileSubmit = (values: {name: string; phoneNumber: string}) => {
     dispatch(setSubmitLoading(true));
-    const body: IUpdateUserProfileBody = {
+    const body = {
       fullName: values.name,
       phoneNumber: values.phoneNumber,
     };
 
-    apiUpdateUserProfile(dispatch, body)
+    apiUpdateUserProfile(dispatch, body as IUpdateUserProfileBody)
       .then(() => {
         fetchUserProfile();
       })

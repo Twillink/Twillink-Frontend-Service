@@ -8,13 +8,19 @@ import WidgetContainerViewer from './widgets/WidgetContainerViewer';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
+import {IWigetProfile} from '@/libs/types/IWigetProfile';
 
 interface IWidgetViewer {
   dataWidget: IItemWidgetType[];
   dataSocial: IAddWidgetSocial[];
+  dataProfile: IWigetProfile;
 }
 
-const WidgetViewer: React.FC<IWidgetViewer> = ({dataWidget, dataSocial}) => {
+const WidgetViewer: React.FC<IWidgetViewer> = ({
+  dataWidget,
+  dataSocial,
+  dataProfile,
+}) => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   const [dataWidgetFiltered, dataContact] = useMemo(() => {
@@ -40,7 +46,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({dataWidget, dataSocial}) => {
           className="artboard  flex flex-col bg-base-100 h-full overflow-y-auto relative"
           ref={scrollContainerRef}>
           <ScrollHideHeader />
-          <UserProfile contact={dataContact} />
+          <UserProfile contact={dataContact} dataProfile={dataProfile} />
           <div className="flex flex-wrap px-6">
             <SocialContainer data={dataSocial} />
             {dataWidgetFiltered
