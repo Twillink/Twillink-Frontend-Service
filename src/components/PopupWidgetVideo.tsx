@@ -31,7 +31,7 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
       caption: '',
       url: '',
       attachmentId: null,
-      video: null,
+      video: '',
       selectedVideo: null,
     },
     validationSchema: AddWidgetVideoSchema,
@@ -39,6 +39,7 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
       const value = {
         caption: values.caption,
         url: values.url,
+        video: values.video,
       };
       const success = await onAdd(WidgetTypeEnum.Video, value);
 
@@ -105,7 +106,7 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
           <div>
             <VideoSelectorWithSource
               video={formik.values.selectedVideo}
-              name={`video`}
+              name={`video-WVideo`}
               label={'Browse Video'}
               onChange={e => {
                 const file = e.target.files?.[0];

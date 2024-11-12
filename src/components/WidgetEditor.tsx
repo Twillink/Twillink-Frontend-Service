@@ -244,7 +244,6 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         break;
       case WidgetTypeEnum.Image:
         file = newWidget.value?.image ?? '';
-        console.log(newWidget.value, ' from image');
 
         if (file) {
           const response = await apiAddAttachment(dispatch, {files: [file]});
@@ -261,11 +260,23 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         apiCall = apiAddWidgetImage(dispatch, body as IAddWidgetImage);
         break;
       case WidgetTypeEnum.Video:
-        body = {
-          caption: newWidget.value?.caption,
-          url: newWidget.value?.url,
-          attachmentId: newWidget.value?.attachmentId,
-        };
+        file = newWidget.value?.video ?? '';
+        if (file) {
+          const response = await apiAddAttachment(dispatch, {files: [file]});
+
+          body = {
+            caption: newWidget.value?.caption,
+            url: response?.data?.path,
+            urlThumbnail: response?.data?.path,
+          };
+        } else {
+          body = {
+            caption: newWidget.value?.caption,
+            url: newWidget.value?.url,
+            urlThumbnail: newWidget.value?.url,
+          };
+        }
+
         apiCall = apiAddWidgetVideo(dispatch, body as IAddWidgetVideo);
         break;
       case WidgetTypeEnum.Contact:
@@ -514,7 +525,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
                       />
                     </div>
                     <p className={'text-sm font-medium text-center'}>
-                      Powered By Twilink
+                      Try Twillink—it&apos;s free!
                     </p>
                   </div>
                 </div>
@@ -524,7 +535,9 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         </div>
         {isDesktop && (
           <div
-            className={'flex w-full flex-wrap overflow-y-auto'}
+            className={
+              'flex w-full flex-wrap whitespace-pre-wrap overflow-y-auto'
+            }
             style={{rowGap: '0px', columnGap: '0px', scrollbarWidth: 'thin'}}>
             {dataWidgetFiltered
               .sort((a, b) => a.order - b.order)

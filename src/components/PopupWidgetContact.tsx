@@ -80,7 +80,7 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
           label="Email"
           icon={
             <div className="relative w-5 h-5 mr-2 bg-transparent">
-              <SvgMail />
+              <SvgMail width={24} height={24} className={'stroke-base-300'} />
             </div>
           }
           name="email"

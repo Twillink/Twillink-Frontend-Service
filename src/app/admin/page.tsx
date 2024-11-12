@@ -94,7 +94,7 @@ const Page = () => {
             />
             <div className={'sticky bg-base-100 bottom-0 py-2 z-30 '}>
               <p className={'text-sm font-medium text-center'}>
-                Powered By Twilink
+                Try Twillink—it&apos;s free!
               </p>
             </div>
           </div>
