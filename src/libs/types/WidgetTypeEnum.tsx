@@ -10,4 +10,6 @@ export enum WidgetTypeEnum {
   Webinar = 'webinar',
   Schedule = 'schedule',
   Social = 'social',
+  Banner = 'banner',
+  Profile = 'profile',
 }

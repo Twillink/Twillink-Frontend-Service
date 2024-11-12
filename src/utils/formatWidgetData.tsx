@@ -23,6 +23,7 @@ const mapWidgetType = (typeWidget: string): WidgetTypeEnum => {
     [WidgetTypeEnum.Contact]: WidgetTypeEnum.Contact,
     [WidgetTypeEnum.Carousel]: WidgetTypeEnum.Carousel,
     [WidgetTypeEnum.Blog]: WidgetTypeEnum.Blog,
+    [WidgetTypeEnum.Profile]: WidgetTypeEnum.Profile,
   };
 
   const type = widgetTypeMap[typeWidget];

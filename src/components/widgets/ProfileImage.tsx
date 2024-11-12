@@ -5,9 +5,14 @@ import Image from 'next/image';
 interface IProfileImage {
   onPhotoChange: (file: File | null) => void;
   isSticky: boolean;
+  urlImage?: string;
 }
 
-const ProfileImage: React.FC<IProfileImage> = ({onPhotoChange, isSticky}) => {
+const ProfileImage: React.FC<IProfileImage> = ({
+  onPhotoChange,
+  isSticky,
+  urlImage,
+}) => {
   const [selectedProfileImage, setSelectedProfileImage] = useState<File | null>(
     null,
   );
@@ -41,9 +46,9 @@ const ProfileImage: React.FC<IProfileImage> = ({onPhotoChange, isSticky}) => {
         className="block cursor-pointer relative">
         <div
           className={`relative z-10 ${size} rounded-full border-4 border-base-100 overflow-hidden shadow-lg bg-base-100`}>
-          {profileImageUrl ? (
+          {(urlImage ?? profileImageUrl) ? (
             <Image
-              src={profileImageUrl}
+              src={(urlImage ?? profileImageUrl) as string}
               alt="User Selected Photo"
               className="object-cover"
               width={imgSize}

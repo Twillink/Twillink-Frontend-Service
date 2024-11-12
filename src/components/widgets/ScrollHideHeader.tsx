@@ -4,10 +4,16 @@ import SvgPlus from '@/assets/svgComponents/SvgPlus';
 import Image from 'next/image';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 
-const ScrollHideHeader: React.FC = () => {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+interface ScrollHideHeaderProps {
+  onClickBanner: () => void;
+  urlBanner?: string;
+}
+
+const ScrollHideHeader = ({
+  onClickBanner,
+  urlBanner,
+}: ScrollHideHeaderProps) => {
   const [scrollOffset, setScrollOffset] = useState<number>(0);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const headerRef = useRef<HTMLDivElement | null>(null);
   const headerHeight = 136;
 
@@ -33,47 +39,33 @@ const ScrollHideHeader: React.FC = () => {
     };
   }, [handleScroll]);
 
-  useEffect(() => {
-    if (selectedImage) {
-      const url = URL.createObjectURL(selectedImage);
-      setImageUrl(url);
-
-      return () => {
-        URL.revokeObjectURL(url);
-      };
-    } else {
-      setImageUrl(null);
-    }
-  }, [selectedImage]);
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] ?? null;
-    if (file) {
-      setSelectedImage(file);
-    }
-  };
+  // useEffect(() => {
+  //   if (selectedImage) {
+  //     const url = URL.createObjectURL(selectedImage);
+  //     setImageUrl(url);
+  //
+  //     return () => {
+  //       URL.revokeObjectURL(url);
+  //     };
+  //   } else {
+  //     setImageUrl(null);
+  //   }
+  // }, [selectedImage]);
 
   return (
     <div
       ref={headerRef}
+      onClick={onClickBanner}
       style={{
         transform: `translateY(-${scrollOffset}px)`,
         transition: 'transform 0.1s ease-out',
       }}
       className={`sticky z-10 w-full bg-base-200 cursor-pointer shadow-md rounded-2xl`}>
       <label htmlFor="file-upload-header" className="cursor-pointer">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          className="hidden"
-          id="file-upload-header"
-        />
-
-        {imageUrl ? (
+        {urlBanner ? (
           <div className="flex justify-center">
             <Image
-              src={imageUrl}
+              src={urlBanner}
               alt="Selected Preview"
               className={`max-w-full h-[136px] w-full object-cover`}
               width={0}

@@ -45,7 +45,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
         <div
           className="artboard  flex flex-col bg-base-100 h-full overflow-y-auto relative"
           ref={scrollContainerRef}>
-          <ScrollHideHeader />
+          <ScrollHideHeader onClickBanner={() => {}} />
           <UserProfile contact={dataContact} dataProfile={dataProfile} />
           <div className="flex flex-wrap px-6">
             <SocialContainer data={dataSocial} />
