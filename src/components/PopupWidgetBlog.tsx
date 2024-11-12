@@ -27,18 +27,18 @@ const PopupWidgetBlog: React.FC<IPopupWidgetBlog> = ({
     initialValues: {
       title: '',
       content: '',
-      selectedImage: null,
-      image: null,
+      selectedImage: '',
+      image: '',
     },
     validationSchema: AddWidgetBlogSchema,
     onSubmit: async values => {
       const value = {
         title: values.title,
         content: values.content,
-        image: values.selectedImage,
+        image: values.image,
       };
 
-      const success = await onAdd(WidgetTypeEnum.Link, value);
+      const success = await onAdd(WidgetTypeEnum.Blog, value);
       if (success) {
         formik.resetForm();
         onClose();
@@ -58,7 +58,7 @@ const PopupWidgetBlog: React.FC<IPopupWidgetBlog> = ({
         onSubmit={formik.handleSubmit}>
         <ImageSelectorWithSource
           image={formik.values.selectedImage}
-          name={`image`}
+          name={`image-WBlog`}
           onChange={e => {
             const file = e.target.files?.[0];
             if (file) {

@@ -13,6 +13,7 @@ import {
   PreviewContext,
   PreviewTypeEnum,
 } from '@/libs/providers/PreviewProvider';
+import WidgetBlog from '@/components/widgets/WidgetBlog';
 
 interface IWidgetContainer {
   handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;
@@ -81,6 +82,15 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
         return (
           <WidgetVideo
             text={values.value?.caption || ''}
+            url={values.value?.url || '#'}
+            image={values.value?.image}
+          />
+        );
+      case WidgetTypeEnum.Blog:
+        console.log(values.value, 'from editor');
+        return (
+          <WidgetBlog
+            title={values.value?.title || ''}
             url={values.value?.url || '#'}
             image={values.value?.image}
           />

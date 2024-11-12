@@ -22,6 +22,7 @@ const mapWidgetType = (typeWidget: string): WidgetTypeEnum => {
     [WidgetTypeEnum.Video]: WidgetTypeEnum.Video,
     [WidgetTypeEnum.Contact]: WidgetTypeEnum.Contact,
     [WidgetTypeEnum.Carousel]: WidgetTypeEnum.Carousel,
+    [WidgetTypeEnum.Blog]: WidgetTypeEnum.Blog,
   };
 
   const type = widgetTypeMap[typeWidget];
@@ -38,6 +39,7 @@ const mapWidgetValue = (item: IFetchedWidgetData) => {
     widgetVideo,
     widgetContact,
     widgetCarousel,
+    widgetBlog,
   } = item;
 
   switch (typeWidget) {
@@ -53,6 +55,8 @@ const mapWidgetValue = (item: IFetchedWidgetData) => {
       return widgetContact ? widgetContact : undefined;
     case WidgetTypeEnum.Carousel:
       return widgetCarousel ? widgetCarousel : undefined;
+    case WidgetTypeEnum.Blog:
+      return widgetBlog ? widgetBlog : undefined;
     default:
       return undefined;
   }

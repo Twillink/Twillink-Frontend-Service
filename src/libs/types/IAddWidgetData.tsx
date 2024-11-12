@@ -20,6 +20,12 @@ export interface IAddWidgetVideo {
   attachmentId?: string;
 }
 
+export interface IAddWidgetBlog {
+  title: string;
+  content: string;
+  url: string;
+}
+
 export interface IAddWidgetCarousel {
   caption: string;
   attachmentIds: number[];

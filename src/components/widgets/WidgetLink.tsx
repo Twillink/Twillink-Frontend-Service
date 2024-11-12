@@ -57,7 +57,7 @@ const WidgetLink: React.FC<IWidgetLink> = ({
     <div
       className="border-base-300 border-2 rounded-2xl h-full w-full p-2 flex items-center"
       {...restProps}>
-      <div className="flex justify-between items-center w-full gap-2">
+      <div className="flex justify-between items-center w-full h-full gap-2">
         <div
           className={'flex flex-col justify-between items-start h-full gap-1'}>
           <div>
@@ -83,7 +83,7 @@ const WidgetLink: React.FC<IWidgetLink> = ({
         {isDivWideEnough && (
           <div
             id={'image-div'}
-            className={`relative  ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} rounded-lg overflow-hidden`}>
+            className={`relative max-w-[50%] ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} rounded-lg overflow-hidden`}>
             {urlThumbnail && (
               <Image
                 src={urlThumbnail}
