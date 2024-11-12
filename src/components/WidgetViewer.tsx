@@ -6,7 +6,6 @@ import PopupWidgetImage from '@/components/PopupWidgetImage';
 import PopupWidgetLink from '@/components/PopupWidgetLink';
 import PopupWidgetText from '@/components/PopupWidgetText';
 import PopupWidgetVideo from '@/components/PopupWidgetVideo';
-import AddWidget from '@/components/widgets/AddWidget';
 import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
 import SocialContainer from '@/components/widgets/SocialContainer';
 import UserProfile from '@/components/widgets/UserProfile';
@@ -565,9 +564,6 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
                         }
                       />
                     ))}
-                {!isDesktop && (
-                  <AddWidget onClick={() => setPopupState('main')} />
-                )}
               </div>
               {isDesktop && (
                 <div>
@@ -618,7 +614,6 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
                   }
                 />
               ))}
-            {isDesktop && <AddWidget onClick={() => setPopupState('main')} />}
           </div>
         )}
       </div>
