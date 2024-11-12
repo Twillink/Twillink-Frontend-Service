@@ -40,10 +40,7 @@ const WidgetLink: React.FC<IWidgetLink> = ({
     const handleResize = () => {
       if (document) {
         const imageDiv = document?.getElementById('image-div');
-        console.log(imageDiv, 'divdiv');
-        console.log(imageDiv?.offsetWidth, 'width');
         if (imageDiv) {
-          console.log(imageDiv.offsetWidth, 'offsetWidth');
           setIsDivWideEnough(imageDiv.offsetWidth >= 100);
         }
       }

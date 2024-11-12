@@ -2,11 +2,7 @@
 
 import React from 'react';
 
-import isUrl from 'is-url';
-import ReactPlayer from 'react-player';
-import Link from 'next/link';
-
-interface IWidgetVideo extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+interface IWidgetVideo {
   text: string;
   url: string;
   width?: string;
@@ -19,9 +15,9 @@ const WidgetVideo: React.FC<IWidgetVideo> = ({
   image,
   ...restProps
 }) => {
+  console.log(url);
   return (
-    <Link
-      href={url}
+    <div
       className="border-base-300 border-2 rounded-2xl h-full w-full flex items-center"
       {...restProps}>
       <div className="flex justify-center items-center w-full h-full relative rounded-2xl overflow-hidden">
@@ -29,11 +25,15 @@ const WidgetVideo: React.FC<IWidgetVideo> = ({
           className={` text-center text-xs text-ellipsis line-clamp-3 overflow-hidden font-normal w-fit ${url || image ? 'w-1/2' : 'w-full'} z-10 absolute bg-base-200 left-2 bottom-2 px-2 py-1 rounded-lg`}>
           {text}
         </p>
-        {url && isUrl(url) && (
-          <ReactPlayer url={url} height={'100%'} width={'100%'} light />
+
+        {url && (
+          <video controls className="max-w-full h-auto">
+            <source src={url} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
         )}
       </div>
-    </Link>
+    </div>
   );
 };
 

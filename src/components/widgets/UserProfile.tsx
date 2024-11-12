@@ -115,7 +115,11 @@ function UserProfile({contact}: IUserProfile) {
                 key={contact?.value?.email}
                 className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
-                  <SvgMail height={20} width={20} className="text-white" />
+                  <SvgMail
+                    height={20}
+                    width={20}
+                    className="stroke-primary-content"
+                  />
                 </div>
                 <p>Email</p>
               </button>
