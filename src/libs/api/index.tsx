@@ -93,6 +93,15 @@ export const apiGetWidgetData = async (
   return await api.get('/api/v1/widget');
 };
 
+export const apiGetWidgetUserData = async (
+  dispatch: AppDispatch,
+  showToasts = true,
+  username = '',
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.get('/api/v1/widget/' + username);
+};
+
 export const apiAddWidgetLink = async (
   dispatch: AppDispatch,
   body: IAddWidgetLink,

@@ -1,76 +1,124 @@
-import {notFound} from 'next/navigation';
-import {FC} from 'react';
-import {dummyWidget} from '@/mock/data';
-import WidgetViewer from '@/components/WidgetViewer';
+'use client';
+
+import WidgetEditor from '@/components/WidgetEditor';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
-import {generateUniqueString} from '@/utils/generateUniqueString';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
+import {setWidgetData} from '@/libs/store/features/myWidgetSlice';
+import {apiGetWidgetUserData} from '@/libs/api';
+import {formatWidgetData} from '@/utils/formatWidgetData';
+import {
+  PreviewContext,
+  PreviewTypeEnum,
+} from '@/libs/providers/PreviewProvider';
+import {GradientDiv} from '@/components/GradientDiv';
+import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
+import {IWigetProfile} from '@/libs/types/IWigetProfile';
+import {useParams} from 'next/navigation';
 
-interface IUser {
-  name: string;
-  bio: string;
-  dataWidget: IItemWidgetType[];
-}
+const Page = () => {
+  const dispatch = useAppDispatch();
+  const myWidget = useAppSelector(state => state.myWidget.data);
+  const isFetchingRef = useRef(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [dataWidget, setDataWidget] = useState<IItemWidgetType[]>([]);
+  const [dataSocial, setDataSocial] = useState<IAddWidgetSocial[]>([]);
+  const [dataProfile, setDataProfile] = useState<IWigetProfile>({
+    username: '',
+    email: '',
+  });
+  const {preview, isMobileScreen} = useContext(PreviewContext);
+  const params = useParams(); // Use useParams instead of useRouter
+  const username = params?.twillink;
 
-interface IMockUsers {
-  [key: string]: IUser;
-}
-
-const fetchUserByUsername = async (username: string): Promise<IUser | null> => {
-  const dataWidget = dummyWidget.map(
-    widget =>
-      ({
-        ...widget,
-        idEditor: generateUniqueString('widget'),
-      }) as IItemWidgetType,
+  const isDesktop = useMemo(
+    () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
+    [preview, isMobileScreen],
   );
 
-  const mockUsers: IMockUsers = {
-    johndoe: {
-      name: 'John Doe',
-      bio: 'Software Developer',
-      dataWidget,
+  const fetchData = useCallback(
+    (withLoading = true) => {
+      isFetchingRef.current = true;
+      if (withLoading) setIsLoading(true);
+      apiGetWidgetUserData(dispatch, false, String(username))
+        .then(response => {
+          const data = response.data?.data?.widgetList;
+          const social = response.data?.data?.sosmed;
+          const profile = response?.data?.data?.profile;
+          const formattedData: IItemWidgetType[] = data.map(formatWidgetData);
+
+          dispatch(setWidgetData(formattedData));
+
+          setDataWidget([...formattedData]);
+          setDataSocial([...social]);
+          setDataProfile({...profile});
+        })
+        .catch()
+        .finally(() => {
+          if (withLoading) setIsLoading(false);
+          isFetchingRef.current = false;
+        });
     },
-    janedoe: {
-      name: 'Jane Doe',
-      bio: 'Graphic Designer',
-      dataWidget: [],
-    },
-  };
+    [dispatch],
+  );
 
-  return mockUsers[username] || null;
-};
-
-interface ITwillinkPage {
-  params: {
-    twillink: string;
-  };
-}
-
-const TwillinkPage: FC<ITwillinkPage> = async ({params}) => {
-  const {twillink} = params;
-  const data = await fetchUserByUsername(twillink);
-
-  if (!data) {
-    return notFound();
-  }
+  useEffect(() => {
+    if (myWidget.length === 0 && !isFetchingRef.current) {
+      fetchData();
+    }
+  }, [fetchData, myWidget]);
 
   return (
-    <div data-theme="light" className="h-full bg-base-100">
-      <div className="flex flex-col items-center justify-center">
-        <div className="h-screen max-w-[26.75rem]">
-          <WidgetViewer
-            dataWidget={data.dataWidget}
-            dataSocial={[]}
-            dataProfile={{
-              username: 'john-doe',
-              description: 'An Artist',
-              email: 'johndoe@mail.com',
-            }}
-          />
+    <div className="flex justify-center items-center w-full h-[calc(100dvh-7.5rem)] overflow-hidden">
+      {isDesktop ? (
+        <div className={'relative max-h-[664px] xl:[756px]  h-full'}>
+          <div
+            className={
+              ' relative aspect-[6.58/4.12] h-full border-4 border-solid rounded-[50px] border-color-[#444] bg-black p-8 overflow-hidden'
+            }>
+            <div
+              className={'mockup-browser h-full w-full bg-base-100 py-6 px-8'}>
+              <WidgetEditor
+                isLoading={isLoading}
+                dataWidget={dataWidget}
+                fetchData={fetchData}
+                setDataWidget={setDataWidget}
+                dataSocial={dataSocial}
+                dataProfile={dataProfile}
+              />
+            </div>
+          </div>
+          <GradientDiv />
         </div>
-      </div>
+      ) : (
+        <div className="mockup-phone h-full max-h-[756px]  w-80 md:w-96">
+          <div className="camera"></div>
+          <div className="display h-full">
+            <WidgetEditor
+              isLoading={isLoading}
+              dataWidget={dataWidget}
+              fetchData={fetchData}
+              setDataWidget={setDataWidget}
+              dataSocial={dataSocial}
+              dataProfile={dataProfile}
+            />
+            <div className={'sticky bg-base-100 bottom-0 py-2 z-30 '}>
+              <p className={'text-sm font-medium text-center'}>
+                Try Twillink—it&apos;s free!
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default TwillinkPage;
+export default Page;
