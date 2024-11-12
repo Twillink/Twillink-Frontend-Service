@@ -76,7 +76,7 @@ const Page = () => {
   }, [fetchData, myWidget]);
 
   return (
-    <div className="flex justify-center items-center w-full h-[calc(100dvh-7.5rem)] overflow-hidden">
+    <div className="flex justify-center items-center w-full  overflow-hidden">
       {isDesktop ? (
         <div className={'relative max-h-[664px] xl:[756px]  h-full'}>
           <div
@@ -98,7 +98,7 @@ const Page = () => {
           <GradientDiv />
         </div>
       ) : (
-        <div className="mockup-phone h-full max-h-[756px]  w-80 md:w-96">
+        <div className="w-full h-full max-w-full max-h-full w-80 md:w-96">
           <div className="camera"></div>
           <div className="display h-full">
             <WidgetViewer
