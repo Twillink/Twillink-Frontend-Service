@@ -82,7 +82,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
                 src={url}
                 alt={title}
                 className="object-cover rounded-lg"
-                layout={'fill'}
+                fill
               />
             )}
           </div>

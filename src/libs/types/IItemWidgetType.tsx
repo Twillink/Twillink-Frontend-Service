@@ -14,6 +14,8 @@ export interface IItemWidgetTypeValues {
   urlThumbnail?: string;
   video?: string;
   content?: string;
+  key?: string;
+  value?: string;
   widgetCarouselAttachment?: WidgetCarouselAttachment[];
 }
 

@@ -7,29 +7,28 @@ import SocialContainer from '@/components/widgets/SocialContainer';
 import WidgetContainerViewer from './widgets/WidgetContainerViewer';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
+import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
 
 interface IWidgetViewer {
   dataWidget: IItemWidgetType[];
+  dataSocial: IAddWidgetSocial[];
 }
 
-const WidgetViewer: React.FC<IWidgetViewer> = ({dataWidget}) => {
+const WidgetViewer: React.FC<IWidgetViewer> = ({dataWidget, dataSocial}) => {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-  const [dataWidgetFiltered, dataContact, dataSocial] = useMemo(() => {
+  const [dataWidgetFiltered, dataContact] = useMemo(() => {
     const filtered = [];
     let contact;
-    const social = [];
     for (let i = 0; i < dataWidget.length; i++) {
       const item = dataWidget[i];
       if (item.type === WidgetTypeEnum.Contact) {
         contact = item;
-      } else if (item.type === WidgetTypeEnum.Social) {
-        social.push(item);
       } else {
         filtered.push(item);
       }
     }
-    return [filtered, contact, social];
+    return [filtered, contact];
   }, [dataWidget]);
 
   return (

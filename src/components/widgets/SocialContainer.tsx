@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import SocialButton from './SocialButton';
-import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {socialButtons} from '../PopupWidgetSocial';
+import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
 
 interface ISocialContainer {
   onClick?: () => void;
-  data: IItemWidgetType[];
+  data: IAddWidgetSocial[];
 }
 
 const SocialContainer: React.FC<ISocialContainer> = ({onClick, data}) => {
@@ -14,28 +14,16 @@ const SocialContainer: React.FC<ISocialContainer> = ({onClick, data}) => {
     // setImageUrls
   ] = useState<string[]>(Array(1).fill(''));
 
-  // const handleFileChange =
-  //   (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
-  //     const files = event.target.files;
-  //     if (files?.length) {
-  //       const imageUrl = URL.createObjectURL(files[0]);
-  //       setImageUrls(prev => {
-  //         const newUrls = [...prev];
-  //         newUrls[index] = imageUrl;
-  //         return newUrls;
-  //       });
-  //     }
-  //   };
+  const disableAddButton = data.length >= socialButtons.length;
 
   return (
-    <div className="flex flex-wrap justify-center py-4 px-8 w-full gap-2">
+    <div className="flex flex-wrap justify-center max-w-[280px] mx-auto py-4 px-8 w-full gap-6">
       {data.map(item => {
-        const Icon = socialButtons.find(
-          btn => btn.name === item.value?.text,
-        )?.icon;
+        console.log(item, 'social');
+        const Icon = socialButtons.find(btn => btn.name === item?.key)?.icon;
         if (!Icon) return null;
         return (
-          <div key={item.value?.text} className="w-7 h-7 flex justify-center">
+          <div key={item?.key} className="w-7 h-7 flex justify-center">
             <Icon
               width={28}
               height={28}
@@ -44,14 +32,15 @@ const SocialContainer: React.FC<ISocialContainer> = ({onClick, data}) => {
           </div>
         );
       })}
-      {imageUrls.map((_, index) => (
-        <div
-          key={index}
-          className="w-1/4 flex justify-center mb-4"
-          onClick={onClick}>
-          <SocialButton imageUrl={imageUrls[index]} />
-        </div>
-      ))}
+      {!disableAddButton &&
+        imageUrls.map((_, index) => (
+          <div
+            key={index}
+            className="w-1/4 flex justify-center mb-4"
+            onClick={onClick}>
+            <SocialButton imageUrl={imageUrls[index]} />
+          </div>
+        ))}
     </div>
   );
 };

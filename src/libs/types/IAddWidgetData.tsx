@@ -36,6 +36,11 @@ interface IAddWidgetContactEmail {
   phoneNumber?: string;
 }
 
+export interface IAddWidgetSocial {
+  key: string;
+  value: string;
+}
+
 interface IAddWidgetContactPhoneNumber {
   email?: string;
   phoneNumber: string;
