@@ -18,6 +18,7 @@ import {
   PreviewContext,
   PreviewTypeEnum,
 } from '@/libs/providers/PreviewProvider';
+import {GradientDiv} from '@/components/GradientDiv';
 
 const Page = () => {
   const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ const Page = () => {
       apiGetWidgetData(dispatch, false)
         .then(response => {
           const data = response.data?.data?.widgetList;
+          // const data = response.data;
           console.log(data, 'data widget');
           const formattedData: IItemWidgetType[] = data.map(formatWidgetData);
           dispatch(setWidgetData(formattedData));
@@ -66,7 +68,7 @@ const Page = () => {
         <div className={'relative max-h-[664px] xl:[756px]  h-full'}>
           <div
             className={
-              ' relative aspect-[4/3] h-full border-4 border-solid rounded-[50px] border-color-[#444] bg-black p-8 overflow-hidden'
+              ' relative aspect-[6.58/4.12] h-full border-4 border-solid rounded-[50px] border-color-[#444] bg-black p-8 overflow-hidden'
             }>
             <div
               className={'mockup-browser h-full w-full bg-base-100 py-6 px-8'}>
@@ -78,10 +80,7 @@ const Page = () => {
               />
             </div>
           </div>
-          <div
-            className={
-              'absolute z-50 bottom-[-1rem] w-[110%] translate-x-[-5%] mx-auto rounded-b-[50px] h-8 bg-gradient-to-b from-[#262626] to-[#181818]'
-            }></div>
+          <GradientDiv />
         </div>
       ) : (
         <div className="mockup-phone h-full max-h-[756px]  w-80 md:w-96">

@@ -15,14 +15,14 @@ const Home: React.FC = () => {
     <div
       data-theme={'skinLight'}
       className={
-        "p-16 flex h-screen max-w-screen-xl justify-between mx-auto items-center gap-[20%] bg-[url('/images/bg-intro.webp')] bg-cover"
+        "p-4  md:p-16 flex flex-col md:flex-row h-screen max-w-screen-xl  justify-center md:justify-between mx-auto items-center gap-12 md:gap-0 bg-[url('/images/bg-intro.webp')] bg-cover"
       }>
       <div
         // data-theme="skinLight"
-        className="flex flex-col items-start justify-center px-2 gap-4">
+        className="flex flex-col items-start justify-center px-2 py-8 md:py-0 gap-0 md:gap-4">
         {/*<SvgTwillinkLogo height={30} className="fill-logo" />*/}
 
-        <h1 className="text-start text-4xl font-bold text-primary leading-relaxed">
+        <h1 className="text-start text-2xl md:text-4xl font-bold text-primary leading-relaxed">
           <MotionSpan
             initial={{opacity: 0, y: 50}}
             whileInView={{opacity: 1, y: 0}}
@@ -53,7 +53,7 @@ const Home: React.FC = () => {
             duration: 0.25,
             delay: 0.75,
           }}>
-          <h2 className="text-primary text-[20px] font-normal leading-relaxed mb-4">
+          <h2 className="text-primary text-xl md:text-[20px] font-normal leading-relaxed mb-4">
             Claim your username now
           </h2>
         </MotionDiv>
@@ -97,7 +97,7 @@ const Home: React.FC = () => {
         )}
       </div>
       <div>
-        <div className={'relative'}>
+        <div className={'relative mr-10'}>
           <div>
             <MotionImg
               initial={{opacity: 0, y: 50}}
@@ -109,7 +109,7 @@ const Home: React.FC = () => {
               }}
               src="/images/Mobile Preview.webp"
               alt="Preview"
-              className={'w-80'}
+              className={'w-[200px] md:w-80'}
             />
           </div>
           <MotionDiv
@@ -120,7 +120,9 @@ const Home: React.FC = () => {
               duration: 1,
               delay: 1,
             }}
-            className={'absolute top-[14%] left-[-50%]'}>
+            className={
+              'absolute top-[18%] md:top-[14%] left-[-30%] md:left-[-50%]'
+            }>
             <MotionImg
               initial={{
                 transform: 'translateZ(8px) translateY(-2px)',
@@ -137,7 +139,7 @@ const Home: React.FC = () => {
               }}
               src="/images/calendar.webp"
               alt="Preview"
-              className={'w-60 '}
+              className={'w-[130px] md:w-60'}
             />
           </MotionDiv>
           <MotionDiv
@@ -148,7 +150,7 @@ const Home: React.FC = () => {
               duration: 1,
               delay: 1,
             }}
-            className={' absolute bottom-[8%] right-[-30%]'}>
+            className={' absolute bottom-[8%] right-[-26%] md:right-[-30%]'}>
             <MotionImg
               initial={{
                 transform: 'translateZ(8px) translateY(0px)',
@@ -165,7 +167,7 @@ const Home: React.FC = () => {
               }}
               src="/images/blog.webp"
               alt="Preview"
-              className="h-[168px]"
+              className="h-[100px] md:h-[168px]"
             />
           </MotionDiv>
         </div>

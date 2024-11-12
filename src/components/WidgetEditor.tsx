@@ -58,6 +58,7 @@ import {
 } from '@/libs/providers/PreviewProvider';
 import Button from '@/components/Button';
 import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
+import PopupWidgetSchedule from '@/components/PopupWidgetSchedule';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -178,6 +179,9 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         break;
       case WidgetTypeEnum.Blog:
         setPopupState(WidgetTypeEnum.Blog);
+        break;
+      case WidgetTypeEnum.Schedule:
+        setPopupState(WidgetTypeEnum.Schedule);
         break;
       case 'main':
         setPopupState('main');
@@ -496,7 +500,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         </div>
         {isDesktop && (
           <div
-            className={' flex w-full flex-wrap overflow-y-auto'}
+            className={'flex w-full flex-wrap overflow-y-auto'}
             style={{rowGap: '0px', columnGap: '0px', scrollbarWidth: 'thin'}}>
             {dataWidgetFiltered
               .sort((a, b) => a.order - b.order)
@@ -580,6 +584,14 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
       <PopupWidgetBlog
         isOpen={popupState === WidgetTypeEnum.Blog}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetSchedule
+        isOpen={popupState === WidgetTypeEnum.Schedule}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}
