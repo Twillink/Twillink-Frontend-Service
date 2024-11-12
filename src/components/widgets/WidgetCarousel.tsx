@@ -8,7 +8,7 @@ interface IWidgetCarousel {
   url?: string;
   width?: string;
   images?: string[];
-  attachmentIds?: number[];
+  attachmentIds?: string[];
 }
 
 const WidgetCarousel: React.FC<IWidgetCarousel> = ({
@@ -25,8 +25,11 @@ const WidgetCarousel: React.FC<IWidgetCarousel> = ({
           {text}
         </p>
 
-        <div>
-          <CustomCarousel slides={images ?? []} attachmentIds={attachmentIds} />
+        <div className={'w-full'}>
+          <CustomCarousel
+            slides={images ?? attachmentIds}
+            attachmentIds={attachmentIds}
+          />
         </div>
       </div>
     </div>

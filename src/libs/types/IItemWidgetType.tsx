@@ -11,6 +11,7 @@ export interface IItemWidgetTypeValues {
   phoneNumber?: string;
   caption?: string;
   attachmentId?: string;
+  urlThumbnail?: string;
   widgetCarouselAttachment?: WidgetCarouselAttachment[];
 }
 

@@ -30,15 +30,15 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
     initialValues: {
       caption: '',
       url: '',
-      attachmentId: null,
       selectedImage: '',
-      image: null,
+      image: '',
     },
     validationSchema: AddWidgetImageSchema,
     onSubmit: async values => {
       const value = {
         caption: values.caption,
         url: values.url,
+        image: values.image,
       };
       const success = await onAdd(WidgetTypeEnum.Image, value);
       if (success) {
@@ -103,7 +103,7 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
           <div>
             <ImageSelectorWithSource
               image={formik.values.selectedImage}
-              name={`image`}
+              name={`image_WImage`}
               label={'Browse Image'}
               onChange={e => {
                 const file = e.target.files?.[0];

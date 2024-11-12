@@ -2,10 +2,10 @@ import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {useFormik} from 'formik';
 import React from 'react';
 import Button from './Button';
-import ImageSelector from './ImageSelector';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
 import AddWidgetLinkSchema from '@/libs/schema/Widget/WidgetLink.schema';
+import ImageSelectorWithSource from '@/components/ImageSelectorWithSource';
 
 interface IPopupWidgetLink {
   isOpen: boolean;
@@ -27,13 +27,14 @@ const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
       title: '',
       url: '',
       selectedImage: null,
+      image: '',
     },
     validationSchema: AddWidgetLinkSchema,
     onSubmit: async values => {
       const value = {
         title: values.title,
         url: values.url,
-        image: values.selectedImage,
+        image: values.image,
       };
 
       const success = await onAdd(WidgetTypeEnum.Link, value);
@@ -83,7 +84,10 @@ const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
               : ''
           }
         />
-        <ImageSelector
+        <ImageSelectorWithSource
+          image={formik.values.selectedImage}
+          name={`image_WLink`}
+          label={'Browse Image'}
           onChange={e => {
             const file = e.target.files?.[0];
             if (file) {
@@ -91,10 +95,16 @@ const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
               reader.onloadend = () => {
                 formik.setFieldValue('selectedImage', reader.result);
               };
+              formik.setFieldValue(`image`, file);
               reader.readAsDataURL(file);
             }
           }}
           reset={formik.values.selectedImage === null}
+          error={
+            formik.touched.selectedImage && formik.errors.selectedImage
+              ? formik.errors.selectedImage
+              : ''
+          }
         />
         <div className="flex justify-end">
           <Button

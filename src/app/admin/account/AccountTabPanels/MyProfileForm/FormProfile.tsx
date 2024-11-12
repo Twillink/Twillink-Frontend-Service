@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {Formik, Form} from 'formik';
+import {Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import InputLabel from '@/components/InputLabel';
 import ErrorMessageField from '@/components/ErrorMessageField';
@@ -39,10 +39,7 @@ const FormProfile: React.FC<FormProfileProps> = ({onSubmit}) => {
         'phoneNumber',
         userProfile.profile?.profile?.phoneNumber || '+62',
       );
-      formikRef.current.setFieldValue(
-        'username',
-        userProfile.profile?.linkUserAuth[0]?.link.userName || '',
-      );
+      formikRef.current.setFieldValue('username', '');
       formikRef.current.setFieldValue(
         'email',
         userProfile.profile?.email || '',

@@ -1,8 +1,6 @@
 'use client';
 
 import React from 'react';
-
-import isUrl from 'is-url';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -26,14 +24,14 @@ const WidgetImage: React.FC<IWidgetImage> = ({
       {...restProps}>
       <div className="flex justify-between items-center w-full gap-2 h-full rounded-2xl overflow-hidden relative">
         <p
-          className={`text-center text-xs text-ellipsis line-clamp-3 overflow-hidden font-normal w-fit ${url || image ? 'w-1/2' : 'w-full'} z-[3] absolute bg-base-200 left-2 bottom-2 px-2 py-1 rounded-lg`}>
+          className={`text-center text-xs text-ellipsis line-clamp-3 overflow-hidden font-normal w-fit ${url || image ? 'w-1/2' : 'w-full'} z-[3] absolute bg-base-200 left-2 right-2 bottom-2 px-2 py-1 rounded-lg`}>
           {text}
         </p>
-        {url && isUrl(url) && (
+        {url && (
           <Image
             src={url}
             alt={text}
-            fill
+            layout={'fill'}
             className="object-cover rounded-lg"
           />
         )}
