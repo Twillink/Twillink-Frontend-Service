@@ -2,6 +2,7 @@ import {AppDispatch} from '../store/store';
 import {IAddAttachment} from '../types/IAttachmentData';
 import createApiClient from './apiClient';
 import {
+  IAddWidgetBlog,
   IAddWidgetCarousel,
   IAddWidgetContact,
   IAddWidgetImage,
@@ -125,6 +126,15 @@ export const apiAddWidgetVideo = async (
 ) => {
   const api = createApiClient(dispatch, showToasts);
   return await api.post('/api/v1/widget-video', body);
+};
+
+export const apiAddWidgetBlog = async (
+  dispatch: AppDispatch,
+  body: IAddWidgetBlog,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/widget-blog', body);
 };
 
 export const apiAddWidgetCarousel = async (

@@ -39,6 +39,13 @@ export interface IFetchedWidgetCarousel {
   widgetCarouselAttachment: WidgetCarouselAttachment[];
 }
 
+export interface IFetchedWidgetBlog {
+  id: number;
+  contents: string;
+  title: string;
+  url: string;
+}
+
 export interface IFetchedWidgetData {
   id: number;
   sequence: number;
@@ -49,5 +56,6 @@ export interface IFetchedWidgetData {
   widgetVideo?: IFetchedWidgetVideo | null;
   widgetContact?: IFetchedWidgetContact | null;
   widgetCarousel?: IFetchedWidgetCarousel | null;
+  widgetBlog?: IFetchedWidgetBlog | null;
   width: string;
 }

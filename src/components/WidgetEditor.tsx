@@ -17,6 +17,7 @@ import {generateUniqueString} from '@/utils/generateUniqueString';
 import Loader from './Loader';
 import {
   apiAddAttachment,
+  apiAddWidgetBlog,
   apiAddWidgetCarousel,
   apiAddWidgetContact,
   apiAddWidgetImage,
@@ -41,6 +42,7 @@ import PopupWidgetSocial from './PopupWidgetSocial';
 import PopupWidgetCarousel from './PopupWidgetCarousel';
 import mockApiCall from '@/mock/mockApiCall';
 import {
+  IAddWidgetBlog,
   IAddWidgetCarousel,
   IAddWidgetContact,
   IAddWidgetImage,
@@ -278,6 +280,26 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         }
 
         apiCall = apiAddWidgetVideo(dispatch, body as IAddWidgetVideo);
+        break;
+      case WidgetTypeEnum.Blog:
+        file = newWidget.value?.image ?? '';
+        if (file) {
+          const response = await apiAddAttachment(dispatch, {files: [file]});
+
+          body = {
+            title: newWidget.value?.title,
+            content: newWidget.value?.content,
+            url: response?.data?.path,
+          };
+        } else {
+          body = {
+            title: newWidget.value?.title,
+            content: newWidget.value?.content,
+            url: newWidget.value?.url,
+          };
+        }
+
+        apiCall = apiAddWidgetBlog(dispatch, body as IAddWidgetBlog);
         break;
       case WidgetTypeEnum.Contact:
         body = {
