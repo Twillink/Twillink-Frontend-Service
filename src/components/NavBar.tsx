@@ -8,9 +8,13 @@ import PreviewController from '@/components/PreviewController';
 
 interface INavBar {
   title?: string;
+  username?: string;
 }
 
-const NavBar: React.FC<INavBar> = ({title = 'My Twillink'}) => (
+const NavBar: React.FC<INavBar> = ({
+  title = 'My Twillink',
+  username = localStorage.getItem('username'),
+}) => (
   <div className="navbar bg-none px-3 pt-0 md:pt-6">
     <div className="flex-none lg:hidden">
       <label
@@ -31,7 +35,7 @@ const NavBar: React.FC<INavBar> = ({title = 'My Twillink'}) => (
           title="Share My Link"
           iconPosition="left"
           icon={<SvgLink className="stroke-primary-content" />}
-          href="/johndoe"
+          href={`/${username}`}
           target="_blank"
         />
       </div>
@@ -53,7 +57,7 @@ const NavBar: React.FC<INavBar> = ({title = 'My Twillink'}) => (
                 title="Share My Link"
                 iconPosition="left"
                 icon={<SvgLink className="stroke-primary-content" />}
-                href="/johndoe"
+                href={`/${username}`}
                 target="_blank"
               />
             </div>

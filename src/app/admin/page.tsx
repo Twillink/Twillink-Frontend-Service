@@ -56,6 +56,7 @@ const Page = () => {
           setDataWidget([...formattedData]);
           setDataSocial([...social]);
           setDataProfile({...profile});
+          localStorage.setItem('username', String(profile.username));
         })
         .catch()
         .finally(() => {
