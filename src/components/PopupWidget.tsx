@@ -73,15 +73,15 @@ const buttons = [
     title: 'Add Map',
     action: WidgetTypeEnum.Map,
     icon: <SvgWidgetMap className="stroke-general-med" />,
-    isComingSoon: false,
-    disabled: false,
+    isComingSoon: true,
+    disabled: true,
   },
   {
     title: 'Add Webinar',
     action: WidgetTypeEnum.Webinar,
     icon: <SvgWidgetWebinar className="stroke-general-med" />,
     isComingSoon: false,
-    disabled: false,
+    disabled: true,
     isPro: true,
   },
   {
@@ -89,7 +89,7 @@ const buttons = [
     action: WidgetTypeEnum.Schedule,
     icon: <SvgWidgetSchedule className="stroke-general-med" />,
     isComingSoon: false,
-    disabled: false,
+    disabled: true,
     isPro: true,
   },
 ];

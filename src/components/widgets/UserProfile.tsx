@@ -7,7 +7,11 @@ import SvgMail from '@/assets/svgComponents/SvgMail';
 import SvgPhoneCall from '@/assets/svgComponents/SvgPhoneCall';
 import Input from '@/components/Input';
 import {IWigetProfile} from '@/libs/types/IWigetProfile';
-import {apiUpdateUserProfile, IUpdateUserProfileBody} from '@/libs/api';
+import {
+  apiAddAttachment,
+  apiUpdateUserProfile,
+  IUpdateUserProfileBody,
+} from '@/libs/api';
 import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 
 interface IUserProfile {
@@ -21,10 +25,10 @@ function UserProfile({contact, dataProfile}: IUserProfile) {
     'none' | 'businessName' | 'caption'
   >('none');
   const [businessName, setBusinessName] = useState(
-    dataProfile?.fullName ?? 'Walter White',
+    dataProfile?.fullName ? dataProfile?.fullName?.trim() : 'Walter White',
   );
   const [caption, setCaption] = useState(
-    dataProfile?.description ?? 'Chemistry Master',
+    dataProfile?.description ? dataProfile?.description : 'Chemistry Master',
   );
   const profileRef = useRef<HTMLDivElement | null>(null);
 
@@ -65,7 +69,7 @@ function UserProfile({contact, dataProfile}: IUserProfile) {
 
   const handleBlur = async () => {
     setEditingSection('none');
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 200));
     const newProfile: IUpdateUserProfileBody = {
       fullName: businessName,
       description: caption,
@@ -75,14 +79,31 @@ function UserProfile({contact, dataProfile}: IUserProfile) {
     await apiUpdateUserProfile(dispatch, newProfile);
   };
 
+  const handlePhotoChange = async (file: any) => {
+    try {
+      const response = await apiAddAttachment(dispatch, {files: [file]});
+      const body = {
+        fullName: dataProfile?.fullName ?? '',
+        description: dataProfile?.description ?? '',
+        urlBanner: dataProfile?.urlBanner ?? '',
+        urlImageProfile: response?.data?.path ?? '',
+      };
+
+      await apiUpdateUserProfile(dispatch, body);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       ref={profileRef}
       className={`w-full ${isSticky ? 'sticky top-0 left-0 right-0 p-4 shadow-md flex flex-row items-center gap-4 pt-9 bg-base-200 z-10' : 'relative flex flex-col items-center gap-4 -top-14 -mb-8'}`}>
       <div>
         <ProfileImage
-          onPhotoChange={file => console.log('Photo changed:', file)}
+          onPhotoChange={file => handlePhotoChange(file)}
           isSticky={isSticky}
+          urlImage={dataProfile?.urlImage}
         />
       </div>
       <div

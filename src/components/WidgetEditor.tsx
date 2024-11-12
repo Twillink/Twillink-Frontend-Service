@@ -28,6 +28,8 @@ import {
   apiChangeOrderWidget,
   apiChangeWidthWidget,
   apiRemoveWidget,
+  apiUpdateUserProfile,
+  IUpdateUserProfileBody,
 } from '@/libs/api';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
@@ -64,6 +66,7 @@ import Button from '@/components/Button';
 import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
 import PopupWidgetSchedule from '@/components/PopupWidgetSchedule';
 import {IWigetProfile} from '@/libs/types/IWigetProfile';
+import PopupWidgetBanner from '@/components/PopupWidgetBanner';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -253,7 +256,6 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         break;
       case WidgetTypeEnum.Image:
         file = newWidget.value?.image ?? '';
-
         if (file) {
           const response = await apiAddAttachment(dispatch, {files: [file]});
           body = {
@@ -340,6 +342,29 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
           return apiAddWidgetCarousel(dispatch, body as IAddWidgetCarousel);
         });
+        break;
+      case WidgetTypeEnum.Banner:
+        file = newWidget.value?.image ?? '';
+        if (file) {
+          const response = await apiAddAttachment(dispatch, {files: [file]});
+          body = {
+            fullName: dataProfile?.fullName,
+            description: dataProfile?.description,
+            urlImageProfile: dataProfile?.urlImage,
+            urlBanner: response?.data?.path,
+          };
+        } else {
+          body = {
+            fullName: dataProfile?.fullName,
+            description: dataProfile?.description,
+            urlImageProfile: dataProfile?.urlImage,
+            urlBanner: dataProfile?.urlBanner,
+          };
+        }
+        apiCall = apiUpdateUserProfile(
+          dispatch,
+          body as IUpdateUserProfileBody,
+        );
         break;
       case WidgetTypeEnum.Map:
         apiCall = mockApiCall();
@@ -489,6 +514,8 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       const item = dataWidget[i];
       if (item.type === WidgetTypeEnum.Contact) {
         contact = item;
+      } else if (item.type === WidgetTypeEnum.Profile) {
+        console.log('skip profile');
       } else {
         filtered.push(item);
       }
@@ -511,7 +538,10 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
             <Loader />
           ) : (
             <>
-              <ScrollHideHeader />
+              <ScrollHideHeader
+                onClickBanner={() => setPopupState(WidgetTypeEnum.Banner)}
+                urlBanner={dataProfile?.urlBanner}
+              />
               <UserProfile contact={dataContact} dataProfile={dataProfile} />
               <div className="flex flex-wrap px-6">
                 <SocialContainer
@@ -605,6 +635,15 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         onAdd={handleAdd}
         disabled={isSubmitting}
       />
+
+      <PopupWidgetBanner
+        isOpen={popupState === WidgetTypeEnum.Banner}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
       <PopupWidgetText
         isOpen={popupState === WidgetTypeEnum.Text}
         onClose={handleClosePopup}
