@@ -1,6 +1,6 @@
 'use client';
 
-import WidgetEditor from '@/components/WidgetEditor';
+import WidgetViewer from '@/components/WidgetViewer';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {
   useCallback,
@@ -85,7 +85,7 @@ const Page = () => {
             }>
             <div
               className={'mockup-browser h-full w-full bg-base-100 py-6 px-8'}>
-              <WidgetEditor
+              <WidgetViewer
                 isLoading={isLoading}
                 dataWidget={dataWidget}
                 fetchData={fetchData}
@@ -101,7 +101,7 @@ const Page = () => {
         <div className="mockup-phone h-full max-h-[756px]  w-80 md:w-96">
           <div className="camera"></div>
           <div className="display h-full">
-            <WidgetEditor
+            <WidgetViewer
               isLoading={isLoading}
               dataWidget={dataWidget}
               fetchData={fetchData}
