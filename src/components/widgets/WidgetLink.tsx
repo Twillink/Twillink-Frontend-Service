@@ -89,7 +89,7 @@ const WidgetLink: React.FC<IWidgetLink> = ({
                 src={urlThumbnail}
                 alt={text}
                 className="object-cover rounded-lg"
-                layout={'fill'}
+                fill
               />
             )}
           </div>

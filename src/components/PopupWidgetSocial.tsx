@@ -14,6 +14,7 @@ import Button from './Button';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
 import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
+import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
 
 interface IPopupWidgetSocial {
   isOpen: boolean;
@@ -23,6 +24,7 @@ interface IPopupWidgetSocial {
     value: IItemWidgetTypeValues,
   ) => Promise<boolean>;
   disabled?: boolean;
+  dataSocial: IAddWidgetSocial[];
 }
 
 interface ISocialButton {
@@ -32,35 +34,35 @@ interface ISocialButton {
 
 export const socialButtons: ISocialButton[] = [
   {
-    name: 'Instagram',
+    name: 'instagram',
     icon: SvgInstagram,
   },
   {
-    name: 'YouTube',
+    name: 'youtube',
     icon: SvgYoutube,
   },
   {
-    name: 'Telegram',
+    name: 'telegram',
     icon: SvgTelegram,
   },
   {
-    name: 'Facebook',
+    name: 'facebook',
     icon: SvgFacebook,
   },
   {
-    name: 'LinkedIn',
+    name: 'linkedin',
     icon: SvgLinkedIn,
   },
   {
-    name: 'Twitter',
+    name: 'twitter',
     icon: SvgTwitter,
   },
   {
-    name: 'Tiktok',
+    name: 'tiktok',
     icon: SvgTiktok,
   },
   {
-    name: 'Tumblr',
+    name: 'tumblr',
     icon: SvgTumblr,
   },
 ];
@@ -70,17 +72,18 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
   onClose,
   onAdd,
   disabled = false,
+  dataSocial,
 }) => {
   const formik = useFormik({
     initialValues: {
-      title: '',
-      url: '',
+      key: '',
+      value: '',
     },
     validationSchema: AddWidgetSocialSchema,
     onSubmit: async values => {
       const value = {
-        title: values.title,
-        url: values.url,
+        key: values.key,
+        value: values.value,
       };
 
       const success = await onAdd(WidgetTypeEnum.Social, value);
@@ -92,6 +95,8 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
     },
   });
 
+  const existingSocials = dataSocial.map(item => item.key);
+
   return (
     <PopupContainer title="Add Social" onClose={onClose} isOpen={isOpen}>
       <form
@@ -100,39 +105,43 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
         onSubmit={formik.handleSubmit}>
         <p className="text-general-med text-sm">Select social account</p>
         <div className="flex gap-4 justify-between flex-nowrap overflow-x-scroll">
-          {socialButtons.map(button => {
-            const Icon = button.icon;
-            return (
-              <div
-                key={button.name}
-                onClick={() => {
-                  formik.setFieldValue('title', button.name);
-                }}
-                className={`w-8 p-1 flex justify-center items-center ${formik.values.title !== button.name ? 'grayscale' : 'bg-base-200'} hover:cursor-pointer`}>
-                <Icon
-                  width={28}
-                  height={28}
-                  className={'fill-slate-500 w-full h-full'}
-                />
-                {/* <span>{button.name}</span> */}
-              </div>
-            );
-          })}
+          {socialButtons
+            .filter(s => !existingSocials.includes(s.name))
+            .map(button => {
+              const Icon = button.icon;
+              return (
+                <div
+                  key={button.name}
+                  onClick={() => {
+                    formik.setFieldValue('key', button.name);
+                  }}
+                  className={`w-8 p-1 flex justify-center items-center ${formik.values.key !== button.name ? 'grayscale' : 'bg-base-200'} hover:cursor-pointer`}>
+                  <Icon
+                    width={28}
+                    height={28}
+                    className={'fill-slate-500 w-full h-full'}
+                  />
+                  {/* <span>{button.name}</span> */}
+                </div>
+              );
+            })}
         </div>
-        {formik.touched.title && formik.errors.title ? (
-          <span className="text-red-500 text-sm">{formik.errors.title}</span>
+        {formik.touched.key && formik.errors.key ? (
+          <span className="text-red-500 text-sm">{formik.errors.key}</span>
         ) : null}
 
         <InputLabel
           type="url"
           label="URL Link"
-          name="url"
-          value={formik.values.url}
+          name="value"
+          value={formik.values.value}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           placeholder="https://www."
           error={
-            formik.touched.url && formik.errors.url ? formik.errors.url : ''
+            formik.touched.value && formik.errors.value
+              ? formik.errors.value
+              : ''
           }
         />
 

@@ -31,7 +31,7 @@ const WidgetImage: React.FC<IWidgetImage> = ({
           <Image
             src={url}
             alt={text}
-            layout={'fill'}
+            fill
             className="object-cover rounded-lg"
           />
         )}

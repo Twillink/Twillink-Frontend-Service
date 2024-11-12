@@ -7,6 +7,7 @@ import {
   IAddWidgetContact,
   IAddWidgetImage,
   IAddWidgetLink,
+  IAddWidgetSocial,
   IAddWidgetText,
   IAddWidgetVideo,
   IChangeOrderWidgetItem,
@@ -156,6 +157,15 @@ export const apiAddWidgetContact = async (
 ) => {
   const api = createApiClient(dispatch, showToasts);
   return await api.post('/api/v1/widget-contact', body);
+};
+
+export const apiAddWidgetSocial = async (
+  dispatch: AppDispatch,
+  body: IAddWidgetSocial,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/widget-sosmed', body);
 };
 
 export const apiRemoveWidget = async (

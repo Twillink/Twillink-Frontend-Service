@@ -19,6 +19,7 @@ import {
   PreviewTypeEnum,
 } from '@/libs/providers/PreviewProvider';
 import {GradientDiv} from '@/components/GradientDiv';
+import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
 
 const Page = () => {
   const dispatch = useAppDispatch();
@@ -26,7 +27,7 @@ const Page = () => {
   const isFetchingRef = useRef(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [dataWidget, setDataWidget] = useState<IItemWidgetType[]>([]);
-
+  const [dataSocial, setDataSocial] = useState<IAddWidgetSocial[]>([]);
   const {preview, isMobileScreen} = useContext(PreviewContext);
 
   const isDesktop = useMemo(
@@ -41,11 +42,11 @@ const Page = () => {
       apiGetWidgetData(dispatch, false)
         .then(response => {
           const data = response.data?.data?.widgetList;
-          // const data = response.data;
-          console.log(data, 'data widget');
+          const social = response.data?.data?.sosmed;
           const formattedData: IItemWidgetType[] = data.map(formatWidgetData);
           dispatch(setWidgetData(formattedData));
           setDataWidget([...formattedData]);
+          setDataSocial([...social]);
         })
         .catch()
         .finally(() => {
@@ -77,6 +78,7 @@ const Page = () => {
                 dataWidget={dataWidget}
                 fetchData={fetchData}
                 setDataWidget={setDataWidget}
+                dataSocial={dataSocial}
               />
             </div>
           </div>
@@ -91,6 +93,7 @@ const Page = () => {
               dataWidget={dataWidget}
               fetchData={fetchData}
               setDataWidget={setDataWidget}
+              dataSocial={dataSocial}
             />
             <div className={'sticky bg-base-100 bottom-0 py-2 z-30 '}>
               <p className={'text-sm font-medium text-center'}>

@@ -48,7 +48,7 @@ function CustomCarousel({slides}: ICustomCarousel) {
             className={cn([styles['embla__slide__img'], 'object-cover'])}
             src={url}
             alt={`image-${index}`}
-            layout={'fill'}
+            fill
           />
         </div>
       </div>

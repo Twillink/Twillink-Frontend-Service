@@ -22,6 +22,7 @@ import {
   apiAddWidgetContact,
   apiAddWidgetImage,
   apiAddWidgetLink,
+  apiAddWidgetSocial,
   apiAddWidgetText,
   apiAddWidgetVideo,
   apiChangeOrderWidget,
@@ -47,6 +48,7 @@ import {
   IAddWidgetContact,
   IAddWidgetImage,
   IAddWidgetLink,
+  IAddWidgetSocial,
   IAddWidgetText,
   IAddWidgetVideo,
   IChangeOrderWidgetItem,
@@ -65,6 +67,7 @@ import PopupWidgetSchedule from '@/components/PopupWidgetSchedule';
 interface IWidgetEditor {
   isLoading: boolean;
   dataWidget: IItemWidgetType[];
+  dataSocial: IAddWidgetSocial[];
   setDataWidget?: React.Dispatch<React.SetStateAction<IItemWidgetType[]>>;
   fetchData: (withLoading: boolean) => void;
   isEditingDisabled?: boolean;
@@ -77,6 +80,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
   dataWidget,
   setDataWidget,
   fetchData,
+  dataSocial,
   isEditingDisabled = false,
 }) => {
   const dispatch = useAppDispatch();
@@ -308,6 +312,13 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         };
         apiCall = apiAddWidgetContact(dispatch, body as IAddWidgetContact);
         break;
+      case WidgetTypeEnum.Social:
+        body = {
+          key: newWidget.value?.key,
+          value: newWidget.value?.value,
+        };
+        apiCall = apiAddWidgetSocial(dispatch, body as IAddWidgetSocial);
+        break;
       case WidgetTypeEnum.Carousel:
         const files = newWidget.value?.images ?? [];
         const apiAttachments: Promise<AxiosResponse<any, any>>[] = [];
@@ -327,7 +338,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           return apiAddWidgetCarousel(dispatch, body as IAddWidgetCarousel);
         });
         break;
-      case WidgetTypeEnum.Social:
+      case WidgetTypeEnum.Map:
         apiCall = mockApiCall();
         break;
       default:
@@ -468,21 +479,18 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     }
   };
 
-  const [dataWidgetFiltered, dataContact, dataSocial] = useMemo(() => {
+  const [dataWidgetFiltered, dataContact] = useMemo(() => {
     const filtered = [];
     let contact;
-    const social = [];
     for (let i = 0; i < dataWidget.length; i++) {
       const item = dataWidget[i];
       if (item.type === WidgetTypeEnum.Contact) {
         contact = item;
-      } else if (item.type === WidgetTypeEnum.Social) {
-        social.push(item);
       } else {
         filtered.push(item);
       }
     }
-    return [filtered, contact, social];
+    return [filtered, contact];
   }, [dataWidget]);
 
   return (
@@ -493,7 +501,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           scrollbarWidth: 'thin',
         }}>
         <div
-          className={`artboard flex flex-col ${isDesktop ? ' rounded-[50px] max-w-[200px]' : 'max-w-[428px] gap-6'} bg-primary-content h-full min-w-[300px] overflow-y-auto relative`}
+          className={`artboard flex flex-col ${isDesktop ? ' rounded-[50px] max-w-[200px]' : 'max-w-[428px]'} bg-primary-content h-full min-w-[300px] overflow-y-auto relative`}
           ref={scrollContainerRef}
           onDragOver={ev => ev.preventDefault()}>
           {isLoading ? (
@@ -639,6 +647,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         onClose={handleClosePopup}
         onAdd={handleAdd}
         disabled={isSubmitting}
+        dataSocial={dataSocial}
       />
 
       <PopupWidgetBlog
