@@ -104,7 +104,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
 
         return (
           <WidgetCarousel
-            text={values.value?.text || ''}
+            text={values.value?.caption || ''}
             url={values.value?.url || '#'}
             images={values.value?.images}
             attachmentIds={attachmentIds}

@@ -18,14 +18,14 @@ const WidgetCarousel: React.FC<IWidgetCarousel> = ({
   ...restProps
 }) => {
   return (
-    <div className="w-full mb-2" {...restProps}>
-      <div className="w-full  bg-red rounded-box space-x-2">
+    <div className="w-full mb-2 " {...restProps}>
+      <div className="w-full rounded-box space-x-2 overflow-hidden">
         <p
-          className={` hidden text-center text-xs text-ellipsis line-clamp-3 overflow-hidden font-normal w-fit ${text ? 'w-1/2' : 'w-full'} z-10 absolute bg-base-200 left-2 bottom-2 px-2 py-2 rounded-full`}>
+          className={`text-start text-sm truncate line-clamp-1 max-w-[90%] overflow-hidden font-normal w-fit ${text ? 'w-1/2' : 'w-full'} z-10 px-2 pt-2 pb-1`}>
           {text}
         </p>
 
-        <div className={'w-full'}>
+        <div className={'w-full h-full'}>
           <CustomCarousel
             slides={images ?? attachmentIds}
             attachmentIds={attachmentIds}
