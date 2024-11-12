@@ -58,7 +58,15 @@ const TwillinkPage: FC<ITwillinkPage> = async ({params}) => {
     <div data-theme="light" className="h-full bg-base-100">
       <div className="flex flex-col items-center justify-center">
         <div className="h-screen max-w-[26.75rem]">
-          <WidgetViewer dataWidget={data.dataWidget} dataSocial={[]} />
+          <WidgetViewer
+            dataWidget={data.dataWidget}
+            dataSocial={[]}
+            dataProfile={{
+              username: 'john-doe',
+              description: 'An Artist',
+              email: 'johndoe@mail.com',
+            }}
+          />
         </div>
       </div>
     </div>

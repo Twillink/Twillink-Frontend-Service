@@ -203,6 +203,7 @@ export interface IUpdateUserProfileBody {
   description: string;
   urlBanner: string;
   urlImageProfile: string;
+  phoneNumber?: string;
 }
 
 export const apiUpdateUserProfile = async (
