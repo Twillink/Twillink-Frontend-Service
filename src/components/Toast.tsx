@@ -1,8 +1,11 @@
-import React, {useContext} from 'react';
+import React, {useContext, useMemo} from 'react';
 import ButtonIcon from './ButtonIcon';
 import SvgResetField from '@/assets/svgComponents/SvgResetField';
 import {ToastType} from '@/libs/types/ToastType';
-import {PreviewContext} from '@/libs/providers/PreviewProvider';
+import {
+  PreviewContext,
+  PreviewTypeEnum,
+} from '@/libs/providers/PreviewProvider';
 
 interface IToast {
   title: string;
@@ -19,8 +22,12 @@ const Toast: React.FC<IToast> = ({
   isVisible,
   onClose,
 }) => {
-  const {isMobileScreen} = useContext(PreviewContext);
+  const {preview, isMobileScreen} = useContext(PreviewContext);
 
+  const isDesktop = useMemo(
+    () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
+    [preview, isMobileScreen],
+  );
   if (!isVisible) return null;
 
   const alertClasses = {
@@ -37,11 +44,12 @@ const Toast: React.FC<IToast> = ({
 
   return (
     <div
-      className={`toast toast-center ${isMobileScreen ? 'toast-bottom mb-[10%]' : 'toast-top'} whitespace-normal z-50`}>
+      className={`toast toast-center ${!isDesktop ? 'toast-bottom mb-[10%]' : 'toast-top'} whitespace-normal z-50`}>
       <div className="bg-white rounded-2xl w-max">
         <div
           className={`alert bg-opacity-15 p-4 ${alertClasses[type]} flex w-max`}>
-          <div className="flex items-start justify-between w-full min-w-80 max-w-[25rem]">
+          <div
+            className={`flex items-start justify-between w-full ${isDesktop ? 'min-w-80' : 'min-w-48'} max-w-[25rem]`}>
             <div className="flex flex-col gap-1">
               <div className="font-bold text-xl mr-2">{title}</div>
               <div className=" text-base">

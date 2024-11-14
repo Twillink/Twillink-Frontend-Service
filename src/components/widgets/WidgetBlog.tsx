@@ -37,7 +37,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
   useEffect(() => {
     const handleResize = () => {
       if (document) {
-        const imageDiv = document?.getElementById('image-div');
+        const imageDiv = document?.getElementById(`image-div-${url}`);
         if (imageDiv) {
           setIsDivWideEnough(imageDiv.offsetWidth >= 100);
         }
@@ -50,10 +50,11 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, [window]);
+  }, [window, document]);
+
   return (
     <div
-      className="border-base-300 border-2 rounded-2xl h-full w-full p-2 flex items-center"
+      className="border-base-300 border-2 rounded-2xl h-full w-full p-2 flex items-center relative"
       {...restProps}>
       <div className="flex justify-between items-start h-full w-full ">
         <div
@@ -63,7 +64,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
           </div>
           <div>
             <p
-              className={`text-start text-xs text-ellipsis line-clamp-3 overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'}`}>
+              className={`text-start text-xs text-ellipsis ${isDivWideEnough ? 'line-clamp-3' : 'line-clamp-2'}  overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'}`}>
               {title}
             </p>
           </div>
@@ -73,20 +74,18 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
             </Link>
           </div>
         </div>
-        {isDivWideEnough && (
-          <div
-            id={'image-div'}
-            className={`relative max-w-[50%] ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} rounded-lg overflow-hidden`}>
-            {url && (
-              <Image
-                src={url}
-                alt={title}
-                className="object-cover rounded-lg"
-                fill
-              />
-            )}
-          </div>
-        )}
+        <div
+          id={`image-div-${url}`}
+          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isDivWideEnough ? 'relative max-w-[50%]' : 'absolute w-full h-full z-[-1] top-0 left-0 bottom-0 blur-xs'} rounded-lg overflow-hidden`}>
+          {url && (
+            <Image
+              src={url}
+              alt={title}
+              className="object-cover rounded-lg"
+              fill
+            />
+          )}
+        </div>
       </div>
     </div>
   );
