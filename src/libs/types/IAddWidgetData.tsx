@@ -10,6 +10,12 @@ export interface IAddWidgetLink {
   image?: string;
 }
 
+export interface IAddWidgetMap {
+  caption: string;
+  latitude: number;
+  longitude: number;
+}
+
 export interface IAddWidgetText {
   text: string;
 }

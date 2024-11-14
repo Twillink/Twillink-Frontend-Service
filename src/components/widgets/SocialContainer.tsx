@@ -19,7 +19,6 @@ const SocialContainer: React.FC<ISocialContainer> = ({onClick, data}) => {
   return (
     <div className="flex flex-wrap justify-center max-w-[280px] mx-auto py-4 px-8 w-full gap-6">
       {data.map(item => {
-        console.log(item, 'social');
         const Icon = socialButtons.find(btn => btn.name === item?.key)?.icon;
         if (!Icon) return null;
         return (

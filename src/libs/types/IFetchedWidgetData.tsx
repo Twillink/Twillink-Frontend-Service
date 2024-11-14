@@ -46,6 +46,13 @@ export interface IFetchedWidgetBlog {
   url: string;
 }
 
+export interface IFetchedWidgetMap {
+  id: number;
+  caption: string;
+  latitude: number;
+  longitude: number;
+}
+
 export interface IFetchedWidgetData {
   id: number;
   sequence: number;
@@ -57,5 +64,6 @@ export interface IFetchedWidgetData {
   widgetContact?: IFetchedWidgetContact | null;
   widgetCarousel?: IFetchedWidgetCarousel | null;
   widgetBlog?: IFetchedWidgetBlog | null;
+  widgetMap?: IFetchedWidgetMap | null;
   width: string;
 }

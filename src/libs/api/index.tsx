@@ -7,6 +7,7 @@ import {
   IAddWidgetContact,
   IAddWidgetImage,
   IAddWidgetLink,
+  IAddWidgetMap,
   IAddWidgetSocial,
   IAddWidgetText,
   IAddWidgetVideo,
@@ -30,6 +31,17 @@ export const apiLinkCheck = async (
 ) => {
   const api = createApiClient(dispatch, showToasts);
   return await api.get(`/api/v1/link/check/${username}`);
+};
+
+export const apiGetPlaces = async (
+  dispatch: AppDispatch,
+  search: string,
+  showToasts = false,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.get(
+    `https://nominatim.openstreetmap.org/search?q=${search}&format=json`,
+  );
 };
 
 export const apiAuthCheckEmail = async (
@@ -175,6 +187,15 @@ export const apiAddWidgetSocial = async (
 ) => {
   const api = createApiClient(dispatch, showToasts);
   return await api.post('/api/v1/widget-sosmed', body);
+};
+
+export const apiAddWidgetMap = async (
+  dispatch: AppDispatch,
+  body: IAddWidgetMap,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/widget-map', body);
 };
 
 export const apiRemoveWidget = async (

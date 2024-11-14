@@ -14,6 +14,7 @@ import {
   PreviewTypeEnum,
 } from '@/libs/providers/PreviewProvider';
 import WidgetBlog from '@/components/widgets/WidgetBlog';
+import WidgetMap from '@/components/widgets/WidgetMap';
 
 interface IWidgetContainer {
   handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;
@@ -87,7 +88,6 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
           />
         );
       case WidgetTypeEnum.Blog:
-        console.log(values.value, 'from editor');
         return (
           <WidgetBlog
             title={values.value?.title || ''}
@@ -108,6 +108,15 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             url={values.value?.url || '#'}
             images={values.value?.images}
             attachmentIds={attachmentIds}
+          />
+        );
+
+      case WidgetTypeEnum.Map:
+        return (
+          <WidgetMap
+            caption={values.value?.caption || ''}
+            latitude={values.value?.latitude || 0}
+            longitude={values.value?.longitude || 0}
           />
         );
 

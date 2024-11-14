@@ -22,6 +22,7 @@ import {
   apiAddWidgetContact,
   apiAddWidgetImage,
   apiAddWidgetLink,
+  apiAddWidgetMap,
   apiAddWidgetSocial,
   apiAddWidgetText,
   apiAddWidgetVideo,
@@ -43,13 +44,13 @@ import {
 } from 'react';
 import PopupWidgetSocial from './PopupWidgetSocial';
 import PopupWidgetCarousel from './PopupWidgetCarousel';
-import mockApiCall from '@/mock/mockApiCall';
 import {
   IAddWidgetBlog,
   IAddWidgetCarousel,
   IAddWidgetContact,
   IAddWidgetImage,
   IAddWidgetLink,
+  IAddWidgetMap,
   IAddWidgetSocial,
   IAddWidgetText,
   IAddWidgetVideo,
@@ -67,6 +68,7 @@ import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
 import PopupWidgetSchedule from '@/components/PopupWidgetSchedule';
 import {IWigetProfile} from '@/libs/types/IWigetProfile';
 import PopupWidgetBanner from '@/components/PopupWidgetBanner';
+import PopupWidgetMap from '@/components/PopupWidgetMap';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -191,6 +193,9 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         break;
       case WidgetTypeEnum.Blog:
         setPopupState(WidgetTypeEnum.Blog);
+        break;
+      case WidgetTypeEnum.Map:
+        setPopupState(WidgetTypeEnum.Map);
         break;
       case WidgetTypeEnum.Schedule:
         setPopupState(WidgetTypeEnum.Schedule);
@@ -367,7 +372,12 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         );
         break;
       case WidgetTypeEnum.Map:
-        apiCall = mockApiCall();
+        body = {
+          caption: newWidget.value?.caption,
+          latitude: newWidget.value?.latitude,
+          longitude: newWidget.value?.longitude,
+        };
+        apiCall = apiAddWidgetMap(dispatch, body as IAddWidgetMap);
         break;
       default:
         return false;
@@ -599,9 +609,14 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         {isDesktop && (
           <div
             className={
-              'flex w-full flex-wrap whitespace-pre-wrap overflow-y-auto'
+              'flex w-full flex-wrap whitespace-pre-wrap overflow-y-auto scrollbar-thin'
             }
-            style={{rowGap: '0px', columnGap: '0px', scrollbarWidth: 'thin'}}>
+            style={{
+              rowGap: '0px',
+              columnGap: '0px',
+              scrollbarWidth: 'thin',
+              scrollBehavior: 'smooth',
+            }}>
             {dataWidgetFiltered
               .sort((a, b) => a.order - b.order)
               .map(widget => (
@@ -702,6 +717,14 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
       <PopupWidgetSchedule
         isOpen={popupState === WidgetTypeEnum.Schedule}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetMap
+        isOpen={popupState === WidgetTypeEnum.Map}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}

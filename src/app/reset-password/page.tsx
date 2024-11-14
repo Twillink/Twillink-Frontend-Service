@@ -5,7 +5,6 @@ import {Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import Button from '@/components/Button';
 import ErrorMessageField from '@/components/ErrorMessageField';
-import Input from '@/components/Input';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import {
   setSubmitLoading,
@@ -16,6 +15,7 @@ import {useRouter} from 'next/navigation';
 import {useEffect} from 'react';
 import {showToast} from '@/libs/store/features/toastSlice';
 import {ToastType} from '@/libs/types/ToastType';
+import {PasswordInput} from '@/components/PasswordInput';
 
 type InitialData = {
   password: string;
@@ -113,8 +113,7 @@ const ResetPasswordPage: React.FC = () => {
                       </div>
                       <div className="flex flex-col gap-6">
                         <div>
-                          <Input
-                            type="password"
+                          <PasswordInput
                             placeholder="Password"
                             name="password"
                             id="password"
@@ -131,8 +130,7 @@ const ResetPasswordPage: React.FC = () => {
                         </div>
 
                         <div>
-                          <Input
-                            type="password"
+                          <PasswordInput
                             placeholder="Confirm Password"
                             name="confirmPassword"
                             id="confirmPassword"
@@ -158,7 +156,7 @@ const ResetPasswordPage: React.FC = () => {
                             }}
                             title="Reset Password"
                             disabled={!isValid || !dirty}
-                            type="button"
+                            type="submit"
                             size="md"
                           />
                         </div>

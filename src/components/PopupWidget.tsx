@@ -73,8 +73,8 @@ const buttons = [
     title: 'Add Map',
     action: WidgetTypeEnum.Map,
     icon: <SvgWidgetMap className="stroke-general-med" />,
-    isComingSoon: true,
-    disabled: true,
+    isComingSoon: false,
+    disabled: false,
   },
   {
     title: 'Add Webinar',
