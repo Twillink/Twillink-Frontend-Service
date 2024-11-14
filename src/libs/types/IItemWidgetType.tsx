@@ -16,8 +16,8 @@ export interface IItemWidgetTypeValues {
   content?: string;
   key?: string;
   value?: string;
-  latitude?: string;
-  longitude?: string;
+  latitude?: number;
+  longitude?: number;
   widgetCarouselAttachment?: WidgetCarouselAttachment[];
 }
 

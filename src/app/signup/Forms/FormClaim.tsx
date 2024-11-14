@@ -5,7 +5,6 @@ import Button from '@/components/Button';
 import ErrorMessageField from '@/components/ErrorMessageField';
 import InputWithLabel from '@/components/InputWithLabel';
 import useDebounce from '@/libs/hooks/useDebounce';
-import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {useFormikContext} from 'formik';
 import React, {useCallback, useEffect, useState} from 'react';
 import validIcon from '@/assets/gifs/valid-green.gif';
@@ -13,6 +12,8 @@ import Image from 'next/image';
 import {testValidUsername} from '@/utils/validationTest';
 import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 import {apiLinkCheck} from '@/libs/api';
+import {handleShowToast} from '@/utils/toast';
+import {ToastType} from '@/libs/types/ToastType';
 
 interface IFormClaimValues {
   username: string;
@@ -40,12 +41,22 @@ const FormClaim: React.FC<IFormClaim> = ({onNext}) => {
       setApiError(null);
 
       try {
-        await apiLinkCheck(dispatch, username, false);
+        const response = await apiLinkCheck(dispatch, username, false);
+        console.log(response, 'response claim');
         setUsernameValid(true);
-      } catch (error: unknown) {
-        const apiError = error as ErrorApiResponseType;
+      } catch (error: any) {
+        const apiError = error;
 
-        setApiError(apiError?.data?.message);
+        handleShowToast(
+          {
+            title: 'Username is not available',
+            // message: apiError?.message || 'Something went wrong. Please retry.',
+            type: ToastType.ERROR,
+          },
+          dispatch,
+        );
+
+        setApiError(apiError?.message || 'Something went wrong. Please retry.');
         setUsernameValid(false);
       } finally {
         setChecking(false);

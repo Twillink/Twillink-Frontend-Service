@@ -20,6 +20,7 @@ import {useEffect} from 'react';
 import ButtonIcon from '@/components/ButtonIcon';
 import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
 import {handleShowToast} from '@/utils/toast';
+import {PasswordInput} from '@/components/PasswordInput';
 
 type InitialData = {
   email: string;
@@ -143,8 +144,7 @@ const LoginPage: React.FC = () => {
                         </div>
 
                         <div>
-                          <Input
-                            type="password"
+                          <PasswordInput
                             placeholder="Your Password"
                             name="password"
                             id="password"

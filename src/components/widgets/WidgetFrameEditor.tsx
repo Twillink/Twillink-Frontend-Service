@@ -36,10 +36,10 @@ const WidgetFrameEditor: React.FC<IWidgetFrameEditor> = ({
 }) => {
   return (
     <div className="relative w-full h-full group rounded-2xl">
-      <div className="absolute inset-0 border-2 border-transparent group-hover:border-primary rounded-2xl"></div>
-      <div className="absolute left-[-2px] top-1/2 transform -translate-y-1/2 h-6 w-1.5 bg-transparent group-hover:bg-base-100 group-hover:border-primary group-hover:border-2 rounded-full"></div>
-      <div className="absolute right-[-2px] top-1/2 transform -translate-y-1/2 h-6 w-1.5 bg-transparent group-hover:bg-base-100 group-hover:border-primary group-hover:border-2 rounded-full"></div>
-      <div className="h-full">{children}</div>
+      <div className="absolute left-[-2px] right-[-2px] top-[-2px] bottom-[-2px] inset-0 border-2 border-transparent z-[-1]  group-hover:border-primary rounded-2xl"></div>
+      <div className="absolute left-[-4px] top-1/2 transform -translate-y-1/2 h-6 w-1.5 bg-transparent group-hover:bg-base-100 group-hover:border-primary group-hover:border-2 rounded-full"></div>
+      <div className="absolute right-[-4px] top-1/2 transform -translate-y-1/2 h-6 w-1.5 bg-transparent group-hover:bg-base-100 group-hover:border-primary group-hover:border-2 rounded-full"></div>
+      <div className="h-full z-[10]">{children}</div>
       {isHovered && (
         <div className="absolute flex items-center justify-center -top-1 -right-1 w-max rounded-full p-[6px] bg-primary">
           {isMenuVisible ? (

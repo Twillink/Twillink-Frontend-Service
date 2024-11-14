@@ -13,6 +13,7 @@ import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {IGeneralSubmit} from '@/libs/types/IGeneralSubmit';
 import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 import {apiAuthCheckEmail} from '@/libs/api';
+import {PasswordInput} from '@/components/PasswordInput';
 
 interface IFormEmailValues {
   email: string;
@@ -112,8 +113,7 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
       </div>
 
       <div>
-        <Input
-          type="password"
+        <PasswordInput
           placeholder="Your Password"
           name="password"
           id="password"

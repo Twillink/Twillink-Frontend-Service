@@ -1,11 +1,16 @@
-import AddWidgetImageSchema from '@/libs/schema/Widget/WidgetImage.schema';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {useFormik} from 'formik';
-import React from 'react';
+import React, {useEffect, useMemo} from 'react';
 import Button from './Button';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
 import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
+import dynamic from 'next/dynamic';
+import {Search} from 'lucide-react';
+import useDebounce from '@/libs/hooks/useDebounce';
+import {apiGetPlaces} from '@/libs/api';
+import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import AddWidgetMapSchema from '@/libs/schema/Widget/WidgetMap.schema';
 
 interface IPopupWidgetImage {
   isOpen: boolean;
@@ -25,27 +30,60 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
   onAdd,
   disabled = false,
 }) => {
+  const Map = useMemo(
+    () =>
+      dynamic(() => import('@/components/Map'), {
+        loading: () => <p>loading . . .</p>,
+        ssr: false,
+      }),
+    [],
+  );
+
+  const [showOptions, setShowOptions] = React.useState(false);
+  const [options, setOptions] = React.useState([]);
+  const dispatch = useAppDispatch();
+
   const formik = useFormik({
     initialValues: {
       caption: '',
       url: '',
       selectedImage: '',
       image: '',
+      search: '',
+      latitude: -6.242284,
+      longitude: 106.821967,
     },
-    validationSchema: AddWidgetImageSchema,
+    validationSchema: AddWidgetMapSchema,
     onSubmit: async values => {
       const value = {
         caption: values.caption,
-        url: values.url,
-        image: values.image,
+        latitude: values.latitude,
+        longitude: values.longitude,
       };
-      const success = await onAdd(WidgetTypeEnum.Image, value);
+      const success = await onAdd(WidgetTypeEnum.Map, value);
       if (success) {
         formik.resetForm();
         onClose();
       }
     },
   });
+
+  const debouncedSearch = useDebounce(formik.values?.search, 1000);
+
+  useEffect(() => {
+    const getLocation = async () => {
+      const {data} = await apiGetPlaces(dispatch, debouncedSearch);
+      const newOptions = data?.map((item: any) => ({
+        label: item.display_name,
+        value: item?.display_name,
+        latitude: item?.lat,
+        longitude: item?.lon,
+      }));
+      setOptions(newOptions);
+    };
+
+    getLocation();
+  }, [debouncedSearch]);
 
   return (
     <PopupContainer
@@ -65,9 +103,6 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             placeholder="Your caption image"
-            showLength
-            showOptional
-            maxLength={100}
             error={
               formik.touched.caption && formik.errors.caption
                 ? formik.errors.caption
@@ -76,22 +111,60 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
           />
         </div>
 
-        {/*<div className="mb-4">*/}
-        {/*  <MapContainer*/}
-        {/*    center={[51.505, -0.09]}*/}
-        {/*    zoom={13}*/}
-        {/*    className="h-48 w-full rounded-lg">*/}
-        {/*    <TileLayer*/}
-        {/*      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"*/}
-        {/*      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'*/}
-        {/*    />*/}
-        {/*    <Marker position={[51.505, -0.09]}>*/}
-        {/*      <Popup>*/}
-        {/*        A pretty CSS3 popup. <br /> Easily customizable.*/}
-        {/*      </Popup>*/}
-        {/*    </Marker>*/}
-        {/*  </MapContainer>*/}
-        {/*</div>*/}
+        <div className={'relative'}>
+          <InputLabel
+            name="search"
+            label={'Search'}
+            value={formik.values.search}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            onFocus={() => setShowOptions(true)}
+            placeholder="Input your location"
+            className=" w-full border border-gray-300 rounded-lg p-2 pr-10 text-sm"
+            error={
+              (formik.touched.latitude && formik.errors.latitude
+                ? formik.errors.latitude
+                : '') ||
+              (formik.touched.longitude && formik.errors.longitude)
+                ? formik.errors.longitude
+                : ''
+            }
+          />
+          <div className="btn btn-ghost btn-sm text-primary absolute right-0 top-1/3  h-fit px-3 py-2  hover:bg-transparent">
+            <Search className="h-5 w-5 opacity-50 hover:opacity-100 transition-opacity" />
+          </div>
+          {showOptions && (
+            <ul className="absolute z-30 w-full bg-white border border-gray-300 rounded-lg mt-2  max-h-40 overflow-y-auto ">
+              {options
+                .filter((option: any) =>
+                  option?.label
+                    ?.toLowerCase()
+                    .includes(debouncedSearch.toLowerCase()),
+                )
+                .map((option: any, index) => (
+                  <li
+                    key={index}
+                    className="p-2 text-sm shadow text-primary hover:bg-gray-100 cursor-pointer"
+                    onClick={() => {
+                      formik.setFieldValue('search', option?.label);
+                      formik.setFieldValue('latitude', option?.latitude);
+                      formik.setFieldValue('longitude', option?.longitude);
+                      setShowOptions(false);
+                    }}>
+                    {option?.label}
+                  </li>
+                ))}
+            </ul>
+          )}
+        </div>
+
+        <div className=" mb-4 z-10 h-48 w-full rounded-lg">
+          <Map
+            position={[formik.values?.latitude, formik.values?.longitude]}
+            zoom={20}
+            popup={'Selected Location'}
+          />
+        </div>
 
         <div className="flex justify-end">
           <Button

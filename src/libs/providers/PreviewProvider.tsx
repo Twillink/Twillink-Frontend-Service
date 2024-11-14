@@ -93,8 +93,6 @@ export const PreviewProvider: React.FC<PreviewProviderProps> = ({children}) => {
     return null;
   }
 
-  console.log(isMobileScreen, preview, 'Preview Controller');
-
   return (
     <PreviewContext.Provider value={{preview, changePreview, isMobileScreen}}>
       {children}
