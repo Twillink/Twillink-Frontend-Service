@@ -50,6 +50,11 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
     },
   });
 
+  const handleResetVideo = () => {
+    formik.setFieldValue('selectedVideo', null);
+    formik.setFieldValue('video', null);
+  };
+
   return (
     <PopupContainer
       title="Add Video"
@@ -121,6 +126,7 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
                 }
               }}
               reset={formik.values.selectedVideo === null}
+              onReset={handleResetVideo}
               error={
                 formik.touched.selectedVideo && formik.errors.selectedVideo
                   ? formik.errors.selectedVideo

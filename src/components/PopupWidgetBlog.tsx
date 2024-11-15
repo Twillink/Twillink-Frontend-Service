@@ -46,6 +46,11 @@ const PopupWidgetBlog: React.FC<IPopupWidgetBlog> = ({
     },
   });
 
+  const handleResetImage = () => {
+    formik.setFieldValue('selectedImage', null);
+    formik.setFieldValue('image', null);
+  };
+
   return (
     <PopupContainer
       title="Add Blog Content"
@@ -71,12 +76,14 @@ const PopupWidgetBlog: React.FC<IPopupWidgetBlog> = ({
             }
           }}
           reset={formik.values.selectedImage === null}
+          onReset={handleResetImage}
+          error={
+            formik.touched.selectedImage && formik.errors.selectedImage
+              ? formik.errors.selectedImage
+              : ''
+          }
         />
-        {formik.touched.selectedImage && formik.errors.selectedImage ? (
-          <span className="text-red-500 text-sm">
-            {formik.errors.selectedImage}
-          </span>
-        ) : null}
+
         <InputLabel
           label="Blog Title"
           name="title"

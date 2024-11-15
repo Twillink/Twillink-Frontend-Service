@@ -1,4 +1,5 @@
 import React from 'react';
+import SvgWidgetDelete from '@/assets/svgComponents/SvgWidgetDelete';
 
 interface IVideoSelectorWithSource
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -9,6 +10,7 @@ interface IVideoSelectorWithSource
   name: string;
   label?: string;
   error?: string;
+  onReset?: () => void;
 }
 
 const VideoSelectorWithSource: React.FC<IVideoSelectorWithSource> = ({
@@ -18,6 +20,7 @@ const VideoSelectorWithSource: React.FC<IVideoSelectorWithSource> = ({
   video,
   error,
   label,
+  onReset,
   ...restProps
 }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +30,14 @@ const VideoSelectorWithSource: React.FC<IVideoSelectorWithSource> = ({
   };
 
   return (
-    <div className="h-[120px] p-[6px] w-full min-w-60">
+    <div className="h-[120px] p-[6px] w-full min-w-60 relative">
+      {video && onReset && (
+        <button
+          onClick={onReset}
+          className="absolute -top-1 -right-1 p-2 bg-primary rounded-full z-30">
+          <SvgWidgetDelete height={16} className="stroke-primary-content" />
+        </button>
+      )}
       <label htmlFor={name ?? 'video-selector'}>
         <div className="h-full cursor-pointer flex flex-col items-center w-full border-2 border-contras-low rounded-2xl bg-contras-med">
           {video ? (

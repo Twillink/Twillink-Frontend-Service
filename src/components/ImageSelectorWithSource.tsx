@@ -1,6 +1,7 @@
 import SvgPlus from '@/assets/svgComponents/SvgPlus';
 import Image from 'next/image';
 import React from 'react';
+import SvgWidgetDelete from '@/assets/svgComponents/SvgWidgetDelete';
 
 interface IImageSelectorWithSource
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -11,6 +12,7 @@ interface IImageSelectorWithSource
   name: string;
   label?: string;
   error?: string;
+  onReset?: () => void;
 }
 
 const ImageSelectorWithSource: React.FC<IImageSelectorWithSource> = ({
@@ -20,6 +22,7 @@ const ImageSelectorWithSource: React.FC<IImageSelectorWithSource> = ({
   image,
   error,
   label,
+  onReset,
   ...restProps
 }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,11 +40,18 @@ const ImageSelectorWithSource: React.FC<IImageSelectorWithSource> = ({
   };
 
   return (
-    <div className="h-[120px] p-[6px] w-full min-w-60">
+    <div className="h-[120px] p-[6px] w-full min-w-60 relative">
+      {image && onReset && (
+        <button
+          onClick={onReset}
+          className="absolute -top-1 -right-1 p-2 bg-primary rounded-full z-30">
+          <SvgWidgetDelete height={16} className="stroke-primary-content" />
+        </button>
+      )}
       <label htmlFor={name ?? 'image-selector'}>
         <div className="h-full cursor-pointer flex flex-col items-center w-full border-2 border-contras-low rounded-2xl bg-contras-med">
           {image ? (
-            <div className="w-full relative h-full">
+            <div className="w-full relative h-full ">
               <Image
                 src={image as string}
                 alt="Selected"
