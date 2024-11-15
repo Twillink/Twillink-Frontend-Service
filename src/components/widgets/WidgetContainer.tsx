@@ -54,9 +54,9 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             text={values.value?.title || ''}
             image={values.value?.image}
             urlThumbnail={values.value?.urlThumbnail}
-            onClick={() => {
-              window.open(values.value?.url || '#', '_blank');
-            }}
+            // onClick={() => {
+            //   window.open(values.value?.url || '#', '_blank');
+            // }}
           />
         );
       case WidgetTypeEnum.Text:
@@ -140,22 +140,6 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
     return values.width;
   }, [values?.width, isDesktop]);
 
-  // if (values.type === WidgetTypeEnum.Carousel) {
-  //   const attachmentIds =
-  //     values.value?.widgetCarouselAttachment?.map(data => data.attachmentId) ||
-  //     [];
-  //   console.log(attachmentIds, 'from editor');
-  //
-  //   return (
-  //     <WidgetCarousel
-  //       text={values.value?.text || ''}
-  //       url={values.value?.url || '#'}
-  //       images={values.value?.images}
-  //       attachmentIds={attachmentIds}
-  //     />
-  //   );
-  // }
-
   return (
     <div
       id={values.idEditor}
@@ -163,7 +147,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       onDragStart={handleDrag}
       onDrop={handleDrop}
       onDragOver={ev => ev.preventDefault()}
-      className={`relative flex z-[2] align-middle items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}
+      className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}
       style={{width: widgetWidth}}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}>

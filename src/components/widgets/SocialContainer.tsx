@@ -17,7 +17,7 @@ const SocialContainer: React.FC<ISocialContainer> = ({onClick, data}) => {
   const disableAddButton = data.length >= socialButtons.length;
 
   return (
-    <div className="flex flex-wrap justify-center max-w-[280px] mx-auto py-4 px-8 w-full gap-6">
+    <div className="flex flex-wrap justify-center max-w-[280px] mx-auto pt-2 pb-5 px-8 w-full gap-6">
       {data.map(item => {
         const Icon = socialButtons.find(btn => btn.name === item?.key)?.icon;
         if (!Icon) return null;

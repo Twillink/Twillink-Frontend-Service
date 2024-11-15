@@ -18,7 +18,9 @@ const WidgetCarousel: React.FC<IWidgetCarousel> = ({
   ...restProps
 }) => {
   return (
-    <div className="w-full mb-2 " {...restProps}>
+    <div
+      className="border-base-300 border-2 rounded-2xl h-full bg-primary-content w-full mb-2 "
+      {...restProps}>
       <div className="w-full rounded-box space-x-2 overflow-hidden">
         <p
           className={`text-start text-sm truncate line-clamp-1 max-w-[90%] overflow-hidden font-normal w-fit ${text ? 'w-1/2' : 'w-full'} z-10 px-2 pt-2 pb-1`}>

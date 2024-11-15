@@ -101,7 +101,8 @@ const PopupWidget: React.FC<IPopupWidget> = ({
 }) => {
   return (
     <PopupContainer title="Add Block" onClose={onClose} isOpen={isOpen}>
-      <div className="bg-contras-med stroke-contras-low rounded-xl p-4">
+      <div
+        className={`${isOpen ? 'visible' : 'hidden'} bg-contras-med stroke-contras-low rounded-xl p-4`}>
         <div className="grid grid-cols-2 gap-4">
           {buttons.map((button, index) => (
             <ButtonAddBlock

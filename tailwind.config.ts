@@ -25,6 +25,12 @@ const config: Config = {
       '4xl': '4rem',
     },
     extend: {
+      gridTemplateRows: {
+        'auto-fit': 'repeat(auto-fit, minmax(200px, 1fr))',
+      },
+      gridTemplateColumns: {
+        'auto-fit': 'repeat(auto-fit, minmax(300px, 1fr))',
+      },
       colors: {
         'contras-high': 'var(--contras-high)',
         'contras-med': 'var(--contras-med)',

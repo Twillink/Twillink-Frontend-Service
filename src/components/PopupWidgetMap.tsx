@@ -30,6 +30,20 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
   onAdd,
   disabled = false,
 }) => {
+  const [location, setLocation] = React.useState({
+    latitude: 0,
+    longitude: 0,
+  });
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(position => {
+      setLocation({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+      });
+    });
+  }, []);
+
   const Map = useMemo(
     () =>
       dynamic(() => import('@/components/Map'), {
@@ -50,9 +64,10 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
       selectedImage: '',
       image: '',
       search: '',
-      latitude: -6.242284,
-      longitude: 106.821967,
+      latitude: location.latitude,
+      longitude: location.longitude,
     },
+    enableReinitialize: true,
     validationSchema: AddWidgetMapSchema,
     onSubmit: async values => {
       const value = {
@@ -85,11 +100,21 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
     getLocation();
   }, [debouncedSearch]);
 
+  const handleCLose = () => {
+    formik.resetForm();
+    onClose();
+  };
+
+  const handleBack = () => {
+    formik.resetForm();
+    onBack();
+  };
+
   return (
     <PopupContainer
       title="Add Image"
-      onClose={onClose}
-      onBack={onBack}
+      onClose={handleCLose}
+      onBack={handleBack}
       isOpen={isOpen}>
       <form
         method="dialog"
@@ -158,11 +183,11 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
           )}
         </div>
 
-        <div className=" mb-4 z-10 h-48 w-full rounded-lg">
+        <div className=" mb-4 z-10 h-36 w-full rounded-2xl overflow-hidden">
           <Map
             position={[formik.values?.latitude, formik.values?.longitude]}
             zoom={20}
-            popup={'Selected Location'}
+            popup={'Location'}
           />
         </div>
 

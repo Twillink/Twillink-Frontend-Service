@@ -171,7 +171,11 @@ function UserProfile({contact, dataProfile}: IUserProfile) {
                 key={contact?.value?.phoneNumber}
                 className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
-                  <SvgPhoneCall height={20} width={20} className="text-white" />
+                  <SvgPhoneCall
+                    height={20}
+                    width={20}
+                    className="stroke-primary-content"
+                  />
                 </div>
                 <p>Call</p>
               </button>

@@ -525,7 +525,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       if (item.type === WidgetTypeEnum.Contact) {
         contact = item;
       } else if (item.type === WidgetTypeEnum.Profile) {
-        console.log('skip profile');
+        // console.log('skip profile');
       } else {
         filtered.push(item);
       }
@@ -541,7 +541,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           scrollbarWidth: 'thin',
         }}>
         <div
-          className={`artboard flex flex-col ${isDesktop ? ' rounded-[50px] max-w-[200px]' : 'max-w-[428px]'} bg-primary-content h-full min-w-[300px] overflow-y-auto relative`}
+          className={`artboard flex flex-col ${isDesktop ? 'rounded-[50px] max-w-[200px]' : 'max-w-[428px]'} bg-primary-content h-full min-w-[300px] overflow-y-auto relative`}
           ref={scrollContainerRef}
           onDragOver={ev => ev.preventDefault()}>
           {isLoading ? (
@@ -553,7 +553,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
                 urlBanner={dataProfile?.urlBanner}
               />
               <UserProfile contact={dataContact} dataProfile={dataProfile} />
-              <div className="flex flex-wrap px-6">
+              <div className={` flex flex-wrap px-5`}>
                 <SocialContainer
                   onClick={() => setPopupState(WidgetTypeEnum.Social)}
                   data={dataSocial}
@@ -609,7 +609,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         {isDesktop && (
           <div
             className={
-              'flex w-full flex-wrap whitespace-pre-wrap overflow-y-auto scrollbar-thin'
+              'flex flex-wrap w-full overflow-y-auto max-h-fit scrollbar-thin'
             }
             style={{
               rowGap: '0px',

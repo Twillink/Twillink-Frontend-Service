@@ -54,19 +54,19 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
 
   return (
     <div
-      className="border-base-300 border-2 rounded-2xl h-full w-full p-2 flex items-center relative"
+      className="border-base-300 border-2 bg-primary-content rounded-2xl h-full w-full p-2 flex items-center relative"
       {...restProps}>
       <div className="flex justify-between items-start h-full w-full ">
         <div
           className={'flex flex-col justify-between items-start h-full gap-2'}>
           <div>
-            <SvgGlobe width={32} height={32} />
-          </div>
-          <div>
-            <p
-              className={`text-start text-xs text-ellipsis ${isDivWideEnough ? 'line-clamp-3' : 'line-clamp-2'}  overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'}`}>
-              {title}
-            </p>
+            <SvgGlobe width={32} height={32} className={'stroke-base-300'} />
+            <div>
+              <p
+                className={`text-start text-xs mt-1 text-ellipsis ${isDivWideEnough ? 'line-clamp-3' : 'line-clamp-2'}  overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'}`}>
+                {title}
+              </p>
+            </div>
           </div>
           <div>
             <Link href={url} passHref target={'_blank'}>
@@ -76,7 +76,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
         </div>
         <div
           id={`image-div-${url}`}
-          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isDivWideEnough ? 'relative max-w-[50%]' : 'absolute w-full h-full z-[-1] top-0 left-0 bottom-0 blur-xs'} rounded-lg overflow-hidden`}>
+          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isDivWideEnough ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
           {url && (
             <Image
               src={url}
