@@ -53,6 +53,18 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
     [formik.values.selectedImages.length],
   );
 
+  const handleResetImage = (index: number) => {
+    const array = formik.values.selectedImages ?? [];
+    const arrayImages = formik.values.images ?? [];
+    if (index > -1) {
+      array.splice(index, 1);
+      arrayImages.splice(index, 1);
+    }
+
+    formik.setFieldValue(`selectedImages`, array);
+    formik.setFieldValue(`images`, arrayImages);
+  };
+
   return (
     <PopupContainer
       title="Add Carousel"
@@ -77,7 +89,9 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
           }
         />
 
-        <div className="overflow-x-scroll flex gap-2">
+        <div
+          className="overflow-x-scroll flex pt-1 gap-2"
+          style={{scrollbarWidth: 'none'}}>
           {formik.values.selectedImages.map((item, index) => (
             <div key={index} className="w-full h-full">
               <ImageSelectorWithSource
@@ -97,6 +111,7 @@ const PopupWidgetCarousel: React.FC<IPopupWidgetCarousel> = ({
                   }
                 }}
                 className="hidden"
+                onReset={() => handleResetImage(index)}
               />
             </div>
           ))}
