@@ -13,6 +13,7 @@ import {
   IUpdateUserProfileBody,
 } from '@/libs/api';
 import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import PopupProfile from '@/components/Popup/PopupProfile';
 
 interface IUserProfile {
   contact?: IItemWidgetType;
@@ -30,6 +31,8 @@ function UserProfile({contact, dataProfile}: IUserProfile) {
   const [caption, setCaption] = useState(
     dataProfile?.description ? dataProfile?.description : 'Chemistry Master',
   );
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const profileRef = useRef<HTMLDivElement | null>(null);
 
   const dispatch = useAppDispatch();
@@ -51,6 +54,18 @@ function UserProfile({contact, dataProfile}: IUserProfile) {
       };
     }
   }, [profileRef]);
+
+  const handleClosePopup = () => {
+    setIsOpen(false);
+  };
+
+  const handleBack = () => {
+    setIsOpen(false);
+  };
+
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
 
   const handleEditClick = (section: 'businessName' | 'caption') => {
     setEditingSection(section);
@@ -155,6 +170,7 @@ function UserProfile({contact, dataProfile}: IUserProfile) {
             {contact?.value?.email && (
               <button
                 key={contact?.value?.email}
+                onClick={handleOpen}
                 className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
                   <SvgMail
@@ -169,6 +185,7 @@ function UserProfile({contact, dataProfile}: IUserProfile) {
             {contact?.value?.phoneNumber && (
               <button
                 key={contact?.value?.phoneNumber}
+                onClick={handleOpen}
                 className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
                   <SvgPhoneCall
@@ -183,6 +200,12 @@ function UserProfile({contact, dataProfile}: IUserProfile) {
           </>
         )}
       </div>
+      <PopupProfile
+        isOpen={isOpen}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        dataContact={contact}
+      />
     </div>
   );
 }

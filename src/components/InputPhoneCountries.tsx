@@ -26,6 +26,7 @@ const InputPhoneCountries: React.FC<IInputLabel> = ({
   label,
   options,
   error,
+  readOnly,
   ...rest
 }) => {
   const currentCountryCode =
@@ -66,6 +67,7 @@ const InputPhoneCountries: React.FC<IInputLabel> = ({
           <select
             className="h-full min-w-20 cursor-pointer flex items-center rounded-l-lg bg-contras-low text-primary border-r-2 border-general-low outline-none"
             value={selectedCountryValue}
+            disabled={readOnly}
             onChange={handleCountryCodeChange}>
             {options.map((option, index) => (
               <option
@@ -84,6 +86,7 @@ const InputPhoneCountries: React.FC<IInputLabel> = ({
           onChange={handleInputChange}
           onBlur={onBlur}
           autoComplete={autoComplete}
+          readOnly={readOnly}
           {...rest}
         />
       </div>

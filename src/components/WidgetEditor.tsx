@@ -643,6 +643,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         onClose={handleClosePopup}
         onAddAction={handleAddAction}
       />
+
       <PopupWidgetLink
         isOpen={popupState === WidgetTypeEnum.Link}
         onClose={handleClosePopup}
@@ -666,6 +667,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         onAdd={handleAdd}
         disabled={isSubmitting}
       />
+
       <PopupWidgetImage
         isOpen={popupState === WidgetTypeEnum.Image}
         onClose={handleClosePopup}

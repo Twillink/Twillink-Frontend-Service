@@ -53,7 +53,7 @@ const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
       isOpen={isOpen}>
       <form
         method="dialog"
-        className="modal-backdrop flex flex-col gap-5"
+        className={`${isOpen ? 'visible' : 'hidden'} modal-backdrop flex flex-col gap-5`}
         onSubmit={formik.handleSubmit}>
         <InputLabel
           label="Link Title"
@@ -71,7 +71,6 @@ const PopupWidgetLink: React.FC<IPopupWidgetLink> = ({
           }
         />
         <InputLabel
-          type="url"
           name="url"
           label="URL Link"
           value={formik.values.url}
