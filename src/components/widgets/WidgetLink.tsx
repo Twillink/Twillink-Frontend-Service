@@ -70,7 +70,10 @@ const WidgetLink: React.FC<IWidgetLink> = ({
             </div>
           </div>
           <div>
-            <Link href={url} passHref target={'_blank'}>
+            <Link
+              href={url.includes('http') ? url : `https://${url}`}
+              passHref
+              target={'_blank'}>
               <Button className={'z-30'} title={'Visit Link'} size={'xs'} />
             </Link>
           </div>

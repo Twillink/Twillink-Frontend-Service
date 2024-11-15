@@ -101,7 +101,7 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
     <PopupContainer title="Add Social" onClose={onClose} isOpen={isOpen}>
       <form
         method="dialog"
-        className="modal-backdrop flex flex-col gap-5"
+        className={`${isOpen ? 'visible' : 'hidden'} modal-backdrop flex flex-col gap-5`}
         onSubmit={formik.handleSubmit}>
         <p className="text-general-med text-sm">Select social account</p>
         <div className="flex gap-4 justify-between flex-nowrap overflow-x-scroll">

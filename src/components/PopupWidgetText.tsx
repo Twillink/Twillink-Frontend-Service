@@ -49,7 +49,7 @@ const PopupWidgetText: React.FC<IPopupWidgetText> = ({
       isOpen={isOpen}>
       <form
         method="dialog"
-        className="modal-backdrop flex flex-col gap-5"
+        className={`${isOpen ? 'visible' : 'hidden'} modal-backdrop flex flex-col gap-5`}
         onSubmit={formik.handleSubmit}>
         <TextAreaLabel
           label="Text"

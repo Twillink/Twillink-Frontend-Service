@@ -1,37 +1,28 @@
 import SvgMail from '@/assets/svgComponents/SvgMail';
 import AddWidgetContactSchema from '@/libs/schema/Widget/WidgetContact.schema';
-import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {useFormik} from 'formik';
 import React, {useMemo} from 'react';
-import Button from './Button';
-import InputLabelWithIcon from './InputLabelWithIcon';
-import InputPhoneCountries from './InputPhoneCountries';
-import PopupContainer from './PopupContainer';
-import {
-  IItemWidgetType,
-  IItemWidgetTypeValues,
-} from '@/libs/types/IItemWidgetType';
+import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {useAppSelector} from '@/libs/hooks/useReduxHook';
 import {RootState} from '@/libs/store/store';
 import {mappingCountryToDialOptions} from '@/utils/mappingCountryToDialOptions';
+import PopupContainer from '@/components/PopupContainer';
+import InputLabelWithIcon from '@/components/InputLabelWithIcon';
+import InputPhoneCountries from '@/components/InputPhoneCountries';
+import Button from '@/components/Button';
 
 interface IPopupWidgetContact {
   isOpen: boolean;
   onClose: () => void;
   onBack: () => void;
-  onAdd: (
-    type: WidgetTypeEnum,
-    value: IItemWidgetTypeValues,
-  ) => Promise<boolean>;
+
   disabled?: boolean;
   dataContact?: IItemWidgetType;
 }
 
-const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
+const PopupProfile: React.FC<IPopupWidgetContact> = ({
   isOpen,
   onClose,
-  onBack,
-  onAdd,
   disabled = false,
   dataContact,
 }) => {
@@ -44,17 +35,9 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
     },
     enableReinitialize: true,
     validationSchema: AddWidgetContactSchema,
-    onSubmit: async values => {
-      const value = {
-        email: values.email,
-        phoneNumber: values.phoneNumber,
-      };
-      const success = await onAdd(WidgetTypeEnum.Contact, value);
-
-      if (success) {
-        formik.resetForm();
-        onClose();
-      }
+    onSubmit: async () => {
+      formik.resetForm();
+      onClose();
     },
   });
 
@@ -66,12 +49,13 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
     );
   }, [formik.values, formik.errors, disabled]);
 
+  const handleCLose = () => {
+    formik.resetForm();
+    onClose();
+  };
+
   return (
-    <PopupContainer
-      title="Add Contact"
-      onClose={onClose}
-      onBack={onBack}
-      isOpen={isOpen}>
+    <PopupContainer title="Contact" onClose={handleCLose} isOpen={isOpen}>
       <form
         method="dialog"
         className={`${isOpen ? 'visible' : 'hidden'} modal-backdrop flex flex-col gap-5`}
@@ -88,6 +72,7 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           placeholder="my email"
+          readOnly={true}
           error={
             formik.touched.email && formik.errors.email
               ? formik.errors.email
@@ -104,6 +89,7 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
           onBlur={formik.handleBlur}
           placeholder="87111122222"
           autoComplete={'phone-number'}
+          readOnly={true}
           error={
             formik.touched.phoneNumber && formik.errors.phoneNumber
               ? formik.errors.phoneNumber
@@ -113,10 +99,11 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
 
         <div className="flex justify-end">
           <Button
-            type="submit"
-            className="w-max"
-            title="Add"
+            type="button"
+            className="btn-outline text-primary w-max"
+            title="Close"
             disabled={disabledSubmit}
+            onClick={handleCLose}
           />
         </div>
       </form>
@@ -124,4 +111,4 @@ const PopupWidgetContact: React.FC<IPopupWidgetContact> = ({
   );
 };
 
-export default PopupWidgetContact;
+export default PopupProfile;
