@@ -20,7 +20,7 @@ const WidgetImage: React.FC<IWidgetImage> = ({
   return (
     <Link
       href={url}
-      className="border-base-300 border-2 rounded-2xl h-full w-full flex items-center "
+      className="border-base-300 bg-primary-content border-2 rounded-2xl h-full w-full flex items-center "
       {...restProps}>
       <div className="flex justify-between items-center w-full gap-2 h-full rounded-2xl overflow-hidden relative">
         <p

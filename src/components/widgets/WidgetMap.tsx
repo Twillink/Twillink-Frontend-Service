@@ -26,9 +26,16 @@ const WidgetMap: React.FC<IWidgetMap> = ({
 
   return (
     <div
-      className="border-base-300 border-2 rounded-2xl h-full w-full flex items-center "
+      className="border-base-300 bg-primary-content border-2 rounded-2xl h-full w-full flex items-center relative"
       {...restProps}>
-      <div className="flex justify-between items-center w-full gap-2 h-full rounded-2xl overflow-hidden relative">
+      <div
+        className="flex justify-between items-center w-full gap-2 h-full rounded-2xl overflow-hidden relative"
+        onClick={() =>
+          window.open(
+            `https://www.openstreetmap.org/#map=${13}/${latitude}/${longitude}`,
+            '_blank',
+          )
+        }>
         <p
           className={`hidden text-center text-xs text-ellipsis line-clamp-3 overflow-hidden font-normal w-fit  z-[3] absolute bg-base-200 left-2 right-2 bottom-2 px-2 py-1 rounded-lg`}>
           {caption}
@@ -41,6 +48,7 @@ const WidgetMap: React.FC<IWidgetMap> = ({
           />
         )}
       </div>
+      {/*</Link>*/}
     </div>
   );
 };

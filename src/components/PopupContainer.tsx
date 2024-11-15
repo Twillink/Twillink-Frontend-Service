@@ -20,8 +20,8 @@ const PopupContainer: React.FC<IPopupContainer> = ({
 }) => {
   return (
     <dialog className={`modal ${isOpen ? 'modal-open' : ''}`} open={isOpen}>
-      <div className="flex flex-col modal-box w-full max-w-[400px] bg-contras-high shadow-[rgba(59,63,81,0.12)_0px_8px_16px_0px] p-4 gap-5 rounded-3xl">
-        <div className="flex flex-row justify-between items-center">
+      <div className="flex flex-col modal-box w-full max-w-[400px] bg-contras-high shadow-[rgba(59,63,81,0.12)_0px_8px_16px_0px] p-4 gap-5 rounded-3xl ">
+        <div className="flex flex-row justify-between items-center ">
           <div className="flex flex-row items-center gap-2">
             {onBack && (
               <ButtonIcon

@@ -41,7 +41,8 @@ const Toast: React.FC<IToast> = ({
       <div className="bg-white rounded-2xl w-max">
         <div
           className={`alert bg-opacity-15 p-4 ${alertClasses[type]} flex w-max`}>
-          <div className="flex items-start justify-between w-full min-w-80 max-w-[25rem]">
+          <div
+            className={`flex items-start justify-between w-full ${isMobileScreen ? 'min-w-80' : 'min-w-48'} max-w-[25rem]`}>
             <div className="flex flex-col gap-1">
               <div className="font-bold text-xl mr-2">{title}</div>
               <div className=" text-base">
