@@ -18,6 +18,7 @@ export interface IItemWidgetTypeValues {
   value?: string;
   latitude?: number;
   longitude?: number;
+  files?: string[];
   widgetCarouselAttachment?: WidgetCarouselAttachment[];
 }
 
