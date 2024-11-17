@@ -23,6 +23,7 @@ import {
   apiAddWidgetImage,
   apiAddWidgetLink,
   apiAddWidgetMap,
+  apiAddWidgetPdf,
   apiAddWidgetSocial,
   apiAddWidgetText,
   apiAddWidgetVideo,
@@ -51,6 +52,7 @@ import {
   IAddWidgetImage,
   IAddWidgetLink,
   IAddWidgetMap,
+  IAddWidgetPdf,
   IAddWidgetSocial,
   IAddWidgetText,
   IAddWidgetVideo,
@@ -69,6 +71,7 @@ import PopupWidgetSchedule from '@/components/PopupWidgetSchedule';
 import {IWigetProfile} from '@/libs/types/IWigetProfile';
 import PopupWidgetBanner from '@/components/PopupWidgetBanner';
 import PopupWidgetMap from '@/components/PopupWidgetMap';
+import PopupWidgetPdf from '@/components/PopupWidgetPdf';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -199,6 +202,9 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         break;
       case WidgetTypeEnum.Schedule:
         setPopupState(WidgetTypeEnum.Schedule);
+        break;
+      case WidgetTypeEnum.PDF:
+        setPopupState(WidgetTypeEnum.PDF);
         break;
       case 'main':
         setPopupState('main');
@@ -378,6 +384,20 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           longitude: newWidget.value?.longitude,
         };
         apiCall = apiAddWidgetMap(dispatch, body as IAddWidgetMap);
+        break;
+      case WidgetTypeEnum.PDF:
+        file = newWidget.value?.files ? newWidget.value?.files[0] : '';
+        if (file) {
+          const response = await apiAddAttachment(dispatch, {files: [file]});
+
+          body = {
+            caption: newWidget.value?.caption,
+            url: response?.data?.path,
+            urlThumbnail: response?.data?.path,
+          };
+        }
+
+        apiCall = apiAddWidgetPdf(dispatch, body as IAddWidgetPdf);
         break;
       default:
         return false;
@@ -727,6 +747,14 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
       <PopupWidgetMap
         isOpen={popupState === WidgetTypeEnum.Map}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetPdf
+        isOpen={popupState === WidgetTypeEnum.PDF}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}

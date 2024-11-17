@@ -15,6 +15,7 @@ import {
 } from '@/libs/providers/PreviewProvider';
 import WidgetBlog from '@/components/widgets/WidgetBlog';
 import WidgetMap from '@/components/widgets/WidgetMap';
+import WidgetPdf from '@/components/widgets/WidgetPdf';
 
 interface IWidgetContainer {
   handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;
@@ -117,6 +118,15 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             caption={values.value?.caption || ''}
             latitude={values.value?.latitude || 0}
             longitude={values.value?.longitude || 0}
+          />
+        );
+      case WidgetTypeEnum.PDF:
+        return (
+          <WidgetPdf
+            text={values.value?.caption || ''}
+            url={values.value?.url || ''}
+            urlThumbnail={values.value?.urlThumbnail || ''}
+            isFullWidth={values.width === '100%'}
           />
         );
 

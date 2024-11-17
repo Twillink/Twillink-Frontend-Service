@@ -8,6 +8,7 @@ import {
   IAddWidgetImage,
   IAddWidgetLink,
   IAddWidgetMap,
+  IAddWidgetPdf,
   IAddWidgetSocial,
   IAddWidgetText,
   IAddWidgetVideo,
@@ -148,6 +149,15 @@ export const apiAddWidgetVideo = async (
 ) => {
   const api = createApiClient(dispatch, showToasts);
   return await api.post('/api/v1/widget-video', body);
+};
+
+export const apiAddWidgetPdf = async (
+  dispatch: AppDispatch,
+  body: IAddWidgetPdf,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/widget-pdf', body);
 };
 
 export const apiAddWidgetBlog = async (

@@ -12,4 +12,5 @@ export enum WidgetTypeEnum {
   Social = 'social',
   Banner = 'banner',
   Profile = 'profile',
+  PDF = 'pdf',
 }

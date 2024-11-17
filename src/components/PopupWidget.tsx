@@ -12,6 +12,7 @@ import SvgWidgetWebinar from '@/assets/svgComponents/SvgWidgetWebinar';
 import SvgWidgetSchedule from '@/assets/svgComponents/SvgWidgetSchedule';
 import PopupContainer from './PopupContainer';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
+import SvgPdf from '@/assets/svgComponents/SvgPdf';
 
 interface IPopupWidget {
   isOpen: boolean;
@@ -73,6 +74,13 @@ const buttons = [
     title: 'Add Map',
     action: WidgetTypeEnum.Map,
     icon: <SvgWidgetMap className="stroke-general-med" />,
+    isComingSoon: false,
+    disabled: false,
+  },
+  {
+    title: 'Add PDF File',
+    action: WidgetTypeEnum.PDF,
+    icon: <SvgPdf className="stroke-general-med stroke-0" />,
     isComingSoon: false,
     disabled: false,
   },

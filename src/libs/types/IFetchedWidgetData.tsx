@@ -53,6 +53,12 @@ export interface IFetchedWidgetMap {
   longitude: number;
 }
 
+export interface IFetchedWidgetPdf {
+  caption?: string;
+  url: string;
+  urlThumbnail?: string;
+}
+
 export interface IFetchedWidgetData {
   id: number;
   sequence: number;
@@ -65,5 +71,6 @@ export interface IFetchedWidgetData {
   widgetCarousel?: IFetchedWidgetCarousel | null;
   widgetBlog?: IFetchedWidgetBlog | null;
   widgetMap?: IFetchedWidgetMap | null;
+  widgetPdf?: IFetchedWidgetPdf | null;
   width: string;
 }

@@ -26,6 +26,12 @@ export interface IAddWidgetVideo {
   attachmentId?: string;
 }
 
+export interface IAddWidgetPdf {
+  caption?: string;
+  url: string;
+  urlThumbnail?: string;
+}
+
 export interface IAddWidgetBlog {
   title: string;
   content: string;
