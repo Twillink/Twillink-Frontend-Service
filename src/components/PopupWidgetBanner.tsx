@@ -40,6 +40,11 @@ const PopupWidgetBanner: React.FC<IPopupWidgetLink> = ({
     },
   });
 
+  const handleResetImage = () => {
+    formik.setFieldValue('selectedImage', null);
+    formik.setFieldValue('image', null);
+  };
+
   return (
     <PopupContainer
       title="Add Banner Image"
@@ -66,6 +71,7 @@ const PopupWidgetBanner: React.FC<IPopupWidgetLink> = ({
             }
           }}
           reset={formik.values.selectedImage === null}
+          onReset={handleResetImage}
           error={
             formik.touched.selectedImage && formik.errors.selectedImage
               ? formik.errors.selectedImage

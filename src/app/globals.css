@@ -13,3 +13,25 @@
 .toggle-custom {
   --handleoffset: 27.5px;
 }
+
+
+.custom-date-picker {
+  appearance: none; /* Removes the default appearance */
+  -webkit-appearance: none; /* For Safari */
+  position: relative;
+  padding-left: 2rem;
+  padding-right: 0;
+}
+
+/* This makes the original calendar icon invisible while keeping it clickable */
+.custom-date-picker::-webkit-calendar-picker-indicator, .custom-date-picker::-webkit-inner-spin-button {
+  opacity: 1;
+  display: block;
+  left: 0;
+
+  font-size: 1rem;
+  position: absolute;
+  filter: invert(100%);
+  cursor: pointer;
+}
+

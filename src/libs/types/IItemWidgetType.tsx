@@ -19,6 +19,14 @@ export interface IItemWidgetTypeValues {
   latitude?: number;
   longitude?: number;
   files?: string[];
+  urlWebinar?: string;
+  description?: string;
+  webinarType?: string;
+  passcode?: string;
+  notes?: string;
+  startDate?: string | Date;
+  endDate?: string | Date;
+  date?: string;
   widgetCarouselAttachment?: WidgetCarouselAttachment[];
 }
 

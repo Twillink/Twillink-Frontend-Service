@@ -16,6 +16,7 @@ import {
 import WidgetBlog from '@/components/widgets/WidgetBlog';
 import WidgetMap from '@/components/widgets/WidgetMap';
 import WidgetPdf from '@/components/widgets/WidgetPdf';
+import WidgetWebinar from '@/components/widgets/WidgetWebinar';
 
 interface IWidgetContainer {
   handleDrag?: (ev: React.DragEvent<HTMLDivElement>) => void;
@@ -126,6 +127,16 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             text={values.value?.caption || ''}
             url={values.value?.url || ''}
             urlThumbnail={values.value?.urlThumbnail || ''}
+            isFullWidth={values.width === '100%'}
+          />
+        );
+
+      case WidgetTypeEnum.Webinar:
+        return (
+          <WidgetWebinar
+            title={values.value?.title || ''}
+            urlWebinar={values.value?.urlWebinar || ''}
+            urlThumbnail={values.value?.urlThumbnail || undefined}
             isFullWidth={values.width === '100%'}
           />
         );

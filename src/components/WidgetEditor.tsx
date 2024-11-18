@@ -27,6 +27,7 @@ import {
   apiAddWidgetSocial,
   apiAddWidgetText,
   apiAddWidgetVideo,
+  apiAddWidgetWebinar,
   apiChangeOrderWidget,
   apiChangeWidthWidget,
   apiRemoveWidget,
@@ -56,6 +57,7 @@ import {
   IAddWidgetSocial,
   IAddWidgetText,
   IAddWidgetVideo,
+  IAddWidgetWebinar,
   IChangeOrderWidgetItem,
   TypeWidthWidgetEnum,
 } from '@/libs/types/IAddWidgetData';
@@ -72,6 +74,7 @@ import {IWigetProfile} from '@/libs/types/IWigetProfile';
 import PopupWidgetBanner from '@/components/PopupWidgetBanner';
 import PopupWidgetMap from '@/components/PopupWidgetMap';
 import PopupWidgetPdf from '@/components/PopupWidgetPdf';
+import PopupWidgetWebinar from '@/components/PopupWidgetWebinar';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -206,6 +209,10 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
       case WidgetTypeEnum.PDF:
         setPopupState(WidgetTypeEnum.PDF);
         break;
+      case WidgetTypeEnum.Webinar:
+        setPopupState(WidgetTypeEnum.Webinar);
+        break;
+
       case 'main':
         setPopupState('main');
         break;
@@ -398,6 +405,22 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         }
 
         apiCall = apiAddWidgetPdf(dispatch, body as IAddWidgetPdf);
+        break;
+      case WidgetTypeEnum.Webinar:
+        body = {
+          title: newWidget.value?.title,
+          urlWebinar: newWidget.value?.urlWebinar,
+          urlThumbnail: newWidget.value?.urlThumbnail,
+          description: newWidget.value?.description,
+          webinarType: newWidget.value?.webinarType,
+          passcode: newWidget.value?.passcode,
+          notes: newWidget.value?.notes,
+          startDate: newWidget.value?.startDate,
+          endDate: newWidget.value?.endDate,
+          date: newWidget.value?.date,
+        };
+
+        apiCall = apiAddWidgetWebinar(dispatch, body as IAddWidgetWebinar);
         break;
       default:
         return false;
@@ -755,6 +778,14 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
       <PopupWidgetPdf
         isOpen={popupState === WidgetTypeEnum.PDF}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetWebinar
+        isOpen={popupState === WidgetTypeEnum.Webinar}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}

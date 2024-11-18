@@ -89,7 +89,7 @@ const buttons = [
     action: WidgetTypeEnum.Webinar,
     icon: <SvgWidgetWebinar className="stroke-general-med" />,
     isComingSoon: false,
-    disabled: true,
+    disabled: false,
     isPro: true,
   },
   {

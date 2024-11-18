@@ -59,6 +59,19 @@ export interface IFetchedWidgetPdf {
   urlThumbnail?: string;
 }
 
+export interface IFetchedWidgetWebinar {
+  title: string;
+  urlWebinar: string;
+  urlThumbnail?: string;
+  description?: string;
+  webinarType?: string;
+  passcode?: string;
+  notes?: string;
+  startDate?: string;
+  endDate?: string;
+  date?: string;
+}
+
 export interface IFetchedWidgetData {
   id: number;
   sequence: number;
@@ -72,5 +85,6 @@ export interface IFetchedWidgetData {
   widgetBlog?: IFetchedWidgetBlog | null;
   widgetMap?: IFetchedWidgetMap | null;
   widgetPdf?: IFetchedWidgetPdf | null;
+  widgetWebinar?: IFetchedWidgetWebinar | null;
   width: string;
 }

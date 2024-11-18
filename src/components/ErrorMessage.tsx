@@ -2,12 +2,13 @@ import React from 'react';
 
 interface IErrorMessage {
   error?: string;
+  className?: string;
 }
 
-const ErrorMessage: React.FC<IErrorMessage> = ({error}) => {
+const ErrorMessage: React.FC<IErrorMessage> = ({error, className}) => {
   if (!error) return null;
 
-  return <div className="text-error">{error}</div>;
+  return <div className={`text-error ${className}`}>{error}</div>;
 };
 
 export default ErrorMessage;
