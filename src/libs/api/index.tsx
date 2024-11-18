@@ -12,6 +12,7 @@ import {
   IAddWidgetSocial,
   IAddWidgetText,
   IAddWidgetVideo,
+  IAddWidgetWebinar,
   IChangeOrderWidgetItem,
   IChangeWidthWidget,
 } from '@/libs/types/IAddWidgetData';
@@ -160,6 +161,14 @@ export const apiAddWidgetPdf = async (
   return await api.post('/api/v1/widget-pdf', body);
 };
 
+export const apiAddWidgetWebinar = async (
+  dispatch: AppDispatch,
+  body: IAddWidgetWebinar,
+  showToasts = true,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.post('/api/v1/widget-webinar', body);
+};
 export const apiAddWidgetBlog = async (
   dispatch: AppDispatch,
   body: IAddWidgetBlog,

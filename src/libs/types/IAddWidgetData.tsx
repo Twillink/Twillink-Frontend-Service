@@ -32,6 +32,18 @@ export interface IAddWidgetPdf {
   urlThumbnail?: string;
 }
 
+export interface IAddWidgetWebinar {
+  title: string;
+  urlWebinar: string;
+  urlThumbnail?: string;
+  description: string;
+  webinarType: string;
+  passcode?: string;
+  notes?: string;
+  startDate: string;
+  endDate: string;
+}
+
 export interface IAddWidgetBlog {
   title: string;
   content: string;
