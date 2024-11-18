@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {useContext, useMemo} from 'react';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import Link from 'next/link';
@@ -26,32 +26,12 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
   isFullWidth = true,
   ...restProps
 }) => {
-  const [isDivWideEnough, setIsDivWideEnough] = useState(true);
-
   const {preview, isMobileScreen} = useContext(PreviewContext);
 
   const isDesktop = useMemo(
     () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
     [preview, isMobileScreen],
   );
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (document) {
-        const imageDiv = document?.getElementById(`image-div-${urlThumbnail}`);
-        if (imageDiv) {
-          setIsDivWideEnough(imageDiv.offsetWidth >= 100);
-        }
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Initial check
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [window]);
 
   return (
     <div
