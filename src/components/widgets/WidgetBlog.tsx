@@ -4,11 +4,11 @@ import React, {useContext, useEffect, useMemo, useState} from 'react';
 import Image from 'next/image';
 import SvgGlobe from '@/assets/svgComponents/SvgGlobe';
 import Button from '@/components/Button';
-import Link from 'next/link';
 import {
   PreviewContext,
   PreviewTypeEnum,
 } from '@/libs/providers/PreviewProvider';
+import PopupDetailBlog from '@/components/Popup/PopupDetailBlog';
 
 interface IWidgetBlog {
   title: string;
@@ -26,6 +26,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
   ...restProps
 }) => {
   const [isDivWideEnough, setIsDivWideEnough] = useState(true);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const {preview, isMobileScreen} = useContext(PreviewContext);
 
@@ -52,6 +53,14 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
     };
   }, [window, document]);
 
+  const handleClosePopup = () => {
+    setIsOpen(false);
+  };
+
+  const handleOpen = () => {
+    setIsOpen(true);
+  };
+
   return (
     <div
       className="border-base-300 border-2 bg-primary-content rounded-2xl h-full w-full p-2 flex items-center relative"
@@ -69,9 +78,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
             </div>
           </div>
           <div>
-            <Link href={url} passHref target={'_blank'}>
-              <Button title={'View Blog'} size={'xs'} />
-            </Link>
+            <Button title={'View Blog'} size={'xs'} onClick={handleOpen} />
           </div>
         </div>
         <div
@@ -87,6 +94,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
           )}
         </div>
       </div>
+      <PopupDetailBlog isOpen={isOpen} onClose={handleClosePopup} />
     </div>
   );
 };
