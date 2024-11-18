@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {useContext, useMemo, useState} from 'react';
 import Image from 'next/image';
 import SvgGlobe from '@/assets/svgComponents/SvgGlobe';
 import Button from '@/components/Button';
@@ -16,16 +16,18 @@ interface IWidgetBlog {
   width?: string;
   image?: string | ArrayBuffer | null;
   urlThumbnail?: string;
+  content?: string;
+  isFullWidth?: boolean;
 }
 
 const WidgetBlog: React.FC<IWidgetBlog> = ({
   title,
   url,
   image,
-
+  content,
+  isFullWidth = true,
   ...restProps
 }) => {
-  const [isDivWideEnough, setIsDivWideEnough] = useState(true);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const {preview, isMobileScreen} = useContext(PreviewContext);
@@ -34,24 +36,6 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
     () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
     [preview, isMobileScreen],
   );
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (document) {
-        const imageDiv = document?.getElementById(`image-div-${url}`);
-        if (imageDiv) {
-          setIsDivWideEnough(imageDiv.offsetWidth >= 100);
-        }
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Initial check
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [window, document]);
 
   const handleClosePopup = () => {
     setIsOpen(false);
@@ -72,7 +56,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
             <SvgGlobe width={32} height={32} className={'stroke-base-300'} />
             <div>
               <p
-                className={`text-start text-xs mt-1 text-ellipsis ${isDivWideEnough ? 'line-clamp-3' : 'line-clamp-2'}  overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'}`}>
+                className={`text-start text-xs mt-1 text-ellipsis ${isFullWidth ? 'line-clamp-3' : 'line-clamp-2'}  overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'}`}>
                 {title}
               </p>
             </div>
@@ -83,7 +67,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
         </div>
         <div
           id={`image-div-${url}`}
-          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isDivWideEnough ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
+          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
           {url && (
             <Image
               src={url}
@@ -94,7 +78,15 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
           )}
         </div>
       </div>
-      <PopupDetailBlog isOpen={isOpen} onClose={handleClosePopup} />
+      <PopupDetailBlog
+        isOpen={isOpen}
+        onClose={handleClosePopup}
+        dataBlog={{
+          title,
+          url,
+          content,
+        }}
+      />
     </div>
   );
 };
