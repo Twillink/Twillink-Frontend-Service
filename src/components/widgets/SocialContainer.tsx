@@ -51,11 +51,16 @@ const SocialContainer: React.FC<ISocialContainer> = ({
           <div
             key={item?.key}
             className="w-7 h-7 flex justify-center relative group">
-            <button
-              onClick={() => handleDelete(item?.key)}
-              className="absolute hidden group-hover:block -z-1 -top-1 -right-1 p-1 bg-primary rounded-full hover:z-30">
-              <SvgWidgetDelete height={12} className="stroke-primary-content" />
-            </button>
+            {!viewer && (
+              <button
+                onClick={() => handleDelete(item?.key)}
+                className="absolute hidden group-hover:block -z-1 -top-1 -right-1 p-1 bg-primary rounded-full hover:z-30">
+                <SvgWidgetDelete
+                  height={12}
+                  className="stroke-primary-content"
+                />
+              </button>
+            )}
             <Link href={item.value} target={'_blank'}>
               <Icon width={28} height={28} className={'fill-slate-500 +'} />
             </Link>
