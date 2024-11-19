@@ -86,13 +86,19 @@ function UserProfile({contact, dataProfile, viewer}: IUserProfile) {
   const handleBlur = async () => {
     setEditingSection('none');
     await new Promise(resolve => setTimeout(resolve, 200));
-    const newProfile: IUpdateUserProfileBody = {
-      fullName: businessName,
-      description: caption,
-      urlBanner: dataProfile?.urlBanner ?? '',
-      urlImageProfile: dataProfile?.urlImage ?? '',
-    };
-    await apiUpdateUserProfile(dispatch, newProfile);
+    try {
+      const newProfile: IUpdateUserProfileBody = {
+        fullName: businessName,
+        description: caption,
+        urlBanner: dataProfile?.urlBanner ?? '',
+        urlImageProfile: dataProfile?.urlImage ?? '',
+      };
+      await apiUpdateUserProfile(dispatch, newProfile);
+    } catch (error) {
+      setBusinessName(dataProfile?.fullName ?? '');
+      setCaption(dataProfile?.description ?? '');
+      console.log(error);
+    }
   };
 
   const handlePhotoChange = async (file: any) => {
