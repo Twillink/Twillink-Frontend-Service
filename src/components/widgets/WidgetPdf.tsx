@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {useContext, useMemo} from 'react';
 import Image from 'next/image';
 import Button from '@/components/Button';
 import Link from 'next/link';
@@ -9,6 +9,8 @@ import {
   PreviewTypeEnum,
 } from '@/libs/providers/PreviewProvider';
 import SvgPdfFile from '@/assets/svgComponents/SvgPdfFile';
+import {usePopup} from '@/libs/providers/PopupProvider';
+import PopupImage from '@/components/Popup/PopupImage';
 
 interface IWidgetLink {
   text: string;
@@ -28,8 +30,6 @@ const WidgetPdf: React.FC<IWidgetLink> = ({
   isFullWidth = true,
   ...restProps
 }) => {
-  const [isDivWideEnough, setIsDivWideEnough] = useState(true);
-
   const {preview, isMobileScreen} = useContext(PreviewContext);
 
   const isDesktop = useMemo(
@@ -37,23 +37,11 @@ const WidgetPdf: React.FC<IWidgetLink> = ({
     [preview, isMobileScreen],
   );
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (document) {
-        const imageDiv = document?.getElementById(`image-div-${urlThumbnail}`);
-        if (imageDiv) {
-          setIsDivWideEnough(imageDiv.offsetWidth >= 100);
-        }
-      }
-    };
+  const {openPopup} = usePopup();
 
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Initial check
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [window]);
+  const handleOpenImage = () => {
+    openPopup('Image', <PopupImage url={urlThumbnail ?? ''} />, 'max-w-[40%]');
+  };
 
   return (
     <div
@@ -65,7 +53,7 @@ const WidgetPdf: React.FC<IWidgetLink> = ({
           <div>
             <div>
               <p
-                className={`text-start mt-1 text-xs text-ellipsis ${isDivWideEnough ? 'line-clamp-3' : 'line-clamp-2'}  overflow-hidden font-semibold w-full ${image ? 'w-1/2' : 'w-full'} `}>
+                className={`text-start mt-1 text-xs text-ellipsis ${isFullWidth ? 'line-clamp-3' : 'line-clamp-2'}  overflow-hidden font-semibold w-full ${image ? 'w-1/2' : 'w-full'} `}>
                 {text}
               </p>
             </div>
@@ -85,12 +73,14 @@ const WidgetPdf: React.FC<IWidgetLink> = ({
           // absolute w-full h-full z-[-1] top-0 left-0 bottom-0 blur-[0px]
           className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
           {urlThumbnail && (
-            <Image
-              src={urlThumbnail}
-              alt={text}
-              className="object-cover rounded-lg"
-              fill
-            />
+            <div className={'cursor-pointer'} onClick={handleOpenImage}>
+              <Image
+                src={urlThumbnail}
+                alt={text}
+                className="object-cover rounded-lg"
+                fill
+              />
+            </div>
           )}
           {!urlThumbnail && (
             <SvgPdfFile

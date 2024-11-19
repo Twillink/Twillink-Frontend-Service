@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useContext, useEffect, useMemo, useState} from 'react';
+import React, {useContext, useMemo} from 'react';
 import Image from 'next/image';
 import SvgGlobe from '@/assets/svgComponents/SvgGlobe';
 import Button from '@/components/Button';
@@ -9,6 +9,8 @@ import {
   PreviewContext,
   PreviewTypeEnum,
 } from '@/libs/providers/PreviewProvider';
+import {usePopup} from '@/libs/providers/PopupProvider';
+import PopupImage from '@/components/Popup/PopupImage';
 
 interface IWidgetLink {
   text: string;
@@ -17,6 +19,7 @@ interface IWidgetLink {
   image?: string | ArrayBuffer | null;
   urlThumbnail?: string;
   onClick?: () => void;
+  isFullWidth?: boolean;
 }
 
 const WidgetLink: React.FC<IWidgetLink> = ({
@@ -24,10 +27,9 @@ const WidgetLink: React.FC<IWidgetLink> = ({
   url,
   image,
   urlThumbnail,
+  isFullWidth = true,
   ...restProps
 }) => {
-  const [isDivWideEnough, setIsDivWideEnough] = useState(true);
-
   const {preview, isMobileScreen} = useContext(PreviewContext);
 
   const isDesktop = useMemo(
@@ -35,23 +37,29 @@ const WidgetLink: React.FC<IWidgetLink> = ({
     [preview, isMobileScreen],
   );
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (document) {
-        const imageDiv = document?.getElementById(`image-div-${urlThumbnail}`);
-        if (imageDiv) {
-          setIsDivWideEnough(imageDiv.offsetWidth >= 100);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     if (document) {
+  //       const imageDiv = document?.getElementById(`image-div-${urlThumbnail}`);
+  //       if (imageDiv) {
+  //         setIsDivWideEnough(imageDiv.offsetWidth >= 100);
+  //       }
+  //     }
+  //   };
+  //
+  //   window.addEventListener('resize', handleResize);
+  //   handleResize(); // Initial check
+  //
+  //   return () => {
+  //     window.removeEventListener('resize', handleResize);
+  //   };
+  // }, [window]);
 
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Initial check
+  const {openPopup} = usePopup();
 
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [window]);
+  const handleOpenImage = () => {
+    openPopup('Image', <PopupImage url={urlThumbnail ?? ''} />, 'max-w-[40%]');
+  };
 
   return (
     <div
@@ -64,7 +72,7 @@ const WidgetLink: React.FC<IWidgetLink> = ({
             <SvgGlobe width={32} height={32} className={'stroke-base-300'} />
             <div>
               <p
-                className={`text-start mt-1 text-xs text-ellipsis ${isDivWideEnough ? 'line-clamp-3' : 'line-clamp-2'}  overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'} `}>
+                className={`text-start mt-1 text-xs text-ellipsis ${isFullWidth ? 'line-clamp-3' : 'line-clamp-2'}  overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'} `}>
                 {text}
               </p>
             </div>
@@ -78,21 +86,22 @@ const WidgetLink: React.FC<IWidgetLink> = ({
             </Link>
           </div>
         </div>
-        {/*{isDivWideEnough && (*/}
         <div
           id={`image-div-${urlThumbnail}`}
-          // absolute w-full h-full z-[-1] top-0 left-0 bottom-0 blur-[0px]
-          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isDivWideEnough ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
+          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
           {urlThumbnail && (
-            <Image
-              src={urlThumbnail}
-              alt={text}
-              className="object-cover rounded-lg"
-              fill
-            />
+            <div
+              onClick={urlThumbnail ? handleOpenImage : undefined}
+              className={'cursor-pointer'}>
+              <Image
+                src={urlThumbnail}
+                alt={text}
+                className="object-cover rounded-lg"
+                fill
+              />
+            </div>
           )}
         </div>
-        {/*)}*/}
       </div>
     </div>
   );

@@ -56,9 +56,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             text={values.value?.title || ''}
             image={values.value?.image}
             urlThumbnail={values.value?.urlThumbnail}
-            // onClick={() => {
-            //   window.open(values.value?.url || '#', '_blank');
-            // }}
+            isFullWidth={values.width === '100%'}
           />
         );
       case WidgetTypeEnum.Text:
@@ -76,9 +74,6 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             text={values.value?.caption || ''}
             url={values.value?.url || '#'}
             image={values.value?.image}
-            onClick={e => {
-              e.preventDefault();
-            }}
           />
         );
       case WidgetTypeEnum.Video:
@@ -96,6 +91,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             content={values.value?.contents ?? ''}
             url={values.value?.url || '#'}
             image={values.value?.image}
+            isFullWidth={values.width === '100%'}
           />
         );
 

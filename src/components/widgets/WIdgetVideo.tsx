@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import {usePopup} from '@/libs/providers/PopupProvider';
+import PopupVideo from '@/components/Popup/PopupVideo';
 
 interface IWidgetVideo {
   text: string;
@@ -15,6 +17,23 @@ const WidgetVideo: React.FC<IWidgetVideo> = ({
   image,
   ...restProps
 }) => {
+  const isYoutube = url?.includes('youtu');
+
+  const youtubeId = isYoutube ? url?.split('v=')[1] : '';
+  const posterYoutube = youtubeId
+    ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+    : '';
+
+  const {openPopup} = usePopup();
+
+  const handleOpenVideo = () => {
+    openPopup(
+      'Image',
+      <PopupVideo url={url ?? ''} posterYoutube={posterYoutube} />,
+      'max-w-[40%]',
+    );
+  };
+
   return (
     <div
       className="border-base-300 bg-primary-content border-2 rounded-2xl h-full w-full flex items-center"
@@ -25,12 +44,19 @@ const WidgetVideo: React.FC<IWidgetVideo> = ({
           {text}
         </p>
 
-        {url && (
-          <video controls className="max-w-full h-auto">
-            <source src={url} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-        )}
+        <div className={'cursor-pointer'} onClick={handleOpenVideo}>
+          {url && (
+            <video
+              controls
+              className="max-w-full h-auto"
+              {...(posterYoutube && {poster: posterYoutube})}
+              // poster={posterYoutube ?? null}
+            >
+              <source src={url} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          )}
+        </div>
       </div>
     </div>
   );

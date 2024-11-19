@@ -8,11 +8,13 @@ import useEmblaCarousel from 'embla-carousel-react';
 import Image from 'next/image';
 import styles from './CustomCarousel.module.css';
 import {cn} from '@/utils/formater';
-import {useContext, useMemo} from 'react';
+import React, {useContext, useMemo} from 'react';
 import {
   PreviewContext,
   PreviewTypeEnum,
 } from '@/libs/providers/PreviewProvider';
+import PopupImage from '@/components/Popup/PopupImage';
+import {usePopup} from '@/libs/providers/PopupProvider';
 
 interface ICustomCarousel {
   slides?: string[];
@@ -31,10 +33,16 @@ function CustomCarousel({slides}: ICustomCarousel) {
 
   const {preview, isMobileScreen} = useContext(PreviewContext);
 
+  const {openPopup} = usePopup();
+
   const isDesktop = useMemo(
     () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
     [preview, isMobileScreen],
   );
+
+  const handleOpenImage = (url: string) => {
+    openPopup('Image', <PopupImage url={url} />, 'max-w-[40%]');
+  };
 
   const renderSlides = () =>
     (slides ?? []).map((url, index) => (
@@ -42,8 +50,9 @@ function CustomCarousel({slides}: ICustomCarousel) {
         <div
           className={cn([
             styles.embla__slide__number,
-            `${isDesktop ? 'h-20 lg:h-24' : 'h-20'}`,
-          ])}>
+            `${isDesktop ? 'h-20 lg:h-24' : 'h-20'} cursor-pointer`,
+          ])}
+          onClick={() => handleOpenImage(url)}>
           <Image
             className={cn([styles['embla__slide__img'], 'object-cover'])}
             src={url}

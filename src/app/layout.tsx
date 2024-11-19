@@ -7,6 +7,7 @@ import ClientAuthLayoutWrapper from '@/libs/providers/ClientAuthLayoutWrapper';
 import ClientThemeWrapper from '@/libs/providers/ClientSkinWrapper';
 import ToastProvider from '@/libs/providers/ToastProvider';
 import {PreviewProvider} from '@/libs/providers/PreviewProvider';
+import {PopupProvider} from '@/libs/providers/PopupProvider';
 
 const plusJakarta = Plus_Jakarta_Sans({subsets: ['latin']});
 
@@ -33,7 +34,9 @@ export default function RootLayout({children}: IRootLayoutProps) {
             <SkinProvider>
               <PreviewProvider>
                 <ClientThemeWrapper>
-                  <ToastProvider>{children}</ToastProvider>
+                  <PopupProvider>
+                    <ToastProvider>{children}</ToastProvider>
+                  </PopupProvider>
                 </ClientThemeWrapper>
               </PreviewProvider>
             </SkinProvider>

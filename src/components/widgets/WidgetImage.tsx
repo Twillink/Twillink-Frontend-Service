@@ -2,9 +2,10 @@
 
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import {usePopup} from '@/libs/providers/PopupProvider';
+import PopupImage from '@/components/Popup/PopupImage';
 
-interface IWidgetImage extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+interface IWidgetImage {
   text: string;
   url: string;
   width?: string;
@@ -17,9 +18,14 @@ const WidgetImage: React.FC<IWidgetImage> = ({
   image,
   ...restProps
 }) => {
+  const {openPopup} = usePopup();
+
+  const handleOpen = () => {
+    openPopup('Image', <PopupImage url={url} />, 'max-w-[40%]');
+  };
+
   return (
-    <Link
-      href={url}
+    <div
       className="border-base-300 bg-primary-content border-2 rounded-2xl h-full w-full flex items-center "
       {...restProps}>
       <div className="flex justify-between items-center w-full gap-2 h-full rounded-2xl overflow-hidden relative">
@@ -28,15 +34,17 @@ const WidgetImage: React.FC<IWidgetImage> = ({
           {text}
         </p>
         {url && (
-          <Image
-            src={url}
-            alt={text}
-            fill
-            className="object-cover rounded-lg"
-          />
+          <button onClick={handleOpen} className="w-full h-full relative">
+            <Image
+              src={url}
+              alt={text}
+              fill
+              className="object-cover rounded-lg"
+            />
+          </button>
         )}
       </div>
-    </Link>
+    </div>
   );
 };
 
