@@ -22,7 +22,11 @@ export const apiAuthLogin = async (
   body: any,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Login Successfully',
+    error: 'Failed to Login. Please Check Your Credentials',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/user-auth/login', body);
 };
 
@@ -60,7 +64,11 @@ export const apiOtpSend = async (
   body: any,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'OTP Successfully Sent to Your Email',
+    error: 'Failed to Send Link',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/otp/send-email', body);
 };
 
@@ -69,7 +77,11 @@ export const apiOtpValidate = async (
   body: any,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Your OTP is Correct',
+    error: 'Failed, Please check your OTP',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/otp/validate', body);
 };
 
@@ -78,7 +90,11 @@ export const apiAuthRegister = async (
   body: any,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Account Successfully Created',
+    error: 'Failed to Create Account',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/user-auth/register', body);
 };
 
@@ -86,7 +102,11 @@ export const apiAuthLogout = async (
   dispatch: AppDispatch,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Logout Successfully',
+    error: 'Failed to Logout',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/user-auth/logout');
 };
 
@@ -95,7 +115,11 @@ export const apiResetPassword = async (
   body: any,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Password Successfully Changed',
+    error: 'Failed to Change Password',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post(`/api/v1/user-auth/forgot-password`, body);
 };
 
@@ -151,7 +175,7 @@ export const apiAddWidgetImage = async (
     success: 'Image Successfully Saved',
     error: 'Failed to Save Image',
   };
-  const api = createApiClient(dispatch, showToasts, true, message);
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-image', body);
 };
 
@@ -280,8 +304,8 @@ export const apiRemoveSocial = async (
   showToasts = true,
 ) => {
   const message = {
-    success: 'Social Successfully Deleted',
-    error: 'Failed to Delete Social',
+    success: 'Social Media Account Successfully Deleted',
+    error: 'Failed to Delete Social Media Account',
   };
   const api = createApiClient(dispatch, showToasts, false, message);
   return await api.delete(`/api/v1/widget-sosmed/${id}`);
@@ -321,7 +345,11 @@ export const apiUpdateUserProfile = async (
   body: IUpdateUserProfileBody,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Profile Successfully Updated',
+    error: 'Failed to Update Profile',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-profile', body);
 };
 
@@ -338,7 +366,11 @@ export const apiChangeWidthWidget = async (
   body: IChangeWidthWidget,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Widget Width Successfully Changed',
+    error: 'Failed to Change Widget Width',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.put(`/api/v1/widget/change-width/${body.id}`, body);
 };
 
@@ -347,7 +379,11 @@ export const apiChangeOrderWidget = async (
   body: IChangeOrderWidgetItem[],
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Widget Order Successfully Changed',
+    error: 'Failed to Change Widget Order',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post(`/api/v1/widget/order`, JSON.stringify(body));
 };
 
@@ -356,7 +392,11 @@ export const apiAddAttachment = async (
   body: IAddAttachment,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts, true);
+  const message = {
+    success: 'File Successfully Saved',
+    error: 'Failed to Save File',
+  };
+  const api = createApiClient(dispatch, showToasts, true, message);
   const formData = new FormData();
   for (let i = 0; i < body.files.length; i++) {
     formData.append('file', body.files[i]);

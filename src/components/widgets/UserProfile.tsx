@@ -18,10 +18,16 @@ import PopupProfile from '@/components/Popup/PopupProfile';
 interface IUserProfile {
   contact?: IItemWidgetType;
   dataProfile: IWigetProfile;
+  fetchData?: (withLoading: boolean) => void;
   viewer: boolean;
 }
 
-function UserProfile({contact, dataProfile, viewer}: IUserProfile) {
+function UserProfile({
+  contact,
+  dataProfile,
+  viewer,
+  fetchData = () => {},
+}: IUserProfile) {
   const [isSticky, setIsSticky] = useState<boolean>(false);
   const [editingSection, setEditingSection] = useState<
     'none' | 'businessName' | 'caption'
@@ -114,6 +120,8 @@ function UserProfile({contact, dataProfile, viewer}: IUserProfile) {
       await apiUpdateUserProfile(dispatch, body);
     } catch (error) {
       console.log(error);
+    } finally {
+      fetchData(false);
     }
   };
 

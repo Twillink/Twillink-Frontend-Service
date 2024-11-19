@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, {useMemo} from 'react';
 import {usePopup} from '@/libs/providers/PopupProvider';
 import PopupVideo from '@/components/Popup/PopupVideo';
+import {removeStringByIndex} from '@/utils/formater';
 
 interface IWidgetVideo {
   text: string;
@@ -17,18 +18,27 @@ const WidgetVideo: React.FC<IWidgetVideo> = ({
   image,
   ...restProps
 }) => {
-  const isYoutube = url?.includes('youtu');
+  const posterYoutube = useMemo(() => {
+    const isYoutube = url?.includes('youtu');
+    let youtubeId = isYoutube ? url?.split('v=')[1] : '';
+    if (youtubeId && youtubeId.includes('&')) {
+      const index = youtubeId.indexOf('&');
+      const length = youtubeId.length;
+      if (index !== -1) {
+        youtubeId = removeStringByIndex(youtubeId, index, length - 1);
+      }
+    }
 
-  const youtubeId = isYoutube ? url?.split('v=')[1] : '';
-  const posterYoutube = youtubeId
-    ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
-    : '';
+    return youtubeId
+      ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+      : '';
+  }, [url]);
 
   const {openPopup} = usePopup();
 
   const handleOpenVideo = () => {
     openPopup(
-      'Image',
+      'Video',
       <PopupVideo url={url ?? ''} posterYoutube={posterYoutube} />,
       'max-w-[40%]',
     );

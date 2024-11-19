@@ -9,3 +9,7 @@ import {twMerge} from 'tailwind-merge';
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+export function removeStringByIndex(text: string, from: number, to: number) {
+  return text.substring(0, from) + text.substring(to);
+}

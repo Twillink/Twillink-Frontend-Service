@@ -37,7 +37,7 @@ const ProfileImage: React.FC<IProfileImage> = ({
     onPhotoChange(file);
   };
   const size = isSticky ? 'w-[44px] h-[44px]' : 'w-[100px] h-[100px]';
-  const imgSize = isSticky ? 44 : 100;
+  // const imgSize = isSticky ? 44 : 100;
 
   return (
     <div>
@@ -50,9 +50,8 @@ const ProfileImage: React.FC<IProfileImage> = ({
             <Image
               src={(urlImage ?? profileImageUrl) as string}
               alt="User Selected Photo"
-              className="object-cover"
-              width={imgSize}
-              height={imgSize}
+              className="object-contain"
+              fill
             />
           ) : (
             <div className="flex items-center justify-center w-full h-full bg-base-200 text-neutral">
