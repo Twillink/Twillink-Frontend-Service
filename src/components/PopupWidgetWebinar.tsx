@@ -11,6 +11,7 @@ import SvgZoom from '@/assets/svgComponents/SvgZoom';
 import TextAreaLabel from '@/components/TextAreaLabel';
 import AddWidgetWebinarSchema from '@/libs/schema/Widget/WidgetWebinar.schema';
 import ErrorMessage from '@/components/ErrorMessage';
+import ImageSelectorWithSource from '@/components/ImageSelectorWithSource';
 
 interface IPopupWidgetVideo {
   isOpen: boolean;
@@ -43,6 +44,8 @@ const PopupWidgetWebinar: React.FC<IPopupWidgetVideo> = ({
       endDate: '',
       webinarType: '',
       platform: '',
+      selectedImage: '',
+      image: '',
     },
     validationSchema: AddWidgetWebinarSchema,
     onSubmit: async values => {
@@ -56,6 +59,7 @@ const PopupWidgetWebinar: React.FC<IPopupWidgetVideo> = ({
         startDate: new Date(`${formik.values.date}T${formik.values.startDate}`),
         endDate: new Date(`${formik.values.date}T${formik.values.endDate}`),
         webinarType: values.webinarType,
+        image: values.image,
       };
 
       const success = await onAdd(WidgetTypeEnum.Webinar, value);
@@ -78,6 +82,11 @@ const PopupWidgetWebinar: React.FC<IPopupWidgetVideo> = ({
 
     return 'Add Webinar';
   }, [formik.values.webinarType]);
+
+  const handleResetImage = () => {
+    formik.setFieldValue('selectedImage', null);
+    formik.setFieldValue('image', null);
+  };
 
   return (
     <PopupContainer
@@ -138,6 +147,31 @@ const PopupWidgetWebinar: React.FC<IPopupWidgetVideo> = ({
 
         {formik.values.webinarType === 'new' && (
           <>
+            <div>
+              <ImageSelectorWithSource
+                image={formik.values.selectedImage}
+                name={`image_WWebinar`}
+                label={'Browse Thumbnail'}
+                onChange={e => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                      formik.setFieldValue('selectedImage', reader.result);
+                    };
+                    formik.setFieldValue(`image`, file);
+                    reader.readAsDataURL(file);
+                  }
+                }}
+                reset={formik.values.selectedImage === null}
+                onReset={handleResetImage}
+                error={
+                  formik.touched.selectedImage && formik.errors.selectedImage
+                    ? formik.errors.selectedImage
+                    : ''
+                }
+              />
+            </div>
             <div>
               <InputLabel
                 label="Webinar Title"

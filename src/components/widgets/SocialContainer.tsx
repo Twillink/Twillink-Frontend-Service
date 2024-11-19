@@ -18,9 +18,7 @@ interface ISocialContainer {
 const SocialContainer: React.FC<ISocialContainer> = ({
   onClick,
   data,
-  fetchData = (e: boolean) => {
-    console.log(e);
-  },
+  fetchData = () => {},
   viewer,
 }) => {
   const [

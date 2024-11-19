@@ -250,19 +250,22 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     switch (type) {
       case WidgetTypeEnum.Link:
         file = newWidget.value?.image ?? '';
+        body = {
+          title: newWidget.value?.title,
+          url: newWidget.value?.url,
+        };
         if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
+          try {
+            const response = await apiAddAttachment(dispatch, {files: [file]});
 
-          body = {
-            title: newWidget.value?.title,
-            url: newWidget.value?.url,
-            urlThumbnail: response?.data?.path,
-          };
-        } else {
-          body = {
-            title: newWidget.value?.title,
-            url: newWidget.value?.url,
-          };
+            body = {
+              ...body,
+              urlThumbnail: response?.data?.path,
+            };
+          } catch {
+            dispatch(setSubmitLoading(false));
+            return false;
+          }
         }
         apiCall = apiAddWidgetLink(dispatch, body as IAddWidgetLink);
         break;
@@ -274,56 +277,69 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         break;
       case WidgetTypeEnum.Image:
         file = newWidget.value?.image ?? '';
+        body = {
+          caption: newWidget.value?.caption,
+          url: newWidget.value?.url,
+        };
         if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
-          body = {
-            caption: newWidget.value?.caption,
-            url: response?.data?.path,
-          };
-        } else {
-          body = {
-            caption: newWidget.value?.caption,
-            url: newWidget.value?.url,
-          };
+          try {
+            const response = await apiAddAttachment(dispatch, {files: [file]});
+            body = {
+              ...body,
+              url: response?.data?.path,
+              urlThumbnail: response?.data?.path,
+            };
+          } catch {
+            dispatch(setSubmitLoading(false));
+            return false;
+          }
         }
         apiCall = apiAddWidgetImage(dispatch, body as IAddWidgetImage);
         break;
       case WidgetTypeEnum.Video:
         file = newWidget.value?.video ?? '';
+        body = {
+          caption: newWidget.value?.caption,
+          url: newWidget.value?.url,
+          urlThumbnail: newWidget.value?.url,
+        };
         if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
+          try {
+            const response = await apiAddAttachment(dispatch, {files: [file]});
 
-          body = {
-            caption: newWidget.value?.caption,
-            url: response?.data?.path,
-            urlThumbnail: response?.data?.path,
-          };
-        } else {
-          body = {
-            caption: newWidget.value?.caption,
-            url: newWidget.value?.url,
-            urlThumbnail: newWidget.value?.url,
-          };
+            body = {
+              ...body,
+              url: response?.data?.path,
+              urlThumbnail: response?.data?.path,
+            };
+          } catch {
+            dispatch(setSubmitLoading(false));
+            return false;
+          }
         }
 
         apiCall = apiAddWidgetVideo(dispatch, body as IAddWidgetVideo);
         break;
       case WidgetTypeEnum.Blog:
         file = newWidget.value?.image ?? '';
-        if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
+        body = {
+          title: newWidget.value?.title,
+          content: newWidget.value?.content,
+          url: newWidget.value?.url,
+        };
 
-          body = {
-            title: newWidget.value?.title,
-            content: newWidget.value?.content,
-            url: response?.data?.path,
-          };
-        } else {
-          body = {
-            title: newWidget.value?.title,
-            content: newWidget.value?.content,
-            url: newWidget.value?.url,
-          };
+        if (file) {
+          try {
+            const response = await apiAddAttachment(dispatch, {files: [file]});
+
+            body = {
+              ...body,
+              url: response?.data?.path,
+            };
+          } catch {
+            dispatch(setSubmitLoading(false));
+            return false;
+          }
         }
 
         apiCall = apiAddWidgetBlog(dispatch, body as IAddWidgetBlog);
@@ -356,29 +372,32 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
             attachmentIds: (data ?? []).map((item: any) => item?.data?.path),
           };
 
-          console.log(body, 'body');
-
           return apiAddWidgetCarousel(dispatch, body as IAddWidgetCarousel);
         });
         break;
       case WidgetTypeEnum.Banner:
         file = newWidget.value?.image ?? '';
+
+        body = {
+          fullName: dataProfile?.fullName,
+          description: dataProfile?.description,
+          urlImageProfile: dataProfile?.urlImage,
+          urlBanner: dataProfile?.urlBanner,
+        };
+
         if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
-          body = {
-            fullName: dataProfile?.fullName,
-            description: dataProfile?.description,
-            urlImageProfile: dataProfile?.urlImage,
-            urlBanner: response?.data?.path,
-          };
-        } else {
-          body = {
-            fullName: dataProfile?.fullName,
-            description: dataProfile?.description,
-            urlImageProfile: dataProfile?.urlImage,
-            urlBanner: dataProfile?.urlBanner,
-          };
+          try {
+            const response = await apiAddAttachment(dispatch, {files: [file]});
+            body = {
+              ...body,
+              urlBanner: response?.data?.path,
+            };
+          } catch {
+            dispatch(setSubmitLoading(false));
+            return false;
+          }
         }
+
         apiCall = apiUpdateUserProfile(
           dispatch,
           body as IUpdateUserProfileBody,
@@ -394,19 +413,25 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         break;
       case WidgetTypeEnum.PDF:
         file = newWidget.value?.files ? newWidget.value?.files[0] : '';
-        if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
 
-          body = {
-            caption: newWidget.value?.caption,
-            url: response?.data?.path,
-            urlThumbnail: response?.data?.path,
-          };
+        if (file) {
+          try {
+            const response = await apiAddAttachment(dispatch, {files: [file]});
+            body = {
+              caption: newWidget.value?.caption,
+              url: response?.data?.path,
+              urlThumbnail: response?.data?.path,
+            };
+          } catch {
+            dispatch(setSubmitLoading(false));
+            return false;
+          }
         }
 
         apiCall = apiAddWidgetPdf(dispatch, body as IAddWidgetPdf);
         break;
       case WidgetTypeEnum.Webinar:
+        file = newWidget.value?.image ?? '';
         body = {
           title: newWidget.value?.title,
           urlWebinar: newWidget.value?.urlWebinar,
@@ -419,6 +444,19 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
           endDate: newWidget.value?.endDate,
           date: newWidget.value?.date,
         };
+
+        if (file) {
+          try {
+            const response = await apiAddAttachment(dispatch, {files: [file]});
+            body = {
+              ...body,
+              urlThumbnail: response?.data?.path,
+            };
+          } catch {
+            dispatch(setSubmitLoading(false));
+            return false;
+          }
+        }
 
         apiCall = apiAddWidgetWebinar(dispatch, body as IAddWidgetWebinar);
         break;
@@ -598,6 +636,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
               <UserProfile
                 contact={dataContact}
                 dataProfile={dataProfile}
+                fetchData={fetchData}
                 viewer={false}
               />
               <div className={` flex flex-wrap px-5`}>

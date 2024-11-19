@@ -112,7 +112,7 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
 
   return (
     <PopupContainer
-      title="Add Image"
+      title="Add Map"
       onClose={handleCLose}
       onBack={handleBack}
       isOpen={isOpen}>
@@ -122,12 +122,12 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
         onSubmit={formik.handleSubmit}>
         <div>
           <InputLabel
-            label="Image Caption"
+            label="Map Caption"
             name="caption"
             value={formik.values.caption}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            placeholder="Your caption image"
+            placeholder="Your caption"
             error={
               formik.touched.caption && formik.errors.caption
                 ? formik.errors.caption

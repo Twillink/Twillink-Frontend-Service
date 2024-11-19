@@ -8,6 +8,8 @@ import {
   PreviewContext,
   PreviewTypeEnum,
 } from '@/libs/providers/PreviewProvider';
+import {usePopup} from '@/libs/providers/PopupProvider';
+import PopupImage from '@/components/Popup/PopupImage';
 
 interface IWidgetWebinar {
   title: string;
@@ -32,6 +34,12 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
     () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
     [preview, isMobileScreen],
   );
+
+  const {openPopup} = usePopup();
+
+  const handleOpenImage = () => {
+    openPopup('Image', <PopupImage url={urlThumbnail ?? ''} />, 'max-w-[40%]');
+  };
 
   return (
     <div
@@ -58,7 +66,7 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
               }
               passHref
               target={'_blank'}>
-              <Button className={'z-30'} title={'Join'} size={'xs'} />
+              <Button className={'z-30'} title={'Join Webinar'} size={'xs'} />
             </Link>
           </div>
         </div>
@@ -66,12 +74,14 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
           id={`image-div-${urlThumbnail}`}
           className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
           {urlThumbnail && (
-            <Image
-              src={urlThumbnail}
-              alt={title}
-              className="object-cover rounded-lg"
-              fill
-            />
+            <div className={'cursor-pointer'} onClick={handleOpenImage}>
+              <Image
+                src={urlThumbnail}
+                alt={title}
+                className="object-cover rounded-lg"
+                fill
+              />
+            </div>
           )}
         </div>
       </div>
