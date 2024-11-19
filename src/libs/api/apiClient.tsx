@@ -9,6 +9,7 @@ const createApiClient = (
   dispatch: AppDispatch,
   showToasts = true,
   isMultipart = false,
+  message?: {success: string; error: string},
 ) => {
   const axiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -34,10 +35,20 @@ const createApiClient = (
   axiosInstance.interceptors.response.use(
     response => {
       if (showToasts) {
+        let title = '';
+        let messageSuccess = '';
+        if (message?.success) {
+          title = message.success;
+          messageSuccess = '';
+        } else {
+          title = 'Success';
+          messageSuccess =
+            response.data.message || 'Action completed successfully.';
+        }
         handleShowToast(
           {
-            title: 'Success',
-            message: response.data.message || 'Action completed successfully.',
+            title,
+            message: messageSuccess,
             type: ToastType.SUCCESS,
           },
           dispatch,
@@ -48,11 +59,21 @@ const createApiClient = (
     error => {
       const formattedError = getError(error);
       if (showToasts) {
+        let title = '';
+        let messageError = '';
+        if (message?.error) {
+          title = message.error;
+          messageError = '';
+        } else {
+          title = 'Success';
+          messageError =
+            formattedError.message?.toString() ||
+            'Something went wrong. Please retry.';
+        }
         handleShowToast(
           {
-            title: 'Error',
-            message:
-              formattedError.message || 'Something went wrong. Please retry.',
+            title,
+            message: messageError,
             type: ToastType.ERROR,
           },
           dispatch,
