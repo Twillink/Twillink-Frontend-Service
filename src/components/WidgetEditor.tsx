@@ -595,9 +595,14 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
                 onClickBanner={() => setPopupState(WidgetTypeEnum.Banner)}
                 urlBanner={dataProfile?.urlBanner}
               />
-              <UserProfile contact={dataContact} dataProfile={dataProfile} />
+              <UserProfile
+                contact={dataContact}
+                dataProfile={dataProfile}
+                viewer={false}
+              />
               <div className={` flex flex-wrap px-5`}>
                 <SocialContainer
+                  viewer={false}
                   onClick={() => setPopupState(WidgetTypeEnum.Social)}
                   data={dataSocial}
                 />
