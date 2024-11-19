@@ -79,7 +79,7 @@ const Page = () => {
         <div className={'relative max-h-[664px] xl:[756px]  h-full'}>
           <div
             className={
-              ' relative aspect-[6.58/4.12] h-full border-4 border-solid rounded-[50px] border-color-[#444] bg-black p-8 overflow-hidden'
+              ' relative aspect-[8/5] h-full border-4 border-solid rounded-[50px] border-color-[#444] bg-black p-8 overflow-hidden'
             }>
             <div
               className={'mockup-browser h-full w-full bg-base-100 py-6 px-8'}>

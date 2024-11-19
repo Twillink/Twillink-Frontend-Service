@@ -62,6 +62,8 @@ export const PreviewProvider: React.FC<PreviewProviderProps> = ({children}) => {
       // Force mobile preview on small screens
       if (isMobile && preview !== PreviewTypeEnum.MOBILE) {
         setPreview(PreviewTypeEnum.MOBILE);
+      } else {
+        setPreview(PreviewTypeEnum.DESKTOP);
       }
     };
 
