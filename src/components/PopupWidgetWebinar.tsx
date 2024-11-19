@@ -186,7 +186,6 @@ const PopupWidgetWebinar: React.FC<IPopupWidgetVideo> = ({
 
             <div>
               <InputLabel
-                type="url"
                 label="Add Webinar Link"
                 name="urlWebinar"
                 value={formik.values.urlWebinar}

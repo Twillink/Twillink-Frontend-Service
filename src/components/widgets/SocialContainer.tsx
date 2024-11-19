@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import SocialButton from './SocialButton';
 import {socialButtons} from '../PopupWidgetSocial';
 import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
+import Link from 'next/link';
 
 interface ISocialContainer {
   onClick?: () => void;
@@ -23,11 +24,9 @@ const SocialContainer: React.FC<ISocialContainer> = ({onClick, data}) => {
         if (!Icon) return null;
         return (
           <div key={item?.key} className="w-7 h-7 flex justify-center">
-            <Icon
-              width={28}
-              height={28}
-              className={'fill-slate-500 w-full h-full'}
-            />
+            <Link href={item.value} target={'_blank'}>
+              <Icon width={28} height={28} className={'fill-slate-500 +'} />
+            </Link>
           </div>
         );
       })}

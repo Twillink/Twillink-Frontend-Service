@@ -31,9 +31,9 @@ const PopupDetailBlog: React.FC<IPopupDetailBlog> = ({
           </div>
         )}
 
-        <div className="flex flex-col gap-2">
-          <p className="text-lg font-bold">{dataBlog?.title}</p>
-          <p className="text-sm text-gray-500">{dataBlog?.content}</p>
+        <div className="flex flex-col gap-2 mb-4">
+          <p className="text-lg text-primary font-bold">{dataBlog?.title}</p>
+          <p className="text-sm text-primary ">{dataBlog?.content}</p>
         </div>
       </div>
     </PopupContainer>

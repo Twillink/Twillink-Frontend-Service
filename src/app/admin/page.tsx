@@ -107,7 +107,10 @@ const Page = () => {
               dataSocial={dataSocial}
               dataProfile={dataProfile}
             />
-            <div className={'sticky bg-base-100 bottom-0 py-2 z-30 '}>
+            <div
+              className={
+                'sticky bg-base-100 bottom-0 py-3 z-30 cursor-pointer'
+              }>
               <p className={'text-sm font-medium text-center'}>
                 Try Twillink—it&apos;s free!
               </p>

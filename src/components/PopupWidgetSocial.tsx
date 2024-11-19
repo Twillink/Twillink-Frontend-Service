@@ -1,7 +1,6 @@
 import SvgFacebook from '@/assets/svgComponents/SvgFacebook';
 import SvgInstagram from '@/assets/svgComponents/SvgInstagram';
 import SvgLinkedIn from '@/assets/svgComponents/SvgLinkedIn';
-import SvgTelegram from '@/assets/svgComponents/SvgTelegram';
 import SvgTiktok from '@/assets/svgComponents/SvgTiktok';
 import SvgTumblr from '@/assets/svgComponents/SvgTumblr';
 import SvgTwitter from '@/assets/svgComponents/SvgTwitter';
@@ -15,6 +14,7 @@ import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
 import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
+import SvgTelegramSocial from '@/assets/svgComponents/SvgTelegramSocial';
 
 interface IPopupWidgetSocial {
   isOpen: boolean;
@@ -43,7 +43,7 @@ export const socialButtons: ISocialButton[] = [
   },
   {
     name: 'telegram',
-    icon: SvgTelegram,
+    icon: SvgTelegramSocial,
   },
   {
     name: 'facebook',
@@ -104,7 +104,9 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
         className={`${isOpen ? 'visible' : 'hidden'} modal-backdrop flex flex-col gap-5`}
         onSubmit={formik.handleSubmit}>
         <p className="text-general-med text-sm">Select social account</p>
-        <div className="flex gap-4 justify-between flex-nowrap overflow-x-scroll">
+        <div
+          className="flex gap-4 justify-around flex-nowrap overflow-x-scroll"
+          style={{scrollbarWidth: 'thin'}}>
           {socialButtons
             .filter(s => !existingSocials.includes(s.name))
             .map(button => {
@@ -115,12 +117,8 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
                   onClick={() => {
                     formik.setFieldValue('key', button.name);
                   }}
-                  className={`w-8 p-1 flex justify-center items-center ${formik.values.key !== button.name ? 'grayscale' : 'bg-base-200'} hover:cursor-pointer`}>
-                  <Icon
-                    width={28}
-                    height={28}
-                    className={'fill-slate-500 w-full h-full'}
-                  />
+                  className={`p-2 flex justify-center items-center ${formik.values.key !== button.name ? 'bg-transparent' : 'bg-base-300 rounded-full'} hover:cursor-pointer`}>
+                  <Icon width={28} height={28} className={'fill-slate-500 '} />
                   {/* <span>{button.name}</span> */}
                 </div>
               );
@@ -131,7 +129,6 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
         ) : null}
 
         <InputLabel
-          type="url"
           label="URL Link"
           name="value"
           value={formik.values.value}
