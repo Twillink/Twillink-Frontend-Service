@@ -605,6 +605,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
                   viewer={false}
                   onClick={() => setPopupState(WidgetTypeEnum.Social)}
                   data={dataSocial}
+                  fetchData={fetchData}
                 />
                 {!isDesktop &&
                   dataWidgetFiltered

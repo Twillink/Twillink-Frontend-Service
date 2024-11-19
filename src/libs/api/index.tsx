@@ -121,7 +121,11 @@ export const apiAddWidgetLink = async (
   body: IAddWidgetLink,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Link Successfully Saved',
+    error: 'Failed to Save Link',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-link', body);
 };
 
@@ -130,7 +134,11 @@ export const apiAddWidgetText = async (
   body: IAddWidgetText,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Text Successfully Saved',
+    error: 'Failed to Save Text',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-text', body);
 };
 
@@ -139,7 +147,11 @@ export const apiAddWidgetImage = async (
   body: IAddWidgetImage,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Image Successfully Saved',
+    error: 'Failed to Save Image',
+  };
+  const api = createApiClient(dispatch, showToasts, true, message);
   return await api.post('/api/v1/widget-image', body);
 };
 
@@ -148,7 +160,11 @@ export const apiAddWidgetVideo = async (
   body: IAddWidgetVideo,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Video Successfully Saved',
+    error: 'Failed to Save Video',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-video', body);
 };
 
@@ -157,7 +173,11 @@ export const apiAddWidgetPdf = async (
   body: IAddWidgetPdf,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'PDF File Successfully Added',
+    error: 'Failed to Add PDF File',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-pdf', body);
 };
 
@@ -166,7 +186,11 @@ export const apiAddWidgetWebinar = async (
   body: IAddWidgetWebinar,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Webinar Successfully Saved',
+    error: 'Failed to Save Webinar',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-webinar', body);
 };
 export const apiAddWidgetBlog = async (
@@ -174,7 +198,11 @@ export const apiAddWidgetBlog = async (
   body: IAddWidgetBlog,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Blog Content Successfully Published',
+    error: 'Failed to Publish Blog Content',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-blog', body);
 };
 
@@ -183,7 +211,11 @@ export const apiAddWidgetCarousel = async (
   body: IAddWidgetCarousel,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Carousel Successfully Saved',
+    error: 'Failed to Save Carousel',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-carousel', {
     ...body,
     attachmentIds: body.attachmentIds,
@@ -195,7 +227,11 @@ export const apiAddWidgetContact = async (
   body: IAddWidgetContact,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Contact Successfully Saved',
+    error: 'Failed to Save Contact',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-contact', body);
 };
 
@@ -204,7 +240,11 @@ export const apiAddWidgetSocial = async (
   body: IAddWidgetSocial,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Social Media Account Successfully Saved',
+    error: 'Failed to Save Social Media Account',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-sosmed', body);
 };
 
@@ -213,7 +253,11 @@ export const apiAddWidgetMap = async (
   body: IAddWidgetMap,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Map Successfully Saved',
+    error: 'Failed to Save Map',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/widget-map', body);
 };
 
@@ -222,8 +266,25 @@ export const apiRemoveWidget = async (
   id: any,
   showToasts = true,
 ) => {
-  const api = createApiClient(dispatch, showToasts);
+  const message = {
+    success: 'Widget Successfully Deleted',
+    error: 'Failed to Delete Widget',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
   return await api.delete(`/api/v1/widget/${id}`);
+};
+
+export const apiRemoveSocial = async (
+  dispatch: AppDispatch,
+  id: any,
+  showToasts = true,
+) => {
+  const message = {
+    success: 'Social Successfully Deleted',
+    error: 'Failed to Delete Social',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
+  return await api.delete(`/api/v1/widget-sosmed/${id}`);
 };
 
 export const apiGetUserProfile = async (
