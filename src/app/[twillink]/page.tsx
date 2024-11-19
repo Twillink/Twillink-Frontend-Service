@@ -83,8 +83,7 @@ const Page = () => {
             className={
               ' relative aspect-[6.58/4.12] h-full border-4 border-solid rounded-[50px] border-color-[#444] bg-black p-8 overflow-hidden'
             }>
-            <div
-              className={'mockup-browser h-full w-full bg-base-100 py-6 px-8'}>
+            <div className={'h-full w-full bg-base-100 py-6 px-8'}>
               <WidgetViewer
                 isLoading={isLoading}
                 dataWidget={dataWidget}

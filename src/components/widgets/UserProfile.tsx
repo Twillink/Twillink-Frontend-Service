@@ -18,9 +18,10 @@ import PopupProfile from '@/components/Popup/PopupProfile';
 interface IUserProfile {
   contact?: IItemWidgetType;
   dataProfile: IWigetProfile;
+  viewer: boolean;
 }
 
-function UserProfile({contact, dataProfile}: IUserProfile) {
+function UserProfile({contact, dataProfile, viewer}: IUserProfile) {
   const [isSticky, setIsSticky] = useState<boolean>(false);
   const [editingSection, setEditingSection] = useState<
     'none' | 'businessName' | 'caption'
@@ -115,11 +116,22 @@ function UserProfile({contact, dataProfile}: IUserProfile) {
       ref={profileRef}
       className={`w-full ${isSticky ? 'sticky top-0 left-0 right-0 p-4 shadow-md flex flex-row items-center gap-4 pt-9 bg-base-200 z-10' : 'relative flex flex-col items-center gap-4 -top-14 -mb-8'}`}>
       <div>
-        <ProfileImage
-          onPhotoChange={file => handlePhotoChange(file)}
-          isSticky={isSticky}
-          urlImage={dataProfile?.urlImage}
-        />
+        {!viewer && (
+          <ProfileImage
+            onPhotoChange={file => handlePhotoChange(file)}
+            isSticky={isSticky}
+            urlImage={dataProfile?.urlImage}
+          />
+        )}
+        {viewer && (
+          <div style={{pointerEvents: 'none'}}>
+            <ProfileImage
+              onPhotoChange={file => handlePhotoChange(file)}
+              isSticky={isSticky}
+              urlImage={dataProfile?.urlImage}
+            />
+          </div>
+        )}
       </div>
       <div
         className={`flex flex-col justify-center ${isSticky ? '' : 'text-center'}`}>

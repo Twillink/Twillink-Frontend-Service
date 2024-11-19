@@ -7,9 +7,14 @@ import Link from 'next/link';
 interface ISocialContainer {
   onClick?: () => void;
   data: IAddWidgetSocial[];
+  viewer: boolean;
 }
 
-const SocialContainer: React.FC<ISocialContainer> = ({onClick, data}) => {
+const SocialContainer: React.FC<ISocialContainer> = ({
+  onClick,
+  data,
+  viewer,
+}) => {
   const [
     imageUrls,
     // setImageUrls
@@ -31,6 +36,7 @@ const SocialContainer: React.FC<ISocialContainer> = ({onClick, data}) => {
         );
       })}
       {!disableAddButton &&
+        !viewer &&
         imageUrls.map((_, index) => (
           <div
             key={index}

@@ -6,10 +6,11 @@ import PopupWidgetImage from '@/components/PopupWidgetImage';
 import PopupWidgetLink from '@/components/PopupWidgetLink';
 import PopupWidgetText from '@/components/PopupWidgetText';
 import PopupWidgetVideo from '@/components/PopupWidgetVideo';
+// import AddWidget from '@/components/widgets/AddWidget';
 import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
 import SocialContainer from '@/components/widgets/SocialContainer';
 import UserProfile from '@/components/widgets/UserProfile';
-import WidgetContainer from '@/components/widgets/WidgetContainer';
+import WidgetContainerView from '@/components/widgets/WidgetContainerView';
 import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {generateUniqueString} from '@/utils/generateUniqueString';
@@ -21,9 +22,12 @@ import {
   apiAddWidgetContact,
   apiAddWidgetImage,
   apiAddWidgetLink,
+  apiAddWidgetMap,
+  apiAddWidgetPdf,
   apiAddWidgetSocial,
   apiAddWidgetText,
   apiAddWidgetVideo,
+  apiAddWidgetWebinar,
   apiChangeOrderWidget,
   apiChangeWidthWidget,
   apiRemoveWidget,
@@ -42,16 +46,18 @@ import {
 } from 'react';
 import PopupWidgetSocial from './PopupWidgetSocial';
 import PopupWidgetCarousel from './PopupWidgetCarousel';
-import mockApiCall from '@/mock/mockApiCall';
 import {
   IAddWidgetBlog,
   IAddWidgetCarousel,
   IAddWidgetContact,
   IAddWidgetImage,
   IAddWidgetLink,
+  IAddWidgetMap,
+  IAddWidgetPdf,
   IAddWidgetSocial,
   IAddWidgetText,
   IAddWidgetVideo,
+  IAddWidgetWebinar,
   IChangeOrderWidgetItem,
   TypeWidthWidgetEnum,
 } from '@/libs/types/IAddWidgetData';
@@ -66,6 +72,9 @@ import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
 import PopupWidgetSchedule from '@/components/PopupWidgetSchedule';
 import {IWigetProfile} from '@/libs/types/IWigetProfile';
 import PopupWidgetBanner from '@/components/PopupWidgetBanner';
+import PopupWidgetMap from '@/components/PopupWidgetMap';
+import PopupWidgetPdf from '@/components/PopupWidgetPdf';
+import PopupWidgetWebinar from '@/components/PopupWidgetWebinar';
 
 interface IWidgetViewer {
   isLoading: boolean;
@@ -79,7 +88,7 @@ interface IWidgetViewer {
 
 type PopupState = 'none' | 'main' | WidgetTypeEnum;
 
-const WidgetEditor: React.FC<IWidgetViewer> = ({
+const WidgetViewer: React.FC<IWidgetViewer> = ({
   isLoading,
   dataWidget,
   setDataWidget,
@@ -191,9 +200,19 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
       case WidgetTypeEnum.Blog:
         setPopupState(WidgetTypeEnum.Blog);
         break;
+      case WidgetTypeEnum.Map:
+        setPopupState(WidgetTypeEnum.Map);
+        break;
       case WidgetTypeEnum.Schedule:
         setPopupState(WidgetTypeEnum.Schedule);
         break;
+      case WidgetTypeEnum.PDF:
+        setPopupState(WidgetTypeEnum.PDF);
+        break;
+      case WidgetTypeEnum.Webinar:
+        setPopupState(WidgetTypeEnum.Webinar);
+        break;
+
       case 'main':
         setPopupState('main');
         break;
@@ -366,7 +385,42 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
         );
         break;
       case WidgetTypeEnum.Map:
-        apiCall = mockApiCall();
+        body = {
+          caption: newWidget.value?.caption,
+          latitude: newWidget.value?.latitude,
+          longitude: newWidget.value?.longitude,
+        };
+        apiCall = apiAddWidgetMap(dispatch, body as IAddWidgetMap);
+        break;
+      case WidgetTypeEnum.PDF:
+        file = newWidget.value?.files ? newWidget.value?.files[0] : '';
+        if (file) {
+          const response = await apiAddAttachment(dispatch, {files: [file]});
+
+          body = {
+            caption: newWidget.value?.caption,
+            url: response?.data?.path,
+            urlThumbnail: response?.data?.path,
+          };
+        }
+
+        apiCall = apiAddWidgetPdf(dispatch, body as IAddWidgetPdf);
+        break;
+      case WidgetTypeEnum.Webinar:
+        body = {
+          title: newWidget.value?.title,
+          urlWebinar: newWidget.value?.urlWebinar,
+          urlThumbnail: newWidget.value?.urlThumbnail,
+          description: newWidget.value?.description,
+          webinarType: newWidget.value?.webinarType,
+          passcode: newWidget.value?.passcode,
+          notes: newWidget.value?.notes,
+          startDate: newWidget.value?.startDate,
+          endDate: newWidget.value?.endDate,
+          date: newWidget.value?.date,
+        };
+
+        apiCall = apiAddWidgetWebinar(dispatch, body as IAddWidgetWebinar);
         break;
       default:
         return false;
@@ -514,7 +568,7 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
       if (item.type === WidgetTypeEnum.Contact) {
         contact = item;
       } else if (item.type === WidgetTypeEnum.Profile) {
-        console.log('skip profile');
+        // console.log('skip profile');
       } else {
         filtered.push(item);
       }
@@ -530,7 +584,7 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
           scrollbarWidth: 'thin',
         }}>
         <div
-          className={`artboard flex flex-col ${isDesktop ? ' rounded-[50px] max-w-[200px]' : 'max-w-[428px]'} bg-primary-content h-full min-w-[300px] overflow-y-auto relative`}
+          className={`artboard flex flex-col ${isDesktop ? 'rounded-[50px] max-w-[200px]' : 'max-w-[428px]'} bg-primary-content h-full min-w-[300px] overflow-y-auto relative`}
           ref={scrollContainerRef}
           onDragOver={ev => ev.preventDefault()}>
           {isLoading ? (
@@ -538,20 +592,25 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
           ) : (
             <>
               <ScrollHideHeader
-                onClickBanner={() => setPopupState(WidgetTypeEnum.Banner)}
+                onClickBanner={() => setPopupState('none')}
                 urlBanner={dataProfile?.urlBanner}
               />
-              <UserProfile contact={dataContact} dataProfile={dataProfile} />
-              <div className="flex flex-wrap px-6">
+              <UserProfile
+                contact={dataContact}
+                dataProfile={dataProfile}
+                viewer={true}
+              />
+              <div className={` flex flex-wrap px-5`}>
                 <SocialContainer
-                  onClick={() => setPopupState(WidgetTypeEnum.Social)}
+                  onClick={() => setPopupState('none')}
                   data={dataSocial}
+                  viewer={true}
                 />
                 {!isDesktop &&
                   dataWidgetFiltered
                     .sort((a, b) => a.order - b.order)
                     .map(widget => (
-                      <WidgetContainer
+                      <WidgetContainerView
                         key={widget.idEditor}
                         values={widget}
                         handleDrag={handleDrag}
@@ -564,11 +623,9 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
                         }
                       />
                     ))}
-                {!isDesktop && (
-                  <div
-                    className={`${isDesktop ? 'h-20 min-w-[160px]' : 'h-[20px] w-full mb-10'} p-[6px]`}
-                  />
-                )}
+                {/* {!isDesktop && (
+                  <AddWidget onClick={() => setPopupState('none')} />
+                )} */}
               </div>
               {isDesktop && (
                 <div>
@@ -600,13 +657,18 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
         {isDesktop && (
           <div
             className={
-              'flex w-full flex-wrap whitespace-pre-wrap overflow-y-auto'
+              'flex flex-wrap w-full overflow-y-auto max-h-fit scrollbar-thin'
             }
-            style={{rowGap: '0px', columnGap: '0px', scrollbarWidth: 'thin'}}>
+            style={{
+              rowGap: '0px',
+              columnGap: '0px',
+              scrollbarWidth: 'thin',
+              scrollBehavior: 'smooth',
+            }}>
             {dataWidgetFiltered
               .sort((a, b) => a.order - b.order)
               .map(widget => (
-                <WidgetContainer
+                <WidgetContainerView
                   key={widget.idEditor}
                   values={widget}
                   handleDrag={handleDrag}
@@ -619,11 +681,7 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
                   }
                 />
               ))}
-            {isDesktop && (
-              <div
-                className={`${isDesktop ? 'h-20 min-w-[160px]' : 'h-[20px] w-full mb-10'} p-[6px]`}
-              />
-            )}
+            {/* {isDesktop && <AddWidget onClick={() => setPopupState('none')} />} */}
           </div>
         )}
       </div>
@@ -633,6 +691,7 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
         onClose={handleClosePopup}
         onAddAction={handleAddAction}
       />
+
       <PopupWidgetLink
         isOpen={popupState === WidgetTypeEnum.Link}
         onClose={handleClosePopup}
@@ -656,6 +715,7 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
         onAdd={handleAdd}
         disabled={isSubmitting}
       />
+
       <PopupWidgetImage
         isOpen={popupState === WidgetTypeEnum.Image}
         onClose={handleClosePopup}
@@ -712,8 +772,32 @@ const WidgetEditor: React.FC<IWidgetViewer> = ({
         onAdd={handleAdd}
         disabled={isSubmitting}
       />
+
+      <PopupWidgetMap
+        isOpen={popupState === WidgetTypeEnum.Map}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetPdf
+        isOpen={popupState === WidgetTypeEnum.PDF}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetWebinar
+        isOpen={popupState === WidgetTypeEnum.Webinar}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
     </>
   );
 };
 
-export default WidgetEditor;
+export default WidgetViewer;
