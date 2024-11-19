@@ -10,7 +10,7 @@ import {handleShowToast} from '@/utils/toast';
 import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 import {ToastType} from '@/libs/types/ToastType';
 
-interface IPopupDetailBlog {
+interface IPopupShareLink {
   isOpen: boolean;
   onClose: () => void;
 
@@ -18,7 +18,7 @@ interface IPopupDetailBlog {
   username?: string;
 }
 
-const PopupShareLink: React.FC<IPopupDetailBlog> = ({
+const PopupShareLink: React.FC<IPopupShareLink> = ({
   isOpen,
   onClose,
   username,

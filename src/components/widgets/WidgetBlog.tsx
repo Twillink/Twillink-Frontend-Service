@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useContext, useMemo, useState} from 'react';
+import React, {useContext, useMemo} from 'react';
 import Image from 'next/image';
 import SvgGlobe from '@/assets/svgComponents/SvgGlobe';
 import Button from '@/components/Button';
@@ -9,6 +9,8 @@ import {
   PreviewTypeEnum,
 } from '@/libs/providers/PreviewProvider';
 import PopupDetailBlog from '@/components/Popup/PopupDetailBlog';
+import {usePopup} from '@/libs/providers/PopupProvider';
+import PopupImage from '@/components/Popup/PopupImage';
 
 interface IWidgetBlog {
   title: string;
@@ -28,8 +30,6 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
   isFullWidth = true,
   ...restProps
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
   const {preview, isMobileScreen} = useContext(PreviewContext);
 
   const isDesktop = useMemo(
@@ -37,12 +37,24 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
     [preview, isMobileScreen],
   );
 
-  const handleClosePopup = () => {
-    setIsOpen(false);
-  };
+  const {openPopup} = usePopup();
 
   const handleOpen = () => {
-    setIsOpen(true);
+    openPopup(
+      'Detail Blog',
+      <PopupDetailBlog
+        dataBlog={{
+          title: title,
+          url: url,
+          content: content,
+        }}
+      />,
+      'max-w-[40%]',
+    );
+  };
+
+  const handleOpenImage = () => {
+    openPopup('Image', <PopupImage url={url} />, 'max-w-[40%]');
   };
 
   return (
@@ -69,24 +81,17 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
           id={`image-div-${url}`}
           className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
           {url && (
-            <Image
-              src={url}
-              alt={title}
-              className="object-cover rounded-lg"
-              fill
-            />
+            <div className={'cursor-pointer'} onClick={handleOpenImage}>
+              <Image
+                src={url}
+                alt={title}
+                className="object-cover rounded-lg"
+                fill
+              />
+            </div>
           )}
         </div>
       </div>
-      <PopupDetailBlog
-        isOpen={isOpen}
-        onClose={handleClosePopup}
-        dataBlog={{
-          title,
-          url,
-          content,
-        }}
-      />
     </div>
   );
 };

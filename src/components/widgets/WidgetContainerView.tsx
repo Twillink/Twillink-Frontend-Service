@@ -1,10 +1,6 @@
 'use client';
 
-import React, {
-  useContext,
-  useMemo,
-  // useState
-} from 'react';
+import React, {useContext, useMemo} from 'react';
 import WidgetLink from '@/components/widgets/WidgetLink';
 import WidgetText from '@/components/widgets/WidgetText';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
@@ -80,9 +76,6 @@ const WidgetContainerView: React.FC<IWidgetContainerView> = ({
             text={values.value?.caption || ''}
             url={values.value?.url || '#'}
             image={values.value?.image}
-            onClick={e => {
-              e.preventDefault();
-            }}
           />
         );
       case WidgetTypeEnum.Video:

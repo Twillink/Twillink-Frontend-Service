@@ -7,6 +7,7 @@ import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
 import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 import VideoSelectorWithSource from '@/components/VideoSelectorWithSource';
+import ReactPlayer from 'react-player';
 
 interface IPopupWidgetVideo {
   isOpen: boolean;
@@ -54,6 +55,13 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
     formik.setFieldValue('selectedVideo', null);
     formik.setFieldValue('video', null);
   };
+
+  const isYoutube = formik.values?.url?.includes('youtu');
+
+  const youtubeId = isYoutube ? formik.values?.url?.split('v=')[1] : '';
+  const posterYoutube = youtubeId
+    ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+    : '';
 
   return (
     <PopupContainer
@@ -133,6 +141,14 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
               }
             />
           </div>
+        )}
+
+        {posterYoutube && (
+          <ReactPlayer
+            url={formik.values?.url}
+            height={'100%'}
+            width={'100%'}
+          />
         )}
 
         <div className="flex justify-end">

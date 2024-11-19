@@ -64,7 +64,7 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
         </div>
         <div
           id={`image-div-${urlThumbnail}`}
-          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'h-10'} rounded-lg overflow-hidden`}>
+          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
           {urlThumbnail && (
             <Image
               src={urlThumbnail}
