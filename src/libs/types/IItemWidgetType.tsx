@@ -27,6 +27,7 @@ export interface IItemWidgetTypeValues {
   startDate?: string | Date;
   endDate?: string | Date;
   date?: string;
+  contents?: string;
   widgetCarouselAttachment?: WidgetCarouselAttachment[];
 }
 

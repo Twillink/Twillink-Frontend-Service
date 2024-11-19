@@ -93,6 +93,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
         return (
           <WidgetBlog
             title={values.value?.title || ''}
+            content={values.value?.contents ?? ''}
             url={values.value?.url || '#'}
             image={values.value?.image}
           />

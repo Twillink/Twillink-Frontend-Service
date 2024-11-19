@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 
 const AddWidgetWebinarSchema = Yup.object().shape({
   title: Yup.string().required('Title is required'),
-  urlWebinar: Yup.string().url('Invalid URL').required('URL is required'),
+  urlWebinar: Yup.string().required('URL is required'),
   description: Yup.string().required('Description is required'),
   webinarType: Yup.string().required('Webinar Type is required'),
   passcode: Yup.string().nullable(),

@@ -87,7 +87,6 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
         {!formik.values.selectedVideo && (
           <div>
             <InputLabel
-              type="url"
               label="Input URL Video"
               name="url"
               value={formik.values.url}

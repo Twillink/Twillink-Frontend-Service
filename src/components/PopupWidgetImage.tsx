@@ -84,7 +84,6 @@ const PopupWidgetImage: React.FC<IPopupWidgetImage> = ({
         {!formik.values.selectedImage && (
           <div>
             <InputLabel
-              type="url"
               label="Input URL Image"
               name="url"
               value={formik.values.url}

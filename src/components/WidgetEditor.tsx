@@ -640,7 +640,11 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
                         }
                       />
                     </div>
-                    <p className={'text-sm font-medium text-center'}>
+
+                    <p
+                      className={
+                        'text-sm font-medium text-center cursor-pointer'
+                      }>
                       Try Twillink—it&apos;s free!
                     </p>
                   </div>
