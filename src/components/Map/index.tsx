@@ -1,4 +1,5 @@
 'use client';
+
 import {MapContainer, Marker, Popup, TileLayer, useMap} from 'react-leaflet';
 import Leaflet from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -39,14 +40,18 @@ const MyMap = (props: any) => {
       scrollWheelZoom={false}
       zoomControl={false}
       className={cn(styles.container, 'z-[0]')}>
+      {/*{!isGoogle ? (*/}
       <TileLayer
-        // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {/*<TileLayer*/}
-      {/*  attribution="Google Maps"*/}
-      {/*  url="https://www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}"*/}
-      {/*/>*/}
+      {/*) : (*/}
+      {/*  <TileLayer*/}
+      {/*    attribution="Google Maps"*/}
+      {/*    url="https://www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}"*/}
+      {/*  />*/}
+      {/*)}*/}
+
       <Marker position={position} autoPanOnFocus icon={icon}>
         <Popup>
           <p>{popup}</p>

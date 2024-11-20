@@ -8,6 +8,7 @@ import PopupContainer from './PopupContainer';
 import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 import VideoSelectorWithSource from '@/components/VideoSelectorWithSource';
 import ReactPlayer from 'react-player';
+import ImageSelectorWithSource from '@/components/ImageSelectorWithSource';
 
 interface IPopupWidgetVideo {
   isOpen: boolean;
@@ -34,6 +35,8 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
       attachmentId: null,
       video: '',
       selectedVideo: null,
+      selectedImage: null,
+      image: '',
     },
     validationSchema: AddWidgetVideoSchema,
     onSubmit: async values => {
@@ -41,6 +44,7 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
         caption: values.caption,
         url: values.url,
         video: values.video,
+        image: values.image,
       };
       const success = await onAdd(WidgetTypeEnum.Video, value);
 
@@ -54,6 +58,11 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
   const handleResetVideo = () => {
     formik.setFieldValue('selectedVideo', null);
     formik.setFieldValue('video', null);
+  };
+
+  const handleResetImage = () => {
+    formik.setFieldValue('selectedImage', null);
+    formik.setFieldValue('image', null);
   };
 
   const isYoutube = formik.values?.url?.includes('youtu');
@@ -137,6 +146,37 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
               error={
                 formik.touched.selectedVideo && formik.errors.selectedVideo
                   ? formik.errors.selectedVideo
+                  : ''
+              }
+            />
+          </div>
+        )}
+
+        {formik.values.selectedVideo && (
+          <div>
+            <label className="mb-1 text-general-med text-sm">
+              Video Thumbnail
+            </label>
+            <ImageSelectorWithSource
+              image={formik.values.selectedImage}
+              name={`image_WVideo`}
+              label={'Browse Thumbnail'}
+              onChange={e => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    formik.setFieldValue('selectedImage', reader.result);
+                  };
+                  formik.setFieldValue(`image`, file);
+                  reader.readAsDataURL(file);
+                }
+              }}
+              reset={formik.values.selectedImage === null}
+              onReset={handleResetImage}
+              error={
+                formik.touched.selectedImage && formik.errors.selectedImage
+                  ? formik.errors.selectedImage
                   : ''
               }
             />

@@ -50,7 +50,7 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
         loading: () => <p>loading . . .</p>,
         ssr: false,
       }),
-    [],
+    [location.latitude, location.longitude],
   );
 
   const [showOptions, setShowOptions] = React.useState(false);
@@ -83,7 +83,7 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
     },
   });
 
-  const debouncedSearch = useDebounce(formik.values?.search, 1000);
+  const debouncedSearch = useDebounce(formik.values?.search, 300);
 
   useEffect(() => {
     const getLocation = async () => {
@@ -118,7 +118,7 @@ const PopupWidgetMap: React.FC<IPopupWidgetImage> = ({
       isOpen={isOpen}>
       <form
         method="dialog"
-        className={`${isOpen ? 'visible' : 'hidden'} modal-backdrop flex flex-col gap-5`}
+        className={`modal-backdrop flex flex-col gap-5`}
         onSubmit={formik.handleSubmit}>
         <div>
           <InputLabel

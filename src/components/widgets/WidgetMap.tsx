@@ -2,6 +2,7 @@
 
 import React, {useMemo} from 'react';
 import dynamic from 'next/dynamic';
+import {useRouter} from 'next/navigation';
 
 interface IWidgetMap {
   caption: string;
@@ -15,13 +16,15 @@ const WidgetMap: React.FC<IWidgetMap> = ({
   longitude,
   ...restProps
 }) => {
+  const router = useRouter();
+
   const Map = useMemo(
     () =>
       dynamic(() => import('@/components/Map'), {
         loading: () => <p>loading . . .</p>,
         ssr: false,
       }),
-    [],
+    [latitude, longitude],
   );
 
   return (
@@ -31,9 +34,8 @@ const WidgetMap: React.FC<IWidgetMap> = ({
       <div
         className="flex justify-between items-center w-full gap-2 h-full rounded-2xl overflow-hidden relative"
         onClick={() =>
-          window.open(
-            `https://www.openstreetmap.org/#map=${13}/${latitude}/${longitude}`,
-            '_blank',
+          router.push(
+            `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=${20}/${latitude}/${longitude}`,
           )
         }>
         <p
@@ -48,7 +50,6 @@ const WidgetMap: React.FC<IWidgetMap> = ({
           />
         )}
       </div>
-      {/*</Link>*/}
     </div>
   );
 };

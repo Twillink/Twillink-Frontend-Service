@@ -59,16 +59,18 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
 
   return (
     <div
-      className="border-base-300 border-2 bg-primary-content rounded-2xl h-full w-full p-2 flex items-center relative"
+      className={`border-base-300 border-2 bg-primary-content rounded-2xl h-full w-full p-2 flex items-center relative`}
       {...restProps}>
       <div className="flex justify-between items-start h-full w-full ">
         <div
-          className={'flex flex-col justify-between items-start h-full gap-2'}>
+          className={
+            'flex flex-col justify-between items-start h-full gap-2 z-[1]'
+          }>
           <div>
             <SvgGlobe width={32} height={32} className={'stroke-base-300'} />
             <div>
               <p
-                className={`text-start text-xs mt-1 text-ellipsis ${isFullWidth ? 'line-clamp-3' : 'line-clamp-2'}  overflow-hidden font-normal w-full ${image ? 'w-1/2' : 'w-full'}`}>
+                className={`text-start text-xs mt-1 text-ellipsis ${isFullWidth ? 'line-clamp-3' : 'line-clamp-2'}  overflow-hidden font-medium w-full ${image ? 'w-1/2' : 'w-full'}`}>
                 {title}
               </p>
             </div>
@@ -79,7 +81,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
         </div>
         <div
           id={`image-div-${url}`}
-          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
+          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'absolute top-0 left-0 h-full w-full'} rounded-lg overflow-hidden`}>
           {url && (
             <div className={'cursor-pointer'} onClick={handleOpenImage}>
               <Image
@@ -89,6 +91,11 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
                 fill
               />
             </div>
+          )}
+          {!isFullWidth && (
+            <div
+              onClick={handleOpenImage}
+              className="absolute cursor-pointer inset-0 bg-base-100 blur-xs opacity-50"></div>
           )}
         </div>
       </div>

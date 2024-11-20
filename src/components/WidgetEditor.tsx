@@ -247,6 +247,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     let apiCall;
     let body = {};
     let file = '';
+    let thumbnail = '';
     switch (type) {
       case WidgetTypeEnum.Link:
         file = newWidget.value?.image ?? '';
@@ -298,10 +299,12 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         break;
       case WidgetTypeEnum.Video:
         file = newWidget.value?.video ?? '';
+        thumbnail = newWidget.value?.image ?? '';
+
         body = {
           caption: newWidget.value?.caption,
           url: newWidget.value?.url,
-          urlThumbnail: newWidget.value?.url,
+          urlThumbnail: newWidget.value?.url ?? '',
         };
         if (file) {
           try {
@@ -310,6 +313,20 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
             body = {
               ...body,
               url: response?.data?.path,
+            };
+          } catch {
+            dispatch(setSubmitLoading(false));
+            return false;
+          }
+        }
+        if (thumbnail) {
+          try {
+            const response = await apiAddAttachment(dispatch, {
+              files: [thumbnail],
+            });
+
+            body = {
+              ...body,
               urlThumbnail: response?.data?.path,
             };
           } catch {
