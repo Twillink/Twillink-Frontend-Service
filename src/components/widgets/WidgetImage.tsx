@@ -21,7 +21,7 @@ const WidgetImage: React.FC<IWidgetImage> = ({
   const {openPopup} = usePopup();
 
   const handleOpen = () => {
-    openPopup('Image', <PopupImage url={url} />, 'max-w-[40%]');
+    openPopup('Image', <PopupImage url={url} />, 'xl:max-w-[40%]');
   };
 
   return (

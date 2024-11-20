@@ -41,7 +41,7 @@ function CustomCarousel({slides}: ICustomCarousel) {
   );
 
   const handleOpenImage = (url: string) => {
-    openPopup('Image', <PopupImage url={url} />, 'max-w-[40%]');
+    openPopup('Image', <PopupImage url={url} />, 'xl:max-w-[40%]');
   };
 
   const renderSlides = () =>
