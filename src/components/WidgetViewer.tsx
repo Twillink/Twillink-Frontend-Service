@@ -38,7 +38,7 @@ import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
 import {
   useCallback,
-  useContext,
+  // useContext,
   useEffect,
   useMemo,
   useRef,
@@ -63,18 +63,19 @@ import {
 } from '@/libs/types/IAddWidgetData';
 import PopupWidgetBlog from '@/components/PopupWidgetBlog';
 import {AxiosResponse} from 'axios';
-import {
-  PreviewContext,
-  PreviewTypeEnum,
-} from '@/libs/providers/PreviewProvider';
-import Button from '@/components/Button';
-import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
+// import {
+//   PreviewContext,
+//   PreviewTypeEnum,
+// } from '@/libs/providers/PreviewProvider';
+// import Button from '@/components/Button';
+// import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
 import PopupWidgetSchedule from '@/components/PopupWidgetSchedule';
 import {IWigetProfile} from '@/libs/types/IWigetProfile';
 import PopupWidgetBanner from '@/components/PopupWidgetBanner';
 import PopupWidgetMap from '@/components/PopupWidgetMap';
 import PopupWidgetPdf from '@/components/PopupWidgetPdf';
 import PopupWidgetWebinar from '@/components/PopupWidgetWebinar';
+import useIsDesktop from '@/app/[twillink]/checkDesktop';
 
 interface IWidgetViewer {
   isLoading: boolean;
@@ -105,12 +106,9 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const scrollSpeed = 10;
 
-  const {preview, isMobileScreen} = useContext(PreviewContext);
+  // const {preview, isMobileScreen} = useContext(PreviewContext);
 
-  const isDesktop = useMemo(
-    () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
-    [preview, isMobileScreen],
-  );
+  const isDesktop = useIsDesktop();
 
   const handleDrag = (ev: React.DragEvent<HTMLDivElement>) => {
     setDragId(ev.currentTarget.id);
@@ -584,7 +582,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
           scrollbarWidth: 'thin',
         }}>
         <div
-          className={`artboard flex flex-col ${isDesktop ? 'rounded-[50px] max-w-[200px]' : 'max-w-[428px]'} bg-primary-content h-full min-w-[300px] overflow-y-auto relative`}
+          className={`artboard flex flex-col ${isDesktop ? 'rounded-[50px] max-w-[500px]' : 'max-w-[428px]'} bg-primary-content h-full min-w-[300px] overflow-y-auto relative`}
           ref={scrollContainerRef}
           onDragOver={ev => ev.preventDefault()}>
           {isLoading ? (
@@ -631,11 +629,12 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
                 <div>
                   <div
                     className={'absolute left-0 right-0 bottom-2 py-2 z-30 '}>
-                    <div className={'px-6 mb-4'}>
+                    {/* <div className={'px-6 mb-4'}>
                       <Button
                         size={'md'}
                         className={'w-full h-8'}
                         title={'Go Pro'}
+                        onClick={() => (window.location.href = '/')}
                         icon={
                           <SvgSparkle
                             width={20}
@@ -644,9 +643,11 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
                           />
                         }
                       />
-                    </div>
-                    <p className={'text-sm font-medium text-center'}>
-                      Try Twillink—it&apos;s free!
+                    </div> */}
+                    <p className="text-sm font-medium text-center">
+                      <a href="/" className="text-black-500 hover:underline">
+                        Try Twillink—it&apos;s free!
+                      </a>
                     </p>
                   </div>
                 </div>
