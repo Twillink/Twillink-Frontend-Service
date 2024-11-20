@@ -6,6 +6,7 @@ import generalSubmitReducer from './features/generalSubmitSlice';
 import myWidgetReducer from './features/myWidgetSlice';
 import countryReducer from './features/countrySlice';
 import forgotPasswordReducer from './features/forgotPasswordSlice';
+import uploadProgressReducer from './features/UploadProgressSlice';
 
 export const makeStore = () => {
   return configureStore({
@@ -17,6 +18,7 @@ export const makeStore = () => {
       myWidget: myWidgetReducer,
       country: countryReducer,
       forgotPassword: forgotPasswordReducer,
+      uploadProgress: uploadProgressReducer,
     },
   });
 };

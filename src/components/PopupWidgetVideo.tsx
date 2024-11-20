@@ -9,6 +9,7 @@ import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 import VideoSelectorWithSource from '@/components/VideoSelectorWithSource';
 import ReactPlayer from 'react-player';
 import ImageSelectorWithSource from '@/components/ImageSelectorWithSource';
+import {useAppSelector} from '@/libs/hooks/useReduxHook';
 
 interface IPopupWidgetVideo {
   isOpen: boolean;
@@ -28,6 +29,8 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
   onAdd,
   disabled = false,
 }) => {
+  const uploadProgress = useAppSelector(state => state.uploadProgress.progress);
+
   const formik = useFormik({
     initialValues: {
       caption: '',
@@ -129,6 +132,8 @@ const PopupWidgetVideo: React.FC<IPopupWidgetVideo> = ({
               video={formik.values.selectedVideo}
               name={`video-WVideo`}
               label={'Browse Video'}
+              progress={uploadProgress}
+              disabled={disabled}
               onChange={e => {
                 const file = e.target.files?.[0];
                 if (file) {

@@ -14,6 +14,8 @@ interface IFileDragableWithSource
   isMultiple?: boolean;
   files: {file: File; previewUrl: string | null}[];
   handleFileChange: (files: File[]) => void;
+  progress?: number;
+  isLoading?: boolean;
 }
 
 const FileDragableWithSource = ({
@@ -21,7 +23,9 @@ const FileDragableWithSource = ({
   name,
   error,
   isMultiple = false,
+  progress,
   handleFileChange,
+  isLoading,
   ...restProps
 }: IFileDragableWithSource) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -190,6 +194,7 @@ const FileDragableWithSource = ({
                     {(file.size / 1024).toFixed(1)} KB
                   </p>
                 </div>
+
                 <button
                   onClick={e => {
                     e.stopPropagation();
@@ -200,6 +205,12 @@ const FileDragableWithSource = ({
                 </button>
               </div>
             ))}
+            {isLoading && progress && (
+              <progress
+                className="progress -mt-3 progress-error w-full"
+                value={progress}
+                max="100"></progress>
+            )}
           </div>
         </div>
       )}

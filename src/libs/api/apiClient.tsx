@@ -3,6 +3,7 @@ import {ToastType} from '@/libs/types/ToastType';
 import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {AppDispatch} from '@/libs/store/store';
 import {handleShowToast} from '@/utils/toast';
+import {setUploadProgress} from '@/libs/store/features/UploadProgressSlice';
 
 const defaultTimeout = 1000 * 90;
 const createApiClient = (
@@ -16,6 +17,10 @@ const createApiClient = (
     timeout: defaultTimeout,
     headers: {
       'Content-Type': isMultipart ? 'multipart/form-data' : 'application/json',
+    },
+    onUploadProgress: (progressEvent: any) => {
+      const percentage = (progressEvent.loaded * 100) / progressEvent.total;
+      dispatch(setUploadProgress(+percentage.toFixed(2)));
     },
   });
 
