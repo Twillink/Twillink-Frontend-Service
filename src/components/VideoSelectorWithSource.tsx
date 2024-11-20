@@ -11,6 +11,7 @@ interface IVideoSelectorWithSource
   label?: string;
   error?: string;
   onReset?: () => void;
+  progress?: number;
 }
 
 const VideoSelectorWithSource: React.FC<IVideoSelectorWithSource> = ({
@@ -21,6 +22,7 @@ const VideoSelectorWithSource: React.FC<IVideoSelectorWithSource> = ({
   error,
   label,
   onReset,
+  progress,
   ...restProps
 }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,6 +67,12 @@ const VideoSelectorWithSource: React.FC<IVideoSelectorWithSource> = ({
         {...restProps}
       />
       {error ? <span className="text-red-500 text-sm">{error}</span> : null}
+      {disabled && progress && (
+        <progress
+          className="progress progress-primary w-full"
+          value={progress}
+          max="100"></progress>
+      )}
     </div>
   );
 };

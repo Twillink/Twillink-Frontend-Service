@@ -7,6 +7,7 @@ import PopupContainer from './PopupContainer';
 import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 import FileDragableWithSource from '@/components/FileDragableWithSource';
 import AddWidgetPdfSchema from '@/libs/schema/Widget/WidgetPdf.schema';
+import {useAppSelector} from '@/libs/hooks/useReduxHook';
 
 interface IPopupWidgetImage {
   isOpen: boolean;
@@ -26,6 +27,8 @@ const PopupWidgetPdf: React.FC<IPopupWidgetImage> = ({
   onAdd,
   disabled = false,
 }) => {
+  const uploadProgress = useAppSelector(state => state.uploadProgress.progress);
+
   const formik = useFormik({
     initialValues: {
       caption: '',
@@ -86,7 +89,9 @@ const PopupWidgetPdf: React.FC<IPopupWidgetImage> = ({
             files={formik.values.files}
             handleFileChange={handleFileChange}
             isMultiple={false}
-            disabled={formik.values?.files?.length > 0}
+            progress={uploadProgress}
+            isLoading={disabled}
+            disabled={formik.values?.files?.length > 0 || disabled}
             error={
               formik.touched.files && formik.errors.files
                 ? formik.errors.files.toString()
