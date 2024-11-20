@@ -49,6 +49,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
           content: content,
         }}
       />,
+      'xl:max-w-[40%]',
     );
   };
 
