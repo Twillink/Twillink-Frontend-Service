@@ -40,7 +40,11 @@ const WidgetPdf: React.FC<IWidgetLink> = ({
   const {openPopup} = usePopup();
 
   const handleOpenImage = () => {
-    openPopup('Image', <PopupImage url={urlThumbnail ?? ''} />, 'max-w-[40%]');
+    openPopup(
+      'Image',
+      <PopupImage url={urlThumbnail ?? ''} />,
+      'xl:max-w-[40%]',
+    );
   };
 
   return (

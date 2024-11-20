@@ -40,7 +40,7 @@ const WidgetVideo: React.FC<IWidgetVideo> = ({
     openPopup(
       'Video',
       <PopupVideo url={url ?? ''} posterYoutube={posterYoutube} />,
-      'max-w-[40%]',
+      'xl:max-w-[40%]',
     );
   };
 

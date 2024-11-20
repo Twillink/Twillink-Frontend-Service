@@ -38,7 +38,11 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
   const {openPopup} = usePopup();
 
   const handleOpenImage = () => {
-    openPopup('Image', <PopupImage url={urlThumbnail ?? ''} />, 'max-w-[40%]');
+    openPopup(
+      'Image',
+      <PopupImage url={urlThumbnail ?? ''} />,
+      'xl:max-w-[40%]',
+    );
   };
 
   return (

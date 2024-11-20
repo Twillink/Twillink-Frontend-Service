@@ -49,12 +49,11 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
           content: content,
         }}
       />,
-      'max-w-[40%]',
     );
   };
 
   const handleOpenImage = () => {
-    openPopup('Image', <PopupImage url={url} />, 'max-w-[40%]');
+    openPopup('Image', <PopupImage url={url} />, 'xl:max-w-[40%]');
   };
 
   return (
