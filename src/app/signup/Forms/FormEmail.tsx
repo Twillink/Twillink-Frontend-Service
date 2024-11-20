@@ -9,7 +9,6 @@ import ButtonSocialAuth from '@/components/ButtonSocialAuth';
 import Image from 'next/image';
 import GoogleIcon from '@/assets/svgs/google-icon.svg';
 import useDebounce from '@/libs/hooks/useDebounce';
-import {ErrorApiResponseType} from '@/libs/types/ErrorApiResponseType';
 import {IGeneralSubmit} from '@/libs/types/IGeneralSubmit';
 import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 import {apiAuthCheckEmail} from '@/libs/api';
@@ -61,9 +60,8 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
       try {
         await apiAuthCheckEmail(dispatch, email, false);
         setEmailAvail(true);
-      } catch (error: unknown) {
-        const apiError = error as ErrorApiResponseType;
-        setApiError(apiError?.data?.message);
+      } catch (error: any) {
+        setApiError('Email ' + error?.message?.toLowerCase());
         setEmailAvail(false);
       } finally {
         setChecking(false);

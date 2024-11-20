@@ -50,9 +50,8 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
       className="border-base-300 border-2 bg-primary-content rounded-2xl h-full w-full p-2 flex items-center relative"
       {...restProps}>
       <div
-        className={`flex ${!isFullWidth ? 'flex-col' : 'flex-row'} justify-between items-center w-full h-full gap-2`}>
-        <div
-          className={`flex flex-col justify-center items-start h-full gap-1`}>
+        className={`flex ${!isFullWidth ? 'flex-col justify-center' : 'flex-row justify-between'}  items-center w-full h-full gap-2`}>
+        <div className={`z-[1]`}>
           <div>
             <div>
               <p
@@ -70,13 +69,13 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
               }
               passHref
               target={'_blank'}>
-              <Button className={'z-30'} title={'Join Webinar'} size={'xs'} />
+              <Button title={'Join Webinar'} size={'xs'} />
             </Link>
           </div>
         </div>
         <div
           id={`image-div-${urlThumbnail}`}
-          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
+          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'absolute top-0 left-0 h-full w-full'} rounded-lg overflow-hidden`}>
           {urlThumbnail && (
             <div className={'cursor-pointer'} onClick={handleOpenImage}>
               <Image
@@ -86,6 +85,11 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
                 fill
               />
             </div>
+          )}
+          {!isFullWidth && (
+            <div
+              onClick={handleOpenImage}
+              className="absolute cursor-pointer inset-0 bg-base-100 blur-xs opacity-50"></div>
           )}
         </div>
       </div>

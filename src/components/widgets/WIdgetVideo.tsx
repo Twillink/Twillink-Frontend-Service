@@ -4,6 +4,7 @@ import React, {useMemo} from 'react';
 import {usePopup} from '@/libs/providers/PopupProvider';
 import PopupVideo from '@/components/Popup/PopupVideo';
 import {removeStringByIndex} from '@/utils/formater';
+import {Play} from 'lucide-react';
 
 interface IWidgetVideo {
   text: string;
@@ -54,15 +55,22 @@ const WidgetVideo: React.FC<IWidgetVideo> = ({
           {text}
         </p>
 
+        {url && (
+          <Play
+            onClick={handleOpenVideo}
+            size={48}
+            className={'absolute stroke-white fill-white z-10 cursor-pointer'}
+          />
+        )}
         <div className={'cursor-pointer'} onClick={handleOpenVideo}>
           {url && (
             <video
-              controls
-              className="max-w-full h-auto"
+              className="max-w-full h-auto z-0"
               {...(posterYoutube && {poster: posterYoutube})}
               // poster={posterYoutube ?? null}
             >
               <source src={url} type="video/mp4" />
+              <source src={url} type="video/mov" />
               Your browser does not support the video tag.
             </video>
           )}
