@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import SkinController from './SkinController';
 import SvgBurgerMenu from '@/assets/svgComponents/SvgBurgerMenu';
 import SvgLink from '@/assets/svgComponents/SvgLink';
@@ -6,6 +6,7 @@ import SvgBurgerMenu2 from '@/assets/svgComponents/SvgBurgerMenu2';
 import PreviewController from '@/components/PreviewController';
 import Button from '@/components/Button';
 import PopupShareLink from '@/components/Popup/PopupShareLink';
+import {usePopup} from '@/libs/providers/PopupProvider';
 
 interface INavBar {
   title?: string;
@@ -16,14 +17,9 @@ const NavBar: React.FC<INavBar> = ({
   title = 'My Twillink',
   username = localStorage.getItem('username'),
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const handleClosePopup = () => {
-    setIsOpen(false);
-  };
-
+  const {openPopup} = usePopup();
   const handleOpen = () => {
-    setIsOpen(true);
+    openPopup('', <PopupShareLink username={username ?? undefined} />, '');
   };
   return (
     <div className="navbar bg-none px-3 pt-0 md:pt-6">
@@ -74,11 +70,6 @@ const NavBar: React.FC<INavBar> = ({
           </ul>
         </details>
       </div>
-      <PopupShareLink
-        isOpen={isOpen}
-        onClose={handleClosePopup}
-        username={username ?? undefined}
-      />
     </div>
   );
 };

@@ -9,9 +9,21 @@ import styles from './Map.module.css';
 import {useEffect} from 'react';
 import {cn} from '@/utils/formater';
 
-// const myCustomColour = '#583470'
+interface Position {
+  lat: number;
+  lng: number;
+}
 
-const icon = new Leaflet.Icon({
+interface MapProps {
+  position: [number, number];
+  zoom: number;
+  popup?: string;
+  scrollWheelZoom?: boolean;
+  zoomControl?: boolean;
+  className?: string;
+}
+
+const MARKER_ICON = {
   iconUrl:
     'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
   shadowUrl:
@@ -20,43 +32,49 @@ const icon = new Leaflet.Icon({
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
-});
+} as Leaflet.IconOptions;
 
-const RecenterAutomatically = ({lat, lng}: {lat: number; lng: number}) => {
+const icon = new Leaflet.Icon(MARKER_ICON);
+
+const RecenterAutomatically = ({lat, lng}: Position) => {
   const map = useMap();
+
   useEffect(() => {
-    map.setView([lat, lng]);
-  }, [lat, lng]);
+    map.setView([lat, lng], map.getZoom());
+  }, [lat, lng, map]);
+
   return null;
 };
 
-const MyMap = (props: any) => {
-  const {position, zoom, popup} = props;
-
+const MyMap = ({
+  position,
+  zoom = 13,
+  popup,
+  scrollWheelZoom = false,
+  zoomControl = false,
+  className,
+}: MapProps) => {
   return (
     <MapContainer
       center={position}
       zoom={zoom}
-      scrollWheelZoom={false}
-      zoomControl={false}
-      className={cn(styles.container, 'z-[0]')}>
-      {/*{!isGoogle ? (*/}
+      scrollWheelZoom={scrollWheelZoom}
+      zoomControl={zoomControl}
+      attributionControl={false}
+      className={cn(styles.container, className, 'z-[0]')}>
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {/*) : (*/}
-      {/*  <TileLayer*/}
-      {/*    attribution="Google Maps"*/}
-      {/*    url="https://www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}"*/}
-      {/*  />*/}
-      {/*)}*/}
 
-      <Marker position={position} autoPanOnFocus icon={icon}>
-        <Popup>
-          <p>{popup}</p>
-        </Popup>
+      <Marker position={position} icon={icon}>
+        {popup && (
+          <Popup>
+            <p>{popup}</p>
+          </Popup>
+        )}
       </Marker>
+
       <RecenterAutomatically lat={position[0]} lng={position[1]} />
     </MapContainer>
   );

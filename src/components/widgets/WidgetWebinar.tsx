@@ -75,7 +75,7 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
         </div>
         <div
           id={`image-div-${urlThumbnail}`}
-          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'absolute top-0 left-0 h-full w-full'} rounded-lg overflow-hidden`}>
+          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
           {urlThumbnail && (
             <div className={'cursor-pointer'} onClick={handleOpenImage}>
               <Image
@@ -86,11 +86,11 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
               />
             </div>
           )}
-          {!isFullWidth && (
-            <div
-              onClick={handleOpenImage}
-              className="absolute cursor-pointer inset-0 bg-base-100 blur-xs opacity-50"></div>
-          )}
+          {/*{!isFullWidth && (*/}
+          {/*  <div*/}
+          {/*    onClick={handleOpenImage}*/}
+          {/*    className="absolute cursor-pointer inset-0 bg-black blur-xs opacity-60"></div>*/}
+          {/*)}*/}
         </div>
       </div>
     </div>

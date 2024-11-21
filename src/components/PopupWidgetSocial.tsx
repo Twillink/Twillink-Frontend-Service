@@ -1,20 +1,21 @@
 import SvgFacebook from '@/assets/svgComponents/SvgFacebook';
 import SvgInstagram from '@/assets/svgComponents/SvgInstagram';
 import SvgLinkedIn from '@/assets/svgComponents/SvgLinkedIn';
+import SvgTelegramSocial from '@/assets/svgComponents/SvgTelegramSocial';
 import SvgTiktok from '@/assets/svgComponents/SvgTiktok';
 import SvgTumblr from '@/assets/svgComponents/SvgTumblr';
 import SvgTwitter from '@/assets/svgComponents/SvgTwitter';
+import SvgWhatsappSocial from '@/assets/svgComponents/SvgWhatsappSocial';
 import SvgYoutube from '@/assets/svgComponents/SvgYoutube';
 import AddWidgetSocialSchema from '@/libs/schema/Widget/WidgetSocial.schema';
+import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
+import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import {useFormik} from 'formik';
 import React from 'react';
 import Button from './Button';
 import InputLabel from './InputLabel';
 import PopupContainer from './PopupContainer';
-import {IItemWidgetTypeValues} from '@/libs/types/IItemWidgetType';
-import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
-import SvgTelegramSocial from '@/assets/svgComponents/SvgTelegramSocial';
 
 interface IPopupWidgetSocial {
   isOpen: boolean;
@@ -40,6 +41,10 @@ export const socialButtons: ISocialButton[] = [
   {
     name: 'youtube',
     icon: SvgYoutube,
+  },
+  {
+    name: 'whatsapp',
+    icon: SvgWhatsappSocial,
   },
   {
     name: 'telegram',

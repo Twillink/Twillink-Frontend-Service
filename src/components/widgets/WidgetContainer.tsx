@@ -60,14 +60,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
           />
         );
       case WidgetTypeEnum.Text:
-        return (
-          <WidgetText
-            text={values.value?.text || ''}
-            onClick={e => {
-              e.preventDefault();
-            }}
-          />
-        );
+        return <WidgetText text={values.value?.text || ''} />;
       case WidgetTypeEnum.Image:
         return (
           <WidgetImage
