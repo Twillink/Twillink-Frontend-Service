@@ -59,7 +59,7 @@ const VideoSelectorWithSource: React.FC<IVideoSelectorWithSource> = ({
       </label>
       <input
         type="file"
-        accept="video/*"
+        accept=".mp4, .mov, .webm, .ogv, .ogg, video/*"
         onChange={handleFileChange}
         disabled={disabled}
         className="hidden"

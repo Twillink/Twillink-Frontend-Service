@@ -81,7 +81,7 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
         </div>
         <div
           id={`image-div-${url}`}
-          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'absolute top-0 left-0 h-full w-full'} rounded-lg overflow-hidden`}>
+          className={` ${isDesktop ? 'h-[120px] w-full' : 'w-[200px] h-[88px]'} ${isFullWidth ? 'relative max-w-[50%]' : 'hidden'} rounded-lg overflow-hidden`}>
           {url && (
             <div className={'cursor-pointer'} onClick={handleOpenImage}>
               <Image
@@ -92,11 +92,11 @@ const WidgetBlog: React.FC<IWidgetBlog> = ({
               />
             </div>
           )}
-          {!isFullWidth && (
-            <div
-              onClick={handleOpenImage}
-              className="absolute cursor-pointer inset-0 bg-base-100 blur-xs opacity-50"></div>
-          )}
+          {/*{!isFullWidth && (*/}
+          {/*  <div*/}
+          {/*    onClick={handleOpenImage}*/}
+          {/*    className="absolute cursor-pointer inset-0 bg-base-100 blur-xs opacity-50"></div>*/}
+          {/*)}*/}
         </div>
       </div>
     </div>

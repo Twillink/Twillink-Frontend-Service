@@ -39,7 +39,7 @@ const WidgetMap: React.FC<IWidgetMap> = ({
           )
         }>
         <p
-          className={`hidden text-center text-xs text-ellipsis line-clamp-3 overflow-hidden font-normal w-fit  z-[3] absolute bg-base-200 left-2 right-2 bottom-2 px-2 py-1 rounded-lg`}>
+          className={`text-center text-xs text-ellipsis line-clamp-3 overflow-hidden font-normal w-fit z-[3] absolute bg-base-200 left-2 right-2 bottom-2 px-2 py-1 rounded-lg`}>
           {caption}
         </p>
         {latitude && longitude && (

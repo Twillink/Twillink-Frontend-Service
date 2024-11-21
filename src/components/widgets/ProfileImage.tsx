@@ -50,7 +50,7 @@ const ProfileImage: React.FC<IProfileImage> = ({
             <Image
               src={(urlImage ?? profileImageUrl) as string}
               alt="User Selected Photo"
-              className="object-contain"
+              className="object-cover object-center"
               fill
             />
           ) : (

@@ -13,7 +13,7 @@ const PopupVideo: React.FC<IPopupImage> = ({url, posterYoutube}) => {
         {url && !posterYoutube && (
           <video
             controls
-            className="max-w-full h-auto"
+            className="w-full h-full"
             /*{...(posterYoutube && {poster: posterYoutube})}*/
             // poster={posterYoutube ?? null}
           >

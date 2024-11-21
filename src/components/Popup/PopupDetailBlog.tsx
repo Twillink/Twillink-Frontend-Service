@@ -7,14 +7,16 @@ interface IPopupDetailBlog {
 }
 
 const PopupDetailBlog: React.FC<IPopupDetailBlog> = ({dataBlog}) => {
+  const paragraphs = dataBlog?.content?.split('\n') || [];
+
   return (
     <div className={`modal-backdrop flex flex-col gap-5`}>
       {dataBlog?.url && (
-        <div className={'relative w-full h-[200px]'}>
+        <div className={'relative w-full h-[400px]'}>
           <Image
             src={dataBlog?.url}
             alt={dataBlog?.title ?? 'Image'}
-            className="object-cover rounded-lg"
+            className="object-contain rounded-lg"
             fill
           />
         </div>
@@ -22,7 +24,11 @@ const PopupDetailBlog: React.FC<IPopupDetailBlog> = ({dataBlog}) => {
 
       <div className="flex flex-col gap-2 mb-4">
         <p className="text-lg text-primary font-bold">{dataBlog?.title}</p>
-        <p className="text-sm text-primary ">{dataBlog?.content}</p>
+        {paragraphs.map((paragraph, index) => (
+          <p key={index} className="text-sm text-justify text-primary">
+            {paragraph}
+          </p>
+        ))}
       </div>
     </div>
   );
