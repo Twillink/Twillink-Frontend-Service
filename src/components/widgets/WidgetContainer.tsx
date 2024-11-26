@@ -75,6 +75,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
             text={values.value?.caption || ''}
             url={values.value?.url || '#'}
             image={values.value?.image}
+            urlThumbnail={values.value?.urlThumbnail}
           />
         );
       case WidgetTypeEnum.Blog:
