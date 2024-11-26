@@ -11,12 +11,14 @@ interface IWidgetVideo {
   url: string;
   width?: string;
   image?: string | ArrayBuffer | null;
+  urlThumbnail?: string;
 }
 
 const WidgetVideo: React.FC<IWidgetVideo> = ({
   text,
   url,
   image,
+  urlThumbnail,
   ...restProps
 }) => {
   const posterYoutube = useMemo(() => {
@@ -29,11 +31,14 @@ const WidgetVideo: React.FC<IWidgetVideo> = ({
         youtubeId = removeStringByIndex(youtubeId, index, length - 1);
       }
     }
+    if (urlThumbnail) {
+      return urlThumbnail;
+    }
 
     return youtubeId
       ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
       : '';
-  }, [url]);
+  }, [url, urlThumbnail]);
 
   const {openPopup} = usePopup();
 
@@ -66,11 +71,12 @@ const WidgetVideo: React.FC<IWidgetVideo> = ({
           {url && (
             <video
               className="max-w-full h-auto z-0"
-              {...(posterYoutube && {poster: posterYoutube})}
-              // poster={posterYoutube ?? null}
-            >
+              {...(posterYoutube && {poster: posterYoutube})}>
               <source src={url} type="video/mp4" />
               <source src={url} type="video/mov" />
+              <source src={url} type="video/webm" />
+              <source src={url} type="video/ogv" />
+              <source src={url} type="video/ogg" />
               Your browser does not support the video tag.
             </video>
           )}
