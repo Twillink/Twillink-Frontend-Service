@@ -263,7 +263,6 @@ const SignupPage: React.FC = () => {
                             type="button"
                             className="flex justify-start w-max"
                           />
-
                           <h3 className="card-title text-primary">
                             {item.title}
                           </h3>
