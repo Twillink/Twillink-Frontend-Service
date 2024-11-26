@@ -31,44 +31,54 @@ interface IPopupWidgetSocial {
 interface ISocialButton {
   name: string;
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  initialUrl?: string;
 }
 
 export const socialButtons: ISocialButton[] = [
   {
     name: 'instagram',
     icon: SvgInstagram,
+    initialUrl: 'https://instagram.com/',
   },
   {
     name: 'youtube',
     icon: SvgYoutube,
+    initialUrl: 'https://youtube.com/',
   },
   {
     name: 'whatsapp',
     icon: SvgWhatsappSocial,
+    initialUrl: 'https://wa.me/',
   },
   {
     name: 'telegram',
     icon: SvgTelegramSocial,
+    initialUrl: 'https://t.me/',
   },
   {
     name: 'facebook',
     icon: SvgFacebook,
+    initialUrl: 'https://facebook.com/',
   },
   {
     name: 'linkedin',
     icon: SvgLinkedIn,
+    initialUrl: 'https://linkedin.com/',
   },
   {
     name: 'twitter',
     icon: SvgTwitter,
+    initialUrl: 'https://x.com/',
   },
   {
     name: 'tiktok',
     icon: SvgTiktok,
+    initialUrl: 'https://tiktok.com/',
   },
   {
     name: 'tumblr',
     icon: SvgTumblr,
+    initialUrl: 'https://tumblr.com/',
   },
 ];
 
@@ -121,6 +131,7 @@ const PopupWidgetSocial: React.FC<IPopupWidgetSocial> = ({
                   key={button.name}
                   onClick={() => {
                     formik.setFieldValue('key', button.name);
+                    formik.setFieldValue('value', button.initialUrl || '');
                   }}
                   className={`p-2 flex justify-center items-center ${formik.values.key !== button.name ? 'bg-transparent' : 'bg-base-300 rounded-full'} hover:cursor-pointer`}>
                   <Icon width={28} height={28} className={'fill-slate-500 '} />

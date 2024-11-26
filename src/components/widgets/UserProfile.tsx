@@ -148,7 +148,7 @@ function UserProfile({
         )}
       </div>
       <div
-        className={`flex flex-col justify-center ${isSticky ? '' : 'text-center'}`}>
+        className={`flex w-[90%] flex-col justify-center ${isSticky ? '' : 'text-center'}`}>
         <div
           onClick={() => handleEditClick('businessName')}
           className="cursor-pointer">
@@ -160,7 +160,7 @@ function UserProfile({
               onBlur={handleBlur}
               autoFocus
               onKeyDown={e => e.key === 'Enter' && handleBlur()}
-              className="border border-gray-300 p-1"
+              className="border border-gray-300 p-1 w-full"
             />
           ) : (
             <h2
@@ -180,7 +180,7 @@ function UserProfile({
               onBlur={handleBlur}
               autoFocus
               onKeyDown={e => e.key === 'Enter' && handleBlur()}
-              className="border border-gray-300 p-1"
+              className="border border-gray-300 p-1 w-full"
             />
           ) : (
             <p
@@ -196,7 +196,13 @@ function UserProfile({
             {contact?.value?.email && (
               <button
                 key={contact?.value?.email}
-                onClick={handleOpen}
+                onClick={
+                  viewer
+                    ? () => {
+                        window.location.href = `mailto:${contact?.value?.email}`;
+                      }
+                    : handleOpen
+                }
                 className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
                   <SvgMail
@@ -211,7 +217,13 @@ function UserProfile({
             {contact?.value?.phoneNumber && (
               <button
                 key={contact?.value?.phoneNumber}
-                onClick={handleOpen}
+                onClick={
+                  viewer
+                    ? () => {
+                        window.location.href = `tel:${contact?.value?.phoneNumber}`;
+                      }
+                    : handleOpen
+                }
                 className="btn btn-primary btn-sm rounded-full">
                 <div className="relative w-4 h-4 mr-1 bg-transparent">
                   <SvgPhoneCall

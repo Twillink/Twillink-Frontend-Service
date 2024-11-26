@@ -718,7 +718,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         {isDesktop && (
           <div
             className={
-              'flex flex-wrap w-full overflow-y-auto max-h-fit scrollbar-thin'
+              'grid grid-cols-3 gap-6 auto-rows-auto w-full overflow-y-auto max-h-fit scrollbar-thin'
             }
             style={{
               rowGap: '0px',

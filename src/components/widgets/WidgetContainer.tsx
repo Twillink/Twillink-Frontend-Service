@@ -145,9 +145,19 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
   };
 
   const widgetWidth = useMemo(() => {
+    // if (isDesktop) {
+    //   return values.width === '100%' ? '50%' : '25%';
+    // }
     if (isDesktop) {
-      return values.width === '100%' ? '50%' : '25%';
+      if (values.width === '100%') {
+        return 'col-span-2';
+      } else {
+        return '';
+      }
+    } else {
+      return values.width === '100%' ? 'w-full' : 'w-1/2';
     }
+
     return values.width;
   }, [values?.width, isDesktop]);
 
@@ -158,8 +168,8 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       onDragStart={handleDrag}
       onDrop={handleDrop}
       onDragOver={ev => ev.preventDefault()}
-      className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}
-      style={{width: widgetWidth}}
+      className={`relative flex z-[2] align-middle   items-center justify-center p-[6px] ${widgetWidth} ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}
+      // style={{width: widgetWidth}}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}>
       <WidgetFrameEditor
