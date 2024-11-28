@@ -8,6 +8,8 @@ import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
 import SvgOrderDown from '@/assets/svgComponents/SvgOrderDown';
 import SvgOrderUp from '@/assets/svgComponents/SvgOrderUp';
 import {TypeWidthWidgetEnum} from '@/libs/types/IAddWidgetData';
+import SvgWidgetFullHeight from '@/assets/svgComponents/SvgWidgetFullHeight';
+import SvgWidgetHalfHeight from '@/assets/svgComponents/SvgWidgetHalfHeight';
 
 interface IWidgetFrameEditor {
   children: React.ReactNode;
@@ -19,6 +21,7 @@ interface IWidgetFrameEditor {
   handleClose: () => void;
   handleMoveUp: () => void;
   handleMoveDown: () => void;
+  handleResizeHeight: () => void;
   values: IItemWidgetType;
 }
 
@@ -32,6 +35,7 @@ const WidgetFrameEditor: React.FC<IWidgetFrameEditor> = ({
   handleClose,
   handleMoveUp,
   handleMoveDown,
+  handleResizeHeight,
   values,
 }) => {
   return (
@@ -52,6 +56,19 @@ const WidgetFrameEditor: React.FC<IWidgetFrameEditor> = ({
               </div>
               <div onClick={handleMoveDown} className="cursor-pointer">
                 <SvgOrderDown className="stroke-base-100" height={16} />
+              </div>
+              <div onClick={handleResizeHeight} className="cursor-pointer">
+                {values.height === TypeWidthWidgetEnum.Half ? (
+                  <SvgWidgetFullHeight
+                    className="stroke-base-100"
+                    height={16}
+                  />
+                ) : (
+                  <SvgWidgetHalfHeight
+                    className="stroke-base-100"
+                    height={16}
+                  />
+                )}
               </div>
               <div onClick={handleResize} className="cursor-pointer">
                 {values.width === TypeWidthWidgetEnum.Half ? (

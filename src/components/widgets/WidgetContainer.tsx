@@ -39,6 +39,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [isFullHeight, setIsFullHeight] = useState(false);
 
   const {preview, isMobileScreen} = useContext(PreviewContext);
 
@@ -145,10 +146,11 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
     setIsMenuVisible(false);
   };
 
+  const handleResizeHeight = () => {
+    setIsFullHeight(!isFullHeight);
+  };
+
   const widgetWidth = useMemo(() => {
-    // if (isDesktop) {
-    //   return values.width === '100%' ? '50%' : '25%';
-    // }
     if (isDesktop) {
       if (values.width === '100%') {
         return 'col-span-2';
@@ -158,9 +160,21 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
     } else {
       return values.width === '100%' ? 'w-full' : 'w-1/2';
     }
-
-    return values.width;
   }, [values?.width, isDesktop]);
+
+  const widgetHeight = useMemo(() => {
+    if (isDesktop) {
+      if (isFullHeight) {
+        return 'row-span-2 h-64 lg:h-72 xl:h-80';
+      }
+      return 'h-32 lg:h-36 xl:h-40';
+    } else {
+      if (isFullHeight) {
+        return 'row-span-2 h-64';
+      }
+      return 'h-32';
+    }
+  }, [isFullHeight, isDesktop]);
 
   return (
     <div
@@ -169,7 +183,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       onDragStart={handleDrag}
       onDrop={handleDrop}
       onDragOver={ev => ev.preventDefault()}
-      className={`relative flex z-[2] align-middle   items-center justify-center p-[6px] ${widgetWidth} ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}
+      className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${widgetWidth} ${widgetHeight} cursor-move`}
       // style={{width: widgetWidth}}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}>
@@ -182,7 +196,8 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
         handleResize={handleResize}
         handleDelete={handleDelete}
         handleClose={handleClose}
-        values={values}>
+        handleResizeHeight={handleResizeHeight}
+        values={{...values, height: isFullHeight ? '100%' : '50%'}}>
         {renderWidget()}
       </WidgetFrameEditor>
     </div>

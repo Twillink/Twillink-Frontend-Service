@@ -36,6 +36,7 @@ export interface IItemWidgetType {
   idEditor: string;
   order: number;
   width: string;
+  height?: string;
   type: WidgetTypeEnum;
   value?: IItemWidgetTypeValues | null;
 }
