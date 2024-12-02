@@ -13,4 +13,5 @@ export enum WidgetTypeEnum {
   Banner = 'banner',
   Profile = 'profile',
   PDF = 'pdf',
+  Event = 'event',
 }

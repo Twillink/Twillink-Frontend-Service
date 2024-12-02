@@ -75,6 +75,7 @@ import PopupWidgetBanner from '@/components/PopupWidgetBanner';
 import PopupWidgetMap from '@/components/PopupWidgetMap';
 import PopupWidgetPdf from '@/components/PopupWidgetPdf';
 import PopupWidgetWebinar from '@/components/PopupWidgetWebinar';
+import PopupWidgetEvent from './PopupWidgetEvent';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -211,6 +212,9 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         break;
       case WidgetTypeEnum.Webinar:
         setPopupState(WidgetTypeEnum.Webinar);
+        break;
+      case WidgetTypeEnum.Event:
+        setPopupState(WidgetTypeEnum.Event);
         break;
 
       case 'main':
@@ -852,6 +856,14 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
       <PopupWidgetWebinar
         isOpen={popupState === WidgetTypeEnum.Webinar}
+        onClose={handleClosePopup}
+        onBack={handleBack}
+        onAdd={handleAdd}
+        disabled={isSubmitting}
+      />
+
+      <PopupWidgetEvent
+        isOpen={popupState === WidgetTypeEnum.Event}
         onClose={handleClosePopup}
         onBack={handleBack}
         onAdd={handleAdd}

@@ -13,6 +13,7 @@ import SvgWidgetSchedule from '@/assets/svgComponents/SvgWidgetSchedule';
 import PopupContainer from './PopupContainer';
 import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
 import SvgPdf from '@/assets/svgComponents/SvgPdf';
+import SvgCalendar from '@/assets/svgComponents/SvgCalendar';
 
 interface IPopupWidget {
   isOpen: boolean;
@@ -81,6 +82,13 @@ const buttons = [
     title: 'Add PDF File',
     action: WidgetTypeEnum.PDF,
     icon: <SvgPdf className="stroke-general-med stroke-0" />,
+    isComingSoon: false,
+    disabled: false,
+  },
+  {
+    title: 'Add Event',
+    action: WidgetTypeEnum.Event,
+    icon: <SvgCalendar className="stroke-general-med " />,
     isComingSoon: false,
     disabled: false,
   },
