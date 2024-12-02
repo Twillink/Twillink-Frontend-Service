@@ -18,6 +18,9 @@ import {
 } from '@/libs/store/features/userProfileSlice';
 import {setCountries} from '@/libs/store/features/countrySlice';
 import {authLogout} from '@/libs/store/features/authSlice';
+import SvgCalendar from '@/assets/svgComponents/SvgCalendar';
+import SvgWidgetVideo from '@/assets/svgComponents/SvgWidgetVideo';
+import SvgDollar from '@/assets/svgComponents/SvgDollar';
 
 const sidebarMenu: Menu[] = [
   {
@@ -34,11 +37,23 @@ const sidebarMenu: Menu[] = [
   {
     title: 'Twilmeet',
     icon: <SvgTwilmeetIcon />,
-    disabled: true,
+    disabled: false,
     menuChild: [
-      {title: 'Calendar', path: '/admin/twilmeet/calendar'},
-      {title: 'Webinar / Class', path: '/admin/twilmeet/webinar'},
-      {title: 'Revenue', path: '/admin/twilmeet/revenue'},
+      {
+        title: 'Calendar',
+        path: '/admin/twilmeet/calendar',
+        icon: <SvgCalendar className="stroke-primary" height={16} />,
+      },
+      {
+        title: 'Webinar / Class',
+        path: '/admin/twilmeet/webinar',
+        icon: <SvgWidgetVideo className="stroke-primary" height={16} />,
+      },
+      {
+        title: 'Revenue',
+        path: '/admin/twilmeet/revenue',
+        icon: <SvgDollar className="stroke-primary" height={16} />,
+      },
     ],
   },
   {

@@ -1,5 +1,5 @@
 import React from 'react';
-const SvgLinkWidget: React.FunctionComponent<React.SVGProps<SVGSVGElement>> = ({
+const SvgWidgetText: React.FunctionComponent<React.SVGProps<SVGSVGElement>> = ({
   height = 24,
   width,
   className,
@@ -19,4 +19,4 @@ const SvgLinkWidget: React.FunctionComponent<React.SVGProps<SVGSVGElement>> = ({
     />
   </svg>
 );
-export default SvgLinkWidget;
+export default SvgWidgetText;

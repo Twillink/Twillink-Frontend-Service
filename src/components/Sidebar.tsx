@@ -75,7 +75,7 @@ const Sidebar: React.FC<ISidebar> = ({menus = []}) => {
                             return (
                               <li key={`child-${idx}`} className={childClasses}>
                                 <Link href={child.path}>
-                                  <div className="group pl-8 gap-4">
+                                  <div className="group flex pl-8 gap-2">
                                     {child.icon && child.icon}
                                     {child.title}
                                   </div>
