@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {apiAddAttachment} from '@/libs/api';
-import { useAppDispatch } from '@/libs/hooks/useReduxHook';
+import {useAppDispatch} from '@/libs/hooks/useReduxHook';
 import {Calendar, Trash, User} from 'lucide-react';
 import React, {useState} from 'react';
 

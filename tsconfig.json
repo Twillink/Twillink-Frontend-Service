@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/admin/twilmeet/calendar/PopupSchedule.jsx", "src/app/admin/twilmeet/webinar/page.jsx", "src/app/admin/twilmeet/webinar/PopupDetailClass.jsx", "src/app/admin/twilmeet/webinar/PopupDetailWebinar.jsx", "src/app/admin/twilmeet/revenue/page.jsx"],
   "exclude": ["node_modules"]
 }

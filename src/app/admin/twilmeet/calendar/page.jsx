@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   format,
   startOfDay,
@@ -11,57 +11,25 @@ import {
   addDays,
   isSameMonth,
 } from 'date-fns';
-import {apiGetTwellmeet} from '@/libs/api';
-import {useAppDispatch} from '@/libs/hooks/useReduxHook';
+import { apiGetTwellmeet } from '@/libs/api';
+import { useAppDispatch } from '@/libs/hooks/useReduxHook';
 import PopupSchedule from './PopupSchedule';
 
-interface Event {
-  date: string;
-  events: string[];
-}
-
-// Transform data to desired format
-const transformData = (data: any[]) => {
-  const result: {[key: string]: string[]} = {};
-
-  data.forEach((item: {infoItem: {date: string; type: string}}) => {
-    const {date, type} = item.infoItem;
-
-    if (!date) return; // Skip if no date
-
-    // Convert date to the desired format (yyyy-MM-dd)
-    const [year, month, day] = date.split('-');
-    const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-
-    // Group events by date
-    if (!result[formattedDate]) {
-      result[formattedDate] = [];
-    }
-
-    result[formattedDate].push(type);
-  });
-
-  // Convert result to an array
-  return Object.entries(result).map(([date, events]) => ({date, events}));
-};
-
-const Calendar: React.FC = () => {
+const Calendar = () => {
   const dispatch = useAppDispatch();
   const [currentDate, setCurrentDate] = useState(startOfDay(new Date()));
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [events, setEvents] = useState<Event[]>([]);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [events, setEvents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const getEventsForDate = (date: Date) => {
+  const getEventsForDate = (date) => {
     const formattedDate = format(startOfDay(date), 'yyyy-MM-dd');
     return events.find(event => event.date === formattedDate)?.events || [];
   };
 
-  const getDateForDate = (date: Date) => {
+  const getDateForDate = (date) => {
     const formattedDate = format(startOfDay(date), 'yyyy-MM-dd');
-    const dates =
-      events.find(event => event.date === formattedDate)?.date || null;
-    return dates;
+    return events.find(event => event.date === formattedDate)?.date || null;
   };
 
   const fetchUserProfile = () => {
@@ -85,7 +53,8 @@ const Calendar: React.FC = () => {
         <div className="items-center justify-between w-50 flex gap-4">
           <button
             className="text-lg font-bold text-gray-500 hover:text-black"
-            onClick={() => setCurrentDate(addDays(currentDate, -30))}>
+            onClick={() => setCurrentDate(addDays(currentDate, -30))}
+          >
             &lt;
           </button>
           <div className="text-xl font-semibold text-gray-700">
@@ -93,13 +62,15 @@ const Calendar: React.FC = () => {
           </div>
           <button
             className="text-lg font-bold text-gray-500 hover:text-black"
-            onClick={() => setCurrentDate(addDays(currentDate, 30))}>
+            onClick={() => setCurrentDate(addDays(currentDate, 30))}
+          >
             &gt;
           </button>
         </div>
         <div
           onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2 bg-orange-700 rounded-large text-center text-white font-medium cursor-pointer">
+          className="px-4 py-2 bg-orange-700 rounded-large text-center text-white font-medium cursor-pointer"
+        >
           Create Event
         </div>
       </div>
@@ -149,20 +120,22 @@ const Calendar: React.FC = () => {
             onClick={() => {
               setSelectedDate(daysData);
             }}
-            className={` cursor-pointer border ${itemHeight} p-3 text-sm rounded-lg transition-colors duration-300 ${
+            className={`cursor-pointer border ${itemHeight} p-3 text-sm rounded-lg transition-colors duration-300 ${
               isCurrentMonth
                 ? 'bg-white hover:bg-gray-50'
                 : 'bg-gray-100 text-gray-400'
-            }`}>
+            }`}
+          >
             <div className="font-semibold flex">
               <span
                 className={`${
                   isSunday
                     ? 'bg-red-500 text-white rounded-full w-8 h-8 flex justify-center items-center'
                     : dayEvents.length !== 0
-                      ? 'border-2 border-black text-black rounded-full w-8 h-8 flex justify-center items-center'
-                      : 'text-black rounded-full w-8 h-8 flex justify-center items-center'
-                }`}>
+                    ? 'border-2 border-black text-black rounded-full w-8 h-8 flex justify-center items-center'
+                    : 'text-black rounded-full w-8 h-8 flex justify-center items-center'
+                }`}
+              >
                 {format(day, 'd')}
               </span>
             </div>
@@ -173,18 +146,19 @@ const Calendar: React.FC = () => {
                   index % 2 === 0
                     ? 'bg-green-200 text-green-700'
                     : 'bg-blue-200 text-blue-700'
-                }`}>
+                }`}
+              >
                 {event}
               </div>
             ))}
-          </div>,
+          </div>
         );
         day = addDays(day, 1);
       }
       rows.push(
         <div key={day.toISOString()} className="grid grid-cols-7 gap-1">
           {days}
-        </div>,
+        </div>
       );
       days = [];
     }

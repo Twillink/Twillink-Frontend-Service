@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-const Modal = ({isOpen, onClose, event, registered}) => {
+const Modal = ({ isOpen, onClose, event, registered }) => {
   if (!isOpen) return null;
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+
   const [activeTab, setActiveTab] = useState('Description');
 
   return (
@@ -10,7 +10,8 @@ const Modal = ({isOpen, onClose, event, registered}) => {
       <div className="bg-white rounded-3xl shadow-lg max-w-md w-full">
         <button
           onClick={onClose}
-          className="absolute text-gray-500 hover:text-gray-800 bg-gray-300 w-8 h-8 rounded-full m-2">
+          className="absolute text-gray-500 hover:text-gray-800 bg-gray-300 w-8 h-8 rounded-full m-2"
+        >
           X
         </button>
         <img
@@ -25,10 +26,10 @@ const Modal = ({isOpen, onClose, event, registered}) => {
             <span>🕙 {event.time}</span>
           </div>
           <div className="flex -space-x-2 mb-4 items-center">
-            {/* Contoh avatar */}
-            {registered.map((data: {photo: string | undefined}) => (
-              // eslint-disable-next-line @next/next/no-img-element, react/jsx-key
+            {/* Displaying avatars of registered users */}
+            {registered.map((data, idx) => (
               <img
+                key={idx}
                 src={data.photo}
                 alt="User"
                 className="w-8 h-8 rounded-full border-2 border-white"
@@ -39,12 +40,13 @@ const Modal = ({isOpen, onClose, event, registered}) => {
             </span>
           </div>
           <div className="text-gray-700 text-sm text-center">
-            {['Description', 'Class'].map(tab => (
+            {['Description', 'Class'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-2 rounded-full text-h3 font-light transition-colors duration-200 relative
-                ${activeTab === tab ? ' text-gray-600' : 'text-gray-200'}`}>
+                ${activeTab === tab ? ' text-gray-600' : 'text-gray-200'}`}
+              >
                 {tab}
               </button>
             ))}
@@ -53,14 +55,19 @@ const Modal = ({isOpen, onClose, event, registered}) => {
             )}
             {activeTab === 'Class' && (
               <div>
-                {event.classes.map(data => (
-                  <div key={data} className="grid grid-cols-1 bg-gray-200 m-2 p-2 rounded-lg">
-                    <p className="w-full text-left font-normal text-[14px]">{data}</p>
+                {event.classes.map((data, idx) => (
+                  <div
+                    key={idx}
+                    className="grid grid-cols-1 bg-gray-200 m-2 p-2 rounded-lg"
+                  >
+                    <p className="w-full text-left font-normal text-[14px]">
+                      {data}
+                    </p>
                     <div className="grid grid-cols-2">
                       <div className="text-left col-span-1 text-[12px] font-light">
-                        Saturday, Desember 26th, 2024
+                        Saturday, December 26th, 2024
                       </div>
-                      <div className="text-left col-span-1 text-right text-[12px] font-light">
+                      <div className=" col-span-1 text-right text-[12px] font-light">
                         14:00 - 16:00
                       </div>
                     </div>
@@ -72,10 +79,11 @@ const Modal = ({isOpen, onClose, event, registered}) => {
               onClick={() =>
                 window.open(
                   'https://app.zoom.us/wc/88266820518/start?fromPWA=1&pwd=pNMxR37I12HQ54FtJafgRSzaNqzEdb.1',
-                  '_blank',
+                  '_blank'
                 )
               }
-              className="p-2 focus:bg-lime-600 cursor-pointer bg-lime-600 rounded-md mt-10 text-center text-white">
+              className="p-2 focus:bg-lime-600 cursor-pointer bg-lime-600 rounded-md mt-10 text-center text-white"
+            >
               Open Webinar
             </div>
           </div>
