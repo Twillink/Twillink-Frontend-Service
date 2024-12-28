@@ -8,24 +8,6 @@ import { Calendar, Timer } from 'lucide-react';
 import Modal from './PopupDetailWebinar';
 import Modal2 from './PopupDetailClass';
 
-// const mockData = [
-//   {
-//     id: 1,
-//     title: 'Leading with Emotional Intelligence: Maximizing Impact',
-//     date: '9 Sep 2024',
-//     time: '10:00',
-//     image:
-//       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF9W9vwDNn5X7zAVeDHXgUKo0nBy0pqCaDcw&s',
-//     registered: 2412,
-//     desc: 'Leading with Emotional Intelligence: Maximizing Impact. Leading with Emotional Intelligence: Maximizing Impact. Leading with Emotional Intelligence: Maximizing Impact .Leading with Emotional Intelligence: Maximizing Impact',
-//     attendees: [
-//       'https://t3.ftcdn.net/jpg/02/99/04/20/360_F_299042079_vGBD7wIlSeNl7vOevWHiL93G4koMM967.jpg',
-//       'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg',
-//       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTF9W9vwDNn5X7zAVeDHXgUKo0nBy0pqCaDcw&s',
-//     ],
-//   },
-// ];
-
 const EventCard = ({ event, onClick }) => (
   <div
     className="bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer m-5"

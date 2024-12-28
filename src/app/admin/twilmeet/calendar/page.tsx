@@ -15,30 +15,61 @@ import { apiGetTwellmeet } from '@/libs/api';
 import { useAppDispatch } from '@/libs/hooks/useReduxHook';
 import PopupSchedule from './PopupSchedule';
 
-const Calendar = () => {
-  const dispatch = useAppDispatch();
-  const [currentDate, setCurrentDate] = useState(startOfDay(new Date()));
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [events, setEvents] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface Event {
+  date: string;
+  events: string[];
+}
 
-  const getEventsForDate = (date) => {
+// Transform data to desired format
+const transformData = (data: any[]): Event[] => {
+  const result: { [key: string]: string[] } = {};
+
+  data.forEach((item: { infoItem: { date: string; type: string } }) => {
+    const { date, type } = item.infoItem;
+
+    if (!date) return; // Skip if no date
+
+    // Convert date to the desired format (yyyy-MM-dd)
+    const [year, month, day] = date.split('-');
+    const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+
+    // Group events by date
+    if (!result[formattedDate]) {
+      result[formattedDate] = [];
+    }
+
+    result[formattedDate].push(type);
+  });
+
+  // Convert result to an array
+  return Object.entries(result).map(([date, events]) => ({ date, events }));
+};
+
+const Calendar: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const [currentDate, setCurrentDate] = useState<Date>(startOfDay(new Date()));
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const getEventsForDate = (date: Date): string[] => {
     const formattedDate = format(startOfDay(date), 'yyyy-MM-dd');
-    return events.find(event => event.date === formattedDate)?.events || [];
+    return events.find((event) => event.date === formattedDate)?.events || [];
   };
 
-  const getDateForDate = (date) => {
+  const getDateForDate = (date: Date): string | null => {
     const formattedDate = format(startOfDay(date), 'yyyy-MM-dd');
-    return events.find(event => event.date === formattedDate)?.date || null;
+    const dates = events.find((event) => event.date === formattedDate)?.date || null;
+    return dates;
   };
 
   const fetchUserProfile = () => {
     apiGetTwellmeet(dispatch, false)
-      .then(response => {
+      .then((response) => {
         const transformedEvents = transformData(response.data.data);
         setEvents(transformedEvents);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error('API Error:', err);
       });
   };
@@ -47,7 +78,7 @@ const Calendar = () => {
     fetchUserProfile();
   }, []);
 
-  const renderHeader = () => {
+  const renderHeader = (): JSX.Element => {
     return (
       <div className="flex items-center justify-between mb-4">
         <div className="items-center justify-between w-50 flex gap-4">
@@ -77,7 +108,7 @@ const Calendar = () => {
     );
   };
 
-  const renderDaysOfWeek = () => {
+  const renderDaysOfWeek = (): JSX.Element => {
     const days = [
       'Sunday',
       'Monday',
@@ -89,7 +120,7 @@ const Calendar = () => {
     ];
     return (
       <div className="grid grid-cols-7 text-center font-semibold text-gray-600">
-        {days.map(day => (
+        {days.map((day) => (
           <div key={day} className="py-2 text-gray-400">
             {day}
           </div>
@@ -98,11 +129,11 @@ const Calendar = () => {
     );
   };
 
-  const renderDates = () => {
+  const renderDates = (): JSX.Element => {
     const startDate = startOfWeek(startOfMonth(currentDate));
     const endDate = endOfWeek(endOfMonth(currentDate));
-    const rows = [];
-    let days = [];
+    const rows: JSX.Element[] = [];
+    let days: JSX.Element[] = [];
     let day = startDate;
 
     const itemHeight = 'h-[calc((100vh-100px)/6)]';
@@ -118,7 +149,7 @@ const Calendar = () => {
           <div
             key={day.toISOString()}
             onClick={() => {
-              setSelectedDate(daysData);
+              setSelectedDate(daysData ? new Date(daysData) : null);
             }}
             className={`cursor-pointer border ${itemHeight} p-3 text-sm rounded-lg transition-colors duration-300 ${
               isCurrentMonth

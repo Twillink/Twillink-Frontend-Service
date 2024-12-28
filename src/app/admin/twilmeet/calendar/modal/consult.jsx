@@ -83,7 +83,7 @@ const ConsultationForm = ({isOpen, onClose}) => {
               value={formData.title}
               onChange={handleChange}
               required
-              className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full border border-gray-200 rounded-md shadow-sm focus:ring-gray-950 focus:ring-gray-950 p-2 my-2 text-[12px]"
             />
           </div>
           <div>
@@ -96,7 +96,7 @@ const ConsultationForm = ({isOpen, onClose}) => {
               value={formData.date}
               onChange={handleChange}
               required
-              className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full border border-gray-200 rounded-md shadow-sm focus:ring-gray-950 focus:ring-gray-950 p-2 my-2 text-[12px]"
             />
           </div>
           <div>
@@ -109,7 +109,7 @@ const ConsultationForm = ({isOpen, onClose}) => {
               value={formData.time}
               onChange={handleChange}
               required
-              className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full border border-gray-200 rounded-md shadow-sm focus:ring-gray-950 focus:ring-gray-950 p-2 my-2 text-[12px]"
             />
           </div>
         </div>
@@ -123,7 +123,7 @@ const ConsultationForm = ({isOpen, onClose}) => {
             name="repeat"
             value={formData.repeat}
             onChange={handleChange}
-            className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+            className="w-full border border-gray-200 rounded-md shadow-sm focus:ring-gray-950 focus:ring-gray-950 p-2 my-2 text-[12px]">
             <option value="None">None</option>
             <option value="Every Day">Every Day</option>
             <option value="Every Week">Every Week</option>
@@ -244,12 +244,12 @@ const ConsultationForm = ({isOpen, onClose}) => {
           <button
             onClick={onClose}
             type="button"
-            className="py-2 px-4 bg-gray-300 rounded-lg shadow">
+            className="py-2 px-4 bg-text-300 rounded-lg shadow border border-black">
             Cancel
           </button>
           <button
             type="submit"
-            className="py-2 px-4 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-500">
+            className="py-2 px-4 bg-gray-600 text-white rounded-lg shadow hover:bg-white-500">
             Publish
           </button>
         </div>

@@ -78,7 +78,7 @@ const Modal = ({ isOpen, onClose, event, registered }) => {
             <div
               onClick={() =>
                 window.open(
-                  'https://app.zoom.us/wc/88266820518/start?fromPWA=1&pwd=pNMxR37I12HQ54FtJafgRSzaNqzEdb.1',
+                  'https://twillmeet.com/room?id=88266820518',
                   '_blank'
                 )
               }

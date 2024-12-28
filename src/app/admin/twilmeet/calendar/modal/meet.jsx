@@ -10,7 +10,7 @@ export default function CreateMeetLinkModal({isOpen, onClose}) {
 
   const createMeetLink = async () => {
     window.open(
-      'https://app.zoom.us/wc/88266820518/start?fromPWA=1&pwd=pNMxR37I12HQ54FtJafgRSzaNqzEdb.1',
+      'https://twillink/room',
       '_blank',
     );
   };
@@ -41,13 +41,13 @@ export default function CreateMeetLinkModal({isOpen, onClose}) {
 
         <div className="flex justify-between">
           <button
-            className="px-4 py-2 text-sm text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
+            className="py-2 px-4 bg-text-300 rounded-lg shadow border border-black"
             onClick={onClose}>
             Cancel
           </button>
           <button
             className={`px-4 py-2 text-sm text-white rounded-md ${
-              isLoading ? 'bg-gray-500' : 'bg-indigo-600 hover:bg-indigo-500'
+              isLoading ? 'bg-gray-500' : 'bg-gray-600 hover:bg-gray-500'
             }`}
             onClick={createMeetLink}
             disabled={isLoading}>
