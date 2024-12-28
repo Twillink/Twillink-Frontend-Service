@@ -34,3 +34,29 @@
   filter: invert(100%);
   cursor: pointer;
 }
+
+/* Kalender styling */
+.calendar-custom {
+  font-family: "Inter", sans-serif;
+}
+
+.react-calendar__tile {
+  padding: 0.5rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: #ff6b6b; /* Warna akhir pekan */
+}
+
+.react-calendar__tile--now {
+  background: #f1f5f9; /* Warna hari ini */
+  border-radius: 8px;
+}
+
+.react-calendar__tile--active {
+  background: #4f46e5; /* Warna dipilih */
+  color: white;
+  border-radius: 8px;
+}

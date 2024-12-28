@@ -413,3 +413,11 @@ export const apiGetAttachmentById = async (
   const api = createApiClient(dispatch, showToasts);
   return await api.get(`/api/v1/attachment/${id}`);
 };
+
+export const apiGetTwellmeet = async (
+  dispatch: AppDispatch,
+  showToasts = false,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.get('/api/v1/Twilmeet');
+};

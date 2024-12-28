@@ -75,9 +75,11 @@ const Sidebar: React.FC<ISidebar> = ({menus = []}) => {
                             return (
                               <li key={`child-${idx}`} className={childClasses}>
                                 <Link href={child.path}>
-                                  <div className="group pl-8 gap-4">
-                                    {child.icon && child.icon}
-                                    {child.title}
+                                  <div className="group pl-8 gap-4 flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                      {child.icon && child.icon}
+                                      <span>{child.title}</span>
+                                    </div>
                                   </div>
                                 </Link>
                               </li>
