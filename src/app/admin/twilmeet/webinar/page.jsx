@@ -64,6 +64,8 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [webinarData, setWebinarData] = useState([]);
   const [classData, setClassData] = useState([]);
+  const [consultData, setConsultData] = useState([]);
+
 
   const handleSubmit = async () => {
     const token = localStorage.getItem('authToken');
@@ -81,9 +83,13 @@ const Home = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.data);
-        setWebinarData(data.data.filter((data) => data.infoItem.type === 'Webinar'));
-        setClassData(data.data.filter((data) => data.infoItem.type === 'Class'));
+        const uid = localStorage.getItem('user');
+        const filtering = data.data.filter((data)=>  data.owner === JSON.parse(uid).id);
+        console.log(filtering)
+        setWebinarData(filtering.filter((data) => data.infoItem.type === 'Webinar'));
+        setClassData(filtering.filter((data) => data.infoItem.type === 'Class'));
+        setConsultData(filtering.filter((data) => data.infoItem.type === 'Consult'));
+
       } else {
         alert('Failed to create consultation');
       }
@@ -100,7 +106,7 @@ const Home = () => {
     <div className="w-full bg-white p-10 rounded-3xl">
       <div className="flex items-center justify-between mb-6">
         <div className="flex space-x-4">
-          {['Webinar', 'Class'].map((tab) => (
+          {['Webinar', 'Class', 'Consult'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -131,6 +137,18 @@ const Home = () => {
           ))}
         {activeTab === 'Class' &&
           classData.map((event) => (
+            <React.Fragment key={event.id}>
+              <EventCard event={event} onClick={() => setIsModalOpen(event)} />
+              <Modal2
+                event={event.infoItem}
+                registered={event.member}
+                isOpen={isModalOpen === event}
+                onClose={() => setIsModalOpen(false)}
+              />
+            </React.Fragment>
+          ))}
+          {activeTab === 'Consult' &&
+          consultData.map((event) => (
             <React.Fragment key={event.id}>
               <EventCard event={event} onClick={() => setIsModalOpen(event)} />
               <Modal2

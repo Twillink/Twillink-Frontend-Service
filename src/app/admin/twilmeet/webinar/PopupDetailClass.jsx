@@ -75,16 +75,25 @@ const Modal = ({ isOpen, onClose, event, registered }) => {
                 ))}
               </div>
             )}
-            <div
-              onClick={() =>
-                window.open(
-                  'https://twillmeet.com/room?id=88266820518',
-                  '_blank'
-                )
-              }
-              className="p-2 focus:bg-lime-600 cursor-pointer bg-lime-600 rounded-md mt-10 text-center text-white"
-            >
-              Open Webinar
+            <div className="row flex items-center gap-2 mt-10">
+              <div
+                onClick={() =>
+                  window.open(
+                    'https://twillmeet.com/room?id=88266820518',
+                    '_blank',
+                  )
+                }
+                className="flex-grow p-3 focus:bg-lime-600 cursor-pointer bg-lime-600 rounded-md text-center text-white font-bold">
+                Open Webinar
+              </div>
+              <button
+                onClick={() => {
+                  alert('Link copied to clipboard!');
+                  navigator.clipboard.writeText(`https://twillmeet.com/twillmeet?id=${event.id}`)
+                }}
+                className="p-3 focus:bg-blue-500 cursor-pointer bg-blue-500 rounded-md text-center text-white">
+                📋
+              </button>
             </div>
           </div>
         </div>

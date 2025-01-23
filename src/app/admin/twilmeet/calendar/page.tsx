@@ -17,28 +17,36 @@ import PopupSchedule from './PopupSchedule';
 
 interface Event {
   date: string;
-  events: string[];
+  events: {
+    id: string;
+    time: string;
+    type: string;
+    price: number;
+    title: string;
+    desc: string;
+  }[];
 }
 
 // Transform data to desired format
 const transformData = (data: any[]): Event[] => {
-  const result: { [key: string]: string[] } = {};
+  const result: { [key: string]: { id: string;
+    time: string;type: string; price: number; title: string; desc: string }[] } = {};
 
-  data.forEach((item: { infoItem: { date: string; type: string } }) => {
-    const { date, type } = item.infoItem;
+  data.forEach((item: { infoItem: { id: string;
+    time: string;date: string; type: string; price: number; title: string; desc: string } }) => {
+    const { id, time, date, type, price, title, desc } = item.infoItem;
 
     if (!date) return; // Skip if no date
 
     // Convert date to the desired format (yyyy-MM-dd)
-    const [year, month, day] = date.split('-');
-    const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+    const formattedDate = date; // Date is already in yyyy-MM-dd format
 
     // Group events by date
     if (!result[formattedDate]) {
       result[formattedDate] = [];
     }
 
-    result[formattedDate].push(type);
+    result[formattedDate].push({ id, time, type, price, title, desc });
   });
 
   // Convert result to an array
@@ -52,13 +60,14 @@ const Calendar: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const getEventsForDate = (date: Date): string[] => {
+  const getEventsForDate = (date: Date): object[] => {
     const formattedDate = format(startOfDay(date), 'yyyy-MM-dd');
     return events.find((event) => event.date === formattedDate)?.events || [];
   };
-
+  
   const getDateForDate = (date: Date): string | null => {
     const formattedDate = format(startOfDay(date), 'yyyy-MM-dd');
+    console.log(events)
     const dates = events.find((event) => event.date === formattedDate)?.date || null;
     return dates;
   };
@@ -66,7 +75,9 @@ const Calendar: React.FC = () => {
   const fetchUserProfile = () => {
     apiGetTwellmeet(dispatch, false)
       .then((response) => {
-        const transformedEvents = transformData(response.data.data);
+        const uids = localStorage.getItem('user');
+        const filtering = response.data.data.filter((datas: { owner: any; })=>  datas.owner === JSON.parse(uids).id);
+        const transformedEvents = transformData(filtering);
         setEvents(transformedEvents);
       })
       .catch((err) => {
@@ -179,7 +190,7 @@ const Calendar: React.FC = () => {
                     : 'bg-blue-200 text-blue-700'
                 }`}
               >
-                {event}
+                {event.type}
               </div>
             ))}
           </div>
@@ -214,9 +225,16 @@ const Calendar: React.FC = () => {
               <div key={index} className="relative flex items-center">
                 <div className="w-3 h-3 border-2 border-gray-400 rounded-full flex-shrink-0 bg-white" />
                 <div className="ml-4 flex-1">
-                  <p className="text-base font-semibold text-gray-900">
-                    {event}
+                  <p className="text-sm font-normal text-gray-900">
+                    {event.time}
                   </p>
+                  <p className="text-base font-semibold text-gray-900">
+                    {event.type}
+                  </p>
+                  <p className="text-sm font-normal text-gray-900">
+                    {event.title}
+                  </p>
+                  {/* <button className="text-sm bg-blue-600 text-center p-2 m-1 rounded-3xl shadow-lg text-white">Open Video</button> */}
                 </div>
               </div>
             ))
