@@ -15,38 +15,35 @@ import { apiGetTwellmeet } from '@/libs/api';
 import { useAppDispatch } from '@/libs/hooks/useReduxHook';
 import PopupSchedule from './PopupSchedule';
 
+interface EventDetails {
+  id: string;
+  time: string;
+  type: string;
+  price: number;
+  title: string;
+  desc: string;
+}
+
 interface Event {
   date: string;
-  events: {
-    id: string;
-    time: string;
-    type: string;
-    price: number;
-    title: string;
-    desc: string;
-  }[];
+  events: EventDetails[];
 }
 
 // Transform data to desired format
 const transformData = (data: any[]): Event[] => {
-  const result: { [key: string]: { id: string;
-    time: string;type: string; price: number; title: string; desc: string }[] } = {};
+  const result: Record<string, EventDetails[]> = {};
 
-  data.forEach((item: { infoItem: { id: string;
-    time: string;date: string; type: string; price: number; title: string; desc: string } }) => {
+  data.forEach((item: { infoItem: EventDetails & { date: string } }) => {
     const { id, time, date, type, price, title, desc } = item.infoItem;
 
     if (!date) return; // Skip if no date
 
-    // Convert date to the desired format (yyyy-MM-dd)
-    const formattedDate = date; // Date is already in yyyy-MM-dd format
-
     // Group events by date
-    if (!result[formattedDate]) {
-      result[formattedDate] = [];
+    if (!result[date]) {
+      result[date] = [];
     }
 
-    result[formattedDate].push({ id, time, type, price, title, desc });
+    result[date].push({ id, time, type, price, title, desc });
   });
 
   // Convert result to an array
@@ -60,7 +57,7 @@ const Calendar: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const getEventsForDate = (date: Date): object[] => {
+  const getEventsForDate = (date: Date): EventDetails[] => {
     const formattedDate = format(startOfDay(date), 'yyyy-MM-dd');
     return events.find((event) => event.date === formattedDate)?.events || [];
   };
@@ -76,6 +73,10 @@ const Calendar: React.FC = () => {
     apiGetTwellmeet(dispatch, false)
       .then((response) => {
         const uids = localStorage.getItem('user');
+        if (!uids) {
+          console.error('No user found in localStorage');
+          return;
+        }
         const filtering = response.data.data.filter((datas: { owner: any; })=>  datas.owner === JSON.parse(uids).id);
         const transformedEvents = transformData(filtering);
         setEvents(transformedEvents);
