@@ -141,7 +141,7 @@ const SignupPage: React.FC = () => {
   };
 
   const renderForm = (
-step: StepsEnum, onNext: () => void, handleSubmit: () => void, formValues: IAuthInitialData, handleSubmitGoogle: (values: any) => Promise<boolean>,
+step: StepsEnum, onNext: () => void, handleSubmit: () => void, formValues: IAuthInitialData,
   ) => {
     switch (step) {
       case StepsEnum.CLAIM:
