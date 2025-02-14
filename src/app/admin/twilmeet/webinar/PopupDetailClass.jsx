@@ -79,7 +79,7 @@ const Modal = ({ isOpen, onClose, event, registered }) => {
               <div
                 onClick={() =>
                   window.open(
-                    'https://twillmeet.com/room?id=88266820518',
+                    'https://twillink.com/room?id=88266820518',
                     '_blank',
                   )
                 }
@@ -89,7 +89,7 @@ const Modal = ({ isOpen, onClose, event, registered }) => {
               <button
                 onClick={() => {
                   alert('Link copied to clipboard!');
-                  navigator.clipboard.writeText(`https://twillmeet.com/twillmeet?id=${event.id}`)
+                  navigator.clipboard.writeText(`https://twillink.com/room?id=${event.id}`)
                 }}
                 className="p-3 focus:bg-blue-500 cursor-pointer bg-blue-500 rounded-md text-center text-white">
                 📋
