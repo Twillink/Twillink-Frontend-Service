@@ -74,7 +74,7 @@ const FormEmail: React.FC<IFormEmail> = ({ onNext, generalSubmit }) => {
     [dispatch],
   );
 
-  const router = useRouter();
+  
 
   const handleGoogleSignUp = async () => {
     const result = await signInWithPopup(auth, provider);
@@ -89,7 +89,7 @@ const FormEmail: React.FC<IFormEmail> = ({ onNext, generalSubmit }) => {
         dispatch(authLogin(response.data));
         localStorage.setItem('authToken', response.data.accessToken);
         localStorage.setItem('user', JSON.stringify(response.data));
-        router.push('/admin');
+        window.location.href = "/admin"
         return true;
       })
       .catch(() => {

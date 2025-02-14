@@ -447,3 +447,11 @@ export const apiGetTwellmeet = async (
   const api = createApiClient(dispatch, showToasts);
   return await api.get('/api/v1/Twilmeet');
 };
+
+export const apiGetStatus = async (
+  dispatch: AppDispatch,
+  showToasts = false,
+) => {
+  const api = createApiClient(dispatch, showToasts);
+  return await api.get('/api/v1/user-auth/check-status');
+};

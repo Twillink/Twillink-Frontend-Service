@@ -11,7 +11,7 @@ import SvgUser from '@/assets/svgComponents/SvgUser';
 import {RootState} from '@/libs/store/store';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
 import Loader from '@/components/Loader';
-import {apiGetCountry, apiGetUserProfile} from '@/libs/api';
+import {apiGetCountry, apiGetStatus, apiGetUserProfile} from '@/libs/api';
 import {
   clearUserProfile,
   setUserProfile,
@@ -20,53 +20,57 @@ import {setCountries} from '@/libs/store/features/countrySlice';
 import {authLogout} from '@/libs/store/features/authSlice';
 import {Calendar, DollarSign, Video} from 'lucide-react';
 
-const sidebarMenu: Menu[] = [
-  {
-    title: 'My Twillink',
-    path: '/admin',
-    icon: <SvgLink className="stroke-primary" />,
-  },
-  {
-    title: 'Analytic',
-    path: '/admin/analytic',
-    icon: <SvgChartSquare className="stroke-primary" />,
-    disabled: true,
-  },
-  {
-    title: 'Twilmeet',
-    icon: <SvgTwilmeetIcon />,
-    disabled: false,
-    menuChild: [
-      {
-        title: 'Calendar',
-        path: '/admin/twilmeet/calendar',
-        icon: <Calendar width={15} />,
-      },
-      {
-        title: 'Webinar / Class',
-        path: '/admin/twilmeet/webinar',
-        icon: <Video width={15} />,
-      },
-      {
-        title: 'Revenue',
-        path: '/admin/twilmeet/revenue',
-        icon: <DollarSign width={15} />,
-      },
-    ],
-  },
-  {
-    title: 'Account',
-    path: '/admin/account',
-    icon: <SvgUser className="stroke-primary" />,
-  },
-];
 
 export default function AdminLayout({children}: {children: React.ReactNode}) {
+  const [meetingLink, setMeetingLink] = useState<string>("");
+
+  const sidebarMenu: Menu[] = [
+    {
+      title: 'My Twillink',
+      path: '/admin',
+      icon: <SvgLink className="stroke-primary" />,
+    },
+    {
+      title: 'Analytic',
+      path: '/admin/analytic',
+      icon: <SvgChartSquare className="stroke-primary" />,
+      disabled: true,
+    },
+    {
+      title: 'Twilmeet',
+      icon: <SvgTwilmeetIcon />,
+      disabled: meetingLink == "" ? true : false,
+      menuChild: [
+        {
+          title: 'Calendar',
+          path: '/admin/twilmeet/calendar',
+          icon: <Calendar width={15} />,
+        },
+        {
+          title: 'Webinar / Class',
+          path: '/admin/twilmeet/webinar',
+          icon: <Video width={15} />,
+        },
+        {
+          title: 'Revenue',
+          path: '/admin/twilmeet/revenue',
+          icon: <DollarSign width={15} />,
+        },
+      ],
+    },
+    {
+      title: 'Account',
+      path: '/admin/account',
+      icon: <SvgUser className="stroke-primary" />,
+    },
+  ];
+
   const dispatch = useAppDispatch();
   const userProfile = useAppSelector((state: RootState) => state.userProfile);
   const country = useAppSelector((state: RootState) => state.country);
 
   const [initialized, setInitialized] = useState<boolean>(false);
+
   const isFetchingRef = useRef(false);
 
   const isLoggedIn = useAppSelector(
@@ -76,6 +80,21 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
   const router = useRouter();
   const pathname = usePathname();
   const [title, setTitle] = useState<string>('My Twillink');
+
+   const openStatus = () => {
+      apiGetStatus(dispatch, false)
+        .then((response) => {
+          const filtering = response.data.codeMeetings
+          setMeetingLink(filtering);
+        })
+        .catch((err) => {
+          console.error('API Error:', err);
+        });
+    }
+  
+    useEffect(() => {
+      openStatus();
+      }, []);
 
   useEffect(() => {
     const currentPath = pathname ?? '';

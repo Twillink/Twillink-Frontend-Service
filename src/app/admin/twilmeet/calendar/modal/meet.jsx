@@ -1,7 +1,10 @@
-import React, {useState} from 'react';
+import { apiGetStatus } from '@/libs/api';
+import { useAppDispatch } from '@/libs/hooks/useReduxHook';
+import React, { useEffect, useState } from 'react';
 
-export default function CreateMeetLinkModal({isOpen, onClose}) {
+export default function CreateMeetLinkModal({ isOpen, onClose }) {
   if (!isOpen) return null;
+  const dispatch = useAppDispatch();
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [meetingLink, setMeetingLink] = useState('');
@@ -10,10 +13,25 @@ export default function CreateMeetLinkModal({isOpen, onClose}) {
 
   const createMeetLink = async () => {
     window.open(
-      'https://twillink/room',
+      'https://twillink.com/room?id='+ meetingLink,
       '_blank',
     );
   };
+
+  const openStatus = () => {
+    apiGetStatus(dispatch, false)
+      .then((response) => {
+        const filtering = response.data.codeMeetings
+        setMeetingLink(filtering);
+      })
+      .catch((err) => {
+        console.error('API Error:', err);
+      });
+  }
+
+  useEffect(() => {
+    openStatus();
+    }, []);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center">
@@ -33,7 +51,7 @@ export default function CreateMeetLinkModal({isOpen, onClose}) {
         <div className="mb-4">
           <input
             type="text"
-            value={meetingLink || 'Twilmeet.com/das-eif-12j'}
+            value={'twillink.com/room?id='+ meetingLink}
             readOnly
             className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2 text-sm"
           />
@@ -46,9 +64,8 @@ export default function CreateMeetLinkModal({isOpen, onClose}) {
             Cancel
           </button>
           <button
-            className={`px-4 py-2 text-sm text-white rounded-md ${
-              isLoading ? 'bg-gray-500' : 'bg-gray-600 hover:bg-gray-500'
-            }`}
+            className={`px-4 py-2 text-sm text-white rounded-md ${isLoading ? 'bg-gray-500' : 'bg-gray-600 hover:bg-gray-500'
+              }`}
             onClick={createMeetLink}
             disabled={isLoading}>
             {isLoading ? 'Loading...' : 'Join Room'}

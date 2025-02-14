@@ -120,11 +120,11 @@ const PreJoin = ({meetingId}) => {
         <h3 className="text-gray-800 text-sm font-medium">Meeting Link</h3>
         <p className="text-blue-500 text-xs mt-1">
           <a
-            href={`https://twillmeet.com/room?id=${meetingId}`}
+            href={`https://twillink.com/room?id=${meetingId}`}
             target="_blank"
             rel="noopener noreferrer"
           >
-            twillmeet.com/room?id={meetingId}
+            twillink.com/room?id={meetingId}
           </a>
         </p>
       </div>
