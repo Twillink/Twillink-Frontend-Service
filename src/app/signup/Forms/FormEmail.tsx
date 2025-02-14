@@ -1,7 +1,7 @@
 'use client';
 
-import React, {useCallback, useEffect, useState} from 'react';
-import {useFormikContext} from 'formik';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useFormikContext } from 'formik';
 import Input from '@/components/Input';
 import ErrorMessageField from '@/components/ErrorMessageField';
 import Button from '@/components/Button';
@@ -9,10 +9,14 @@ import ButtonSocialAuth from '@/components/ButtonSocialAuth';
 import Image from 'next/image';
 import GoogleIcon from '@/assets/svgs/google-icon.svg';
 import useDebounce from '@/libs/hooks/useDebounce';
-import {IGeneralSubmit} from '@/libs/types/IGeneralSubmit';
-import {useAppDispatch} from '@/libs/hooks/useReduxHook';
-import {apiAuthCheckEmail} from '@/libs/api';
-import {PasswordInput} from '@/components/PasswordInput';
+import { IGeneralSubmit } from '@/libs/types/IGeneralSubmit';
+import { useAppDispatch } from '@/libs/hooks/useReduxHook';
+import { apiAuthCheckEmail, apiAuthRegisterGoogle } from '@/libs/api';
+import { PasswordInput } from '@/components/PasswordInput';
+import { authLogin } from '@/libs/store/features/authSlice';
+import { setSubmitLoading, setSubmitSuccess } from '@/libs/store/features/generalSubmitSlice';
+import { auth, provider, signInWithPopup } from '@/libs/api/firebase-config';
+import { useRouter } from 'next/router';
 
 interface IFormEmailValues {
   email: string;
@@ -25,7 +29,7 @@ interface IFormEmail {
   generalSubmit: IGeneralSubmit;
 }
 
-const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
+const FormEmail: React.FC<IFormEmail> = ({ onNext, generalSubmit }) => {
   const dispatch = useAppDispatch();
 
   const {
@@ -47,7 +51,7 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
   const debouncedEmail = useDebounce(values.email);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const {value} = event.target;
+    const { value } = event.target;
     setFieldValue('email', value);
     setIsTyping(true);
   };
@@ -70,15 +74,30 @@ const FormEmail: React.FC<IFormEmail> = ({onNext, generalSubmit}) => {
     [dispatch],
   );
 
+  const router = useRouter();
+
   const handleGoogleSignUp = async () => {
-    const username = values.username;
-    if (!username) {
-      return;
-    }
-    window.open(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google-signup?userName=${encodeURIComponent(username)}`,
-      '_blank',
-    );
+    const result = await signInWithPopup(auth, provider);
+    const token = await result.user.getIdToken();
+    const body = {
+      token: token,
+      username: values.username,
+    };
+
+    return apiAuthRegisterGoogle(dispatch, body)
+      .then(response => {
+        dispatch(authLogin(response.data));
+        localStorage.setItem('authToken', response.data.accessToken);
+        localStorage.setItem('user', JSON.stringify(response.data));
+        router.push('/admin');
+        return true;
+      })
+      .catch(() => {
+        return false;
+      })
+      .finally(() => {
+        dispatch(setSubmitLoading(false));
+      });
   };
 
   useEffect(() => {

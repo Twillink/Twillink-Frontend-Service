@@ -30,6 +30,19 @@ export const apiAuthLogin = async (
   return await api.post('/api/v1/user-auth/login', body);
 };
 
+export const apiAuthLoginGoogle = async (
+  dispatch: AppDispatch,
+  body: any,
+  showToasts = true,
+) => {
+  const message = {
+    success: 'Login Successfully',
+    error: 'Failed to Login. Please Check Your Credentials',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
+  return await api.post('/api/v1/user-auth/loginGoogle', body);
+};
+
 export const apiLinkCheck = async (
   dispatch: AppDispatch,
   username: string,
@@ -96,6 +109,19 @@ export const apiAuthRegister = async (
   };
   const api = createApiClient(dispatch, showToasts, false, message);
   return await api.post('/api/v1/user-auth/register', body);
+};
+
+export const apiAuthRegisterGoogle = async (
+  dispatch: AppDispatch,
+  body: any,
+  showToasts = true,
+) => {
+  const message = {
+    success: 'Account Successfully Created',
+    error: 'Failed to Create Account',
+  };
+  const api = createApiClient(dispatch, showToasts, false, message);
+  return await api.post('/api/v1/user-auth/registerGoogle', body);
 };
 
 export const apiAuthLogout = async (

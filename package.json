@@ -20,6 +20,7 @@
     "date-fns": "^4.1.0",
     "embla-carousel": "^8.3.0",
     "embla-carousel-react": "^8.3.0",
+    "firebase": "^11.3.1",
     "formik": "^2.4.6",
     "framer-motion": "^11.3.31",
     "is-url": "^1.2.4",

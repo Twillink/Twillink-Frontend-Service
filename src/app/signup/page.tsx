@@ -11,7 +11,7 @@ import FormVerify from './Forms/FormVerify';
 import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
 import ButtonIcon from '@/components/ButtonIcon';
 import {StepsEnum} from '@/libs/types/StepsEnum';
-import {apiAuthRegister, apiOtpSend} from '@/libs/api';
+import {apiAuthRegister, apiAuthRegisterGoogle, apiOtpSend} from '@/libs/api';
 import {IAuthInitialData} from '@/libs/types/IAuthInitialData';
 import {TypeOtpEnum} from '@/libs/types/TypeOtpEnum';
 import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
@@ -24,6 +24,7 @@ import {
 import {resetToastState, showToast} from '@/libs/store/features/toastSlice';
 import {ToastType} from '@/libs/types/ToastType';
 import {useRouter} from 'next/navigation';
+import { auth, provider, signInWithPopup } from '@/libs/api/firebase-config';
 
 interface IItemStepSignup {
   title: string;
@@ -140,10 +141,7 @@ const SignupPage: React.FC = () => {
   };
 
   const renderForm = (
-    step: StepsEnum,
-    onNext: () => void,
-    handleSubmit: () => void,
-    formValues: IAuthInitialData,
+step: StepsEnum, onNext: () => void, handleSubmit: () => void, formValues: IAuthInitialData, handleSubmitGoogle: (values: any) => Promise<boolean>,
   ) => {
     switch (step) {
       case StepsEnum.CLAIM:
@@ -271,7 +269,7 @@ const SignupPage: React.FC = () => {
                               item.step,
                               () => handleNext(item.seq, validateForm, values),
                               handleSubmit,
-                              values,
+                              values
                             )}
                         </div>
                       </div>

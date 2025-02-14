@@ -1,7 +1,7 @@
 'use client';
 
 import GradientBg from '@/components/GradientBg';
-import {Form, Formik} from 'formik';
+import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import ButtonSocialAuth from '@/components/ButtonSocialAuth';
 import Button from '@/components/Button';
@@ -10,17 +10,18 @@ import ErrorMessageField from '@/components/ErrorMessageField';
 import Input from '@/components/Input';
 import Image from 'next/image';
 import GoogleIcon from '@/assets/svgs/google-icon.svg';
-import {authLogin} from '@/libs/store/features/authSlice';
-import {useRouter} from 'next/navigation';
-import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
-import {apiAuthLogin} from '@/libs/api';
-import {ToastType} from '@/libs/types/ToastType';
-import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
-import {useEffect} from 'react';
+import { authLogin } from '@/libs/store/features/authSlice';
+import { useRouter } from 'next/navigation';
+import { useAppDispatch, useAppSelector } from '@/libs/hooks/useReduxHook';
+import { apiAuthLogin, apiAuthLoginGoogle } from '@/libs/api';
+import { ToastType } from '@/libs/types/ToastType';
+import { setSubmitLoading } from '@/libs/store/features/generalSubmitSlice';
+import { useEffect, useState } from 'react';
 import ButtonIcon from '@/components/ButtonIcon';
 import SvgArrowLeft from '@/assets/svgComponents/SvgArrowLeft';
-import {handleShowToast} from '@/utils/toast';
-import {PasswordInput} from '@/components/PasswordInput';
+import { handleShowToast } from '@/utils/toast';
+import { PasswordInput } from '@/components/PasswordInput';
+import { auth, provider, signInWithPopup, signOut } from "../../libs/api/firebase-config";
 
 type InitialData = {
   email: string;
@@ -35,6 +36,7 @@ const initialValue: InitialData = {
 const LoginPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const generalSubmit = useAppSelector(state => state.generalSubmit);
+  const [user, setUser] = useState(null);
 
   const router = useRouter();
 
@@ -45,11 +47,35 @@ const LoginPage: React.FC = () => {
       .min(6, 'Password must be at least 6 characters'),
   });
 
+  // const handleGoogleSignIn = async () => {
+  //   window.open(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google-signin`,
+  //     '_blank',
+  //   );
+  // };
+
   const handleGoogleSignIn = async () => {
-    window.open(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user-auth-social/google-signin`,
-      '_blank',
-    );
+    try {
+      dispatch(setSubmitLoading(true));
+      const result = await signInWithPopup(auth, provider);
+      const token = await result.user.getIdToken();
+      const body = {
+        token: token,
+      };
+      return apiAuthLoginGoogle(dispatch, body)
+        .then(response => {
+          dispatch(authLogin(response.data));
+          localStorage.setItem('authToken', response.data.accessToken);
+          localStorage.setItem('user', JSON.stringify(response.data));
+          router.push('/admin');
+        })
+        .catch()
+        .finally(() => {
+          dispatch(setSubmitLoading(false));
+        });
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+    }
   };
 
   const handleSubmit = async (values: InitialData) => {
