@@ -11,10 +11,13 @@ const PreJoin = ({ meetingId }) => {
   const [paymentMethod, setPaymentMethod] = useState('Stripe');
 
   const [formData, setFormData] = useState({
-    fullname: '',
-    lastname: '',
+    firstName: '',
+    lastName: '',
     phoneNumber: '',
     email: '',
+    typePayment: 'paypal',
+    idItem: meetingId,
+    price: data?.price
   });
 
   const handleSubmit = async () => {
@@ -37,6 +40,32 @@ const PreJoin = ({ meetingId }) => {
         setdata(data.data)
       } else {
         alert('Failed to create consultation');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const handleSubmitBuy = async () => {
+    // const token = localStorage.getItem('authToken');
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/Twilmeet/BuyTweelmeet`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData)
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        alert('Success to Register');
+      } else {
+        alert('Failed to register, please try again');
       }
     } catch (error) {
       console.error('Error:', error);
@@ -73,19 +102,19 @@ const PreJoin = ({ meetingId }) => {
           <div className="grid grid-cols-2 gap-4">
             <Input
               type="text"
-              name="firstname"
+              name="firstName"
               placeholder="First Name"
               className="p-2 border rounded w-full"
-              value={formData.firstname}
+              value={formData.firstName}
               onChange={handleChange}
               required
             />
             <Input
               type="text"
-              name="lastname"
+              name="lastName"
               placeholder="Last Name"
               className="p-2 border rounded w-full"
-              value={formData.lastname}
+              value={formData.lastName}
               onChange={handleChange}
               required
             />
@@ -112,7 +141,7 @@ const PreJoin = ({ meetingId }) => {
               required
             />
           </div>
-          <button className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+          <button onClick={()=> handleSubmitBuy()} className="mt-6 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
             Confirm
           </button>
         </div>
