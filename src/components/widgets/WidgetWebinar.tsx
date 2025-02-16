@@ -65,7 +65,7 @@ const WidgetWebinar: React.FC<IWidgetWebinar> = ({
               href={
                 urlWebinar.includes('http')
                   ? urlWebinar
-                  : `https://${urlWebinar}`
+                  : `${process.env.NEXT_PUBLIC_API_ROUTE}/webinar?id=${urlWebinar}`
               }
               passHref
               target={'_blank'}>

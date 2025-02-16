@@ -115,7 +115,7 @@ const ConsultationForm = ({isOpen, onClose}) => {
         </div>
 
         {/* Repeat Options */}
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-700">
             Repeat Every
           </label>
@@ -130,7 +130,7 @@ const ConsultationForm = ({isOpen, onClose}) => {
             <option value="Every Month">Every Month</option>
             <option value="Specific Day">Specific Day</option>
           </select>
-        </div>
+        </div> */}
 
         {/* Consultation Type */}
         {/* <div className="space-y-2">
