@@ -19,6 +19,17 @@ import {
 import {setCountries} from '@/libs/store/features/countrySlice';
 import {authLogout} from '@/libs/store/features/authSlice';
 import {Calendar, DollarSign, Video} from 'lucide-react';
+import SvgZoom from '@/assets/svgComponents/SvgZoom';
+import SvgYoutube from '@/assets/svgComponents/SvgYoutube';
+import SvgCalendly from '@/assets/svgComponents/SvgCalendly';
+import SvgPhoneCall from '@/assets/svgComponents/SvgPhoneCall';
+import SvgTwillinkLogo from '@/assets/svgComponents/SvgTwillinkLogo';
+import SvgCheck from '@/assets/svgComponents/SvgCheck';
+import SvgSun from '@/assets/svgComponents/SvgSun';
+import SvgBurgerMenu from '@/assets/svgComponents/SvgBurgerMenu';
+import SvgBurgerMenu2 from '@/assets/svgComponents/SvgBurgerMenu2';
+import SvgMobile from '@/assets/svgComponents/SvgMobile';
+import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
 
 
 export default function AdminLayout({children}: {children: React.ReactNode}) {
@@ -37,26 +48,27 @@ export default function AdminLayout({children}: {children: React.ReactNode}) {
       disabled: true,
     },
     {
-      title: 'Twilmeet',
-      icon: <SvgTwilmeetIcon />,
+      title: 'Webinar & Class',
+      icon: <SvgSparkle className="stroke-primary"/>,
+      path: '/admin/twilmeet/webinar',
       disabled: meetingLink == "" ? true : false,
-      menuChild: [
-        {
-          title: 'Calendar',
-          path: '/admin/twilmeet/calendar',
-          icon: <Calendar width={15} />,
-        },
-        {
-          title: 'Webinar / Class',
-          path: '/admin/twilmeet/webinar',
-          icon: <Video width={15} />,
-        },
-        {
-          title: 'Revenue',
-          path: '/admin/twilmeet/revenue',
-          icon: <DollarSign width={15} />,
-        },
-      ],
+      // menuChild: [
+      //   {
+      //     title: 'Calendar',
+      //     path: '/admin/twilmeet/calendar',
+      //     icon: <Calendar width={15} />,
+      //   },
+      //   {
+      //     title: 'Webinar / Class',
+      //     path: '/admin/twilmeet/webinar',
+      //     icon: <Video width={15} />,
+      //   },
+      //   {
+      //     title: 'Revenue',
+      //     path: '/admin/twilmeet/revenue',
+      //     icon: <DollarSign width={15} />,
+      //   },
+      // ],
     },
     {
       title: 'Account',

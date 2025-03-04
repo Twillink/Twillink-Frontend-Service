@@ -16,7 +16,7 @@ interface IPreviewContext {
 export const PreviewContext = createContext<IPreviewContext>({
   preview: PreviewTypeEnum.DESKTOP,
   changePreview: () => {},
-  isMobileScreen: false,
+  isMobileScreen: true,
 });
 
 interface PreviewProviderProps {

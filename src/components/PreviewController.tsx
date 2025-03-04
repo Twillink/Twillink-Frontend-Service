@@ -36,18 +36,18 @@ const PreviewController: React.FC = () => {
           transition={{type: 'spring', stiffness: 300, damping: 30}}
           style={{width: '200%', left: '-50%'}}
         />
-        <span className="relative z-10 flex items-center justify-center w-1/2 h-full float-left">
-          <SvgLaptop
-            width={24}
-            height={24}
-            className={`${isDesktop ? 'stroke-primary-content' : 'stroke-primary'}`}
-          />
-        </span>
         <span className="relative z-10 flex items-center justify-center w-1/2 h-full float-right">
           <SvgMobile
             width={24}
             height={24}
             className={`${isDesktop ? 'stroke-primary' : 'stroke-primary-content'}`}
+          />
+        </span>
+        <span className="relative z-10 flex items-center justify-center w-1/2 h-full float-left">
+          <SvgLaptop
+            width={24}
+            height={24}
+            className={`${isDesktop ? 'stroke-primary-content' : 'stroke-primary'}`}
           />
         </span>
       </button>

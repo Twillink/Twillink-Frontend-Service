@@ -11,9 +11,9 @@ import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
 import SocialContainer from '@/components/widgets/SocialContainer';
 import UserProfile from '@/components/widgets/UserProfile';
 import WidgetContainer from '@/components/widgets/WidgetContainer';
-import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
-import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
-import {generateUniqueString} from '@/utils/generateUniqueString';
+import { IItemWidgetType } from '@/libs/types/IItemWidgetType';
+import { WidgetTypeEnum } from '@/libs/types/WidgetTypeEnum';
+import { generateUniqueString } from '@/utils/generateUniqueString';
 import Loader from './Loader';
 import {
   apiAddAttachment,
@@ -34,8 +34,8 @@ import {
   apiUpdateUserProfile,
   IUpdateUserProfileBody,
 } from '@/libs/api';
-import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
-import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
+import { useAppDispatch, useAppSelector } from '@/libs/hooks/useReduxHook';
+import { setSubmitLoading } from '@/libs/store/features/generalSubmitSlice';
 import {
   useCallback,
   useContext,
@@ -62,7 +62,7 @@ import {
   TypeWidthWidgetEnum,
 } from '@/libs/types/IAddWidgetData';
 import PopupWidgetBlog from '@/components/PopupWidgetBlog';
-import {AxiosResponse} from 'axios';
+import { AxiosResponse } from 'axios';
 import {
   PreviewContext,
   PreviewTypeEnum,
@@ -70,11 +70,13 @@ import {
 import Button from '@/components/Button';
 import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
 import PopupWidgetSchedule from '@/components/PopupWidgetSchedule';
-import {IWigetProfile} from '@/libs/types/IWigetProfile';
+import { IWigetProfile } from '@/libs/types/IWigetProfile';
 import PopupWidgetBanner from '@/components/PopupWidgetBanner';
 import PopupWidgetMap from '@/components/PopupWidgetMap';
 import PopupWidgetPdf from '@/components/PopupWidgetPdf';
 import PopupWidgetWebinar from '@/components/PopupWidgetWebinar';
+import { RainbowButton } from './Button/RainbowButton';
+import Link from 'next/link';
 
 interface IWidgetEditor {
   isLoading: boolean;
@@ -105,7 +107,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const scrollSpeed = 10;
 
-  const {preview, isMobileScreen} = useContext(PreviewContext);
+  const { preview, isMobileScreen } = useContext(PreviewContext);
 
   const isDesktop = useMemo(
     () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
@@ -128,10 +130,10 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
     if (dragWidget && dropWidget) {
       const newWidgetState = dataWidget.map(widget => {
         if (widget.idEditor === dragId) {
-          return {...widget, order: dropWidget.order};
+          return { ...widget, order: dropWidget.order };
         }
         if (widget.idEditor === ev.currentTarget.id) {
-          return {...widget, order: dragWidget.order};
+          return { ...widget, order: dragWidget.order };
         }
         return widget;
       });
@@ -257,7 +259,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         };
         if (file) {
           try {
-            const response = await apiAddAttachment(dispatch, {files: [file]});
+            const response = await apiAddAttachment(dispatch, { files: [file] });
 
             body = {
               ...body,
@@ -284,7 +286,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         };
         if (file) {
           try {
-            const response = await apiAddAttachment(dispatch, {files: [file]});
+            const response = await apiAddAttachment(dispatch, { files: [file] });
             body = {
               ...body,
               url: response?.data?.path,
@@ -308,7 +310,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         };
         if (file) {
           try {
-            const response = await apiAddAttachment(dispatch, {files: [file]});
+            const response = await apiAddAttachment(dispatch, { files: [file] });
 
             body = {
               ...body,
@@ -347,7 +349,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
         if (file) {
           try {
-            const response = await apiAddAttachment(dispatch, {files: [file]});
+            const response = await apiAddAttachment(dispatch, { files: [file] });
 
             body = {
               ...body,
@@ -380,7 +382,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         const apiAttachments: Promise<AxiosResponse<any, any>>[] = [];
 
         for (let i = 0; i < files.length; i++) {
-          apiAttachments.push(apiAddAttachment(dispatch, {files: [files[i]]}));
+          apiAttachments.push(apiAddAttachment(dispatch, { files: [files[i]] }));
         }
 
         apiCall = Promise.all(apiAttachments).then(data => {
@@ -404,7 +406,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
         if (file) {
           try {
-            const response = await apiAddAttachment(dispatch, {files: [file]});
+            const response = await apiAddAttachment(dispatch, { files: [file] });
             body = {
               ...body,
               urlBanner: response?.data?.path,
@@ -433,7 +435,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
         if (file) {
           try {
-            const response = await apiAddAttachment(dispatch, {files: [file]});
+            const response = await apiAddAttachment(dispatch, { files: [file] });
             body = {
               caption: newWidget.value?.caption,
               url: response?.data?.path,
@@ -464,7 +466,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
         if (file) {
           try {
-            const response = await apiAddAttachment(dispatch, {files: [file]});
+            const response = await apiAddAttachment(dispatch, { files: [file] });
             body = {
               ...body,
               urlThumbnail: response?.data?.path,
@@ -595,7 +597,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
         prevWidgets.map(widget => {
           if (widget.idEditor === id) {
             widgetId = widget.id;
-            return {...widget, width: newWidth};
+            return { ...widget, width: newWidth };
           }
           return widget;
         }),
@@ -603,7 +605,7 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
 
       if (widgetId) {
         dispatch(setSubmitLoading(true));
-        apiChangeWidthWidget(dispatch, {id: widgetId, width: newWidth})
+        apiChangeWidthWidget(dispatch, { id: widgetId, width: newWidth })
           .then(() => {
             fetchData(false);
           })
@@ -703,12 +705,15 @@ const WidgetEditor: React.FC<IWidgetEditor> = ({
                       />
                     </div>
 
-                    <p
-                      className={
-                        'text-sm font-medium text-center cursor-pointer'
-                      }>
-                      Try Twillink—it&apos;s free!
-                    </p>
+                    {/* <div className={'sticky bg-base-100 bottom-0 py-2 z-30 px-2'}>
+                      <p className={'text-sm font-medium text-center'}>
+                        <Link href="/" className="text-black-500 hover:underline">
+                          <RainbowButton>
+                            Try Twillink—it&apos;s free!
+                          </RainbowButton>
+                        </Link>
+                      </p>
+                    </div> */}
                   </div>
                 </div>
               )}

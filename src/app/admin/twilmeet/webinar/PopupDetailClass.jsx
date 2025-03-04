@@ -83,7 +83,7 @@ const Modal = ({ isOpen, onClose, event, registered }) => {
                     '_blank',
                   )
                 }
-                className="flex-grow p-3 focus:bg-lime-600 cursor-pointer bg-lime-600 rounded-md text-center text-white font-bold">
+                className="flex-grow p-3 focus:bg-black cursor-pointer bg-black rounded-md text-center text-white font-bold">
                 Open Webinar
               </div>
               <button
@@ -91,7 +91,7 @@ const Modal = ({ isOpen, onClose, event, registered }) => {
                   alert('Link copied to clipboard!');
                   navigator.clipboard.writeText(`https://twillink.com/room?id=${event.id}`)
                 }}
-                className="p-3 focus:bg-blue-500 cursor-pointer bg-blue-500 rounded-md text-center text-white">
+                className="p-3 focus:bg-gray-500 cursor-pointer bg-gray-500 rounded-md text-center text-white">
                 📋
               </button>
             </div>

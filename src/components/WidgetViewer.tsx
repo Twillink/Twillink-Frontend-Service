@@ -11,9 +11,9 @@ import ScrollHideHeader from '@/components/widgets/ScrollHideHeader';
 import SocialContainer from '@/components/widgets/SocialContainer';
 import UserProfile from '@/components/widgets/UserProfile';
 import WidgetContainerView from '@/components/widgets/WidgetContainerView';
-import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
-import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
-import {generateUniqueString} from '@/utils/generateUniqueString';
+import { IItemWidgetType } from '@/libs/types/IItemWidgetType';
+import { WidgetTypeEnum } from '@/libs/types/WidgetTypeEnum';
+import { generateUniqueString } from '@/utils/generateUniqueString';
 import Loader from './Loader';
 import {
   apiAddAttachment,
@@ -34,8 +34,8 @@ import {
   apiUpdateUserProfile,
   IUpdateUserProfileBody,
 } from '@/libs/api';
-import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
-import {setSubmitLoading} from '@/libs/store/features/generalSubmitSlice';
+import { useAppDispatch, useAppSelector } from '@/libs/hooks/useReduxHook';
+import { setSubmitLoading } from '@/libs/store/features/generalSubmitSlice';
 import {
   useCallback,
   // useContext,
@@ -62,7 +62,7 @@ import {
   TypeWidthWidgetEnum,
 } from '@/libs/types/IAddWidgetData';
 import PopupWidgetBlog from '@/components/PopupWidgetBlog';
-import {AxiosResponse} from 'axios';
+import { AxiosResponse } from 'axios';
 // import {
 //   PreviewContext,
 //   PreviewTypeEnum,
@@ -70,12 +70,14 @@ import {AxiosResponse} from 'axios';
 // import Button from '@/components/Button';
 // import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
 import PopupWidgetSchedule from '@/components/PopupWidgetSchedule';
-import {IWigetProfile} from '@/libs/types/IWigetProfile';
+import { IWigetProfile } from '@/libs/types/IWigetProfile';
 import PopupWidgetBanner from '@/components/PopupWidgetBanner';
 import PopupWidgetMap from '@/components/PopupWidgetMap';
 import PopupWidgetPdf from '@/components/PopupWidgetPdf';
 import PopupWidgetWebinar from '@/components/PopupWidgetWebinar';
 import useIsDesktop from '@/app/[twillink]/checkDesktop';
+import { RainbowButton } from './Button/RainbowButton';
+import Link from 'next/link';
 
 interface IWidgetViewer {
   isLoading: boolean;
@@ -126,10 +128,10 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
     if (dragWidget && dropWidget) {
       const newWidgetState = dataWidget.map(widget => {
         if (widget.idEditor === dragId) {
-          return {...widget, order: dropWidget.order};
+          return { ...widget, order: dropWidget.order };
         }
         if (widget.idEditor === ev.currentTarget.id) {
-          return {...widget, order: dragWidget.order};
+          return { ...widget, order: dragWidget.order };
         }
         return widget;
       });
@@ -249,7 +251,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
       case WidgetTypeEnum.Link:
         file = newWidget.value?.image ?? '';
         if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
+          const response = await apiAddAttachment(dispatch, { files: [file] });
 
           body = {
             title: newWidget.value?.title,
@@ -273,7 +275,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
       case WidgetTypeEnum.Image:
         file = newWidget.value?.image ?? '';
         if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
+          const response = await apiAddAttachment(dispatch, { files: [file] });
           body = {
             caption: newWidget.value?.caption,
             url: response?.data?.path,
@@ -289,7 +291,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
       case WidgetTypeEnum.Video:
         file = newWidget.value?.video ?? '';
         if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
+          const response = await apiAddAttachment(dispatch, { files: [file] });
 
           body = {
             caption: newWidget.value?.caption,
@@ -309,7 +311,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
       case WidgetTypeEnum.Blog:
         file = newWidget.value?.image ?? '';
         if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
+          const response = await apiAddAttachment(dispatch, { files: [file] });
 
           body = {
             title: newWidget.value?.title,
@@ -345,7 +347,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
         const apiAttachments: Promise<AxiosResponse<any, any>>[] = [];
 
         for (let i = 0; i < files.length; i++) {
-          apiAttachments.push(apiAddAttachment(dispatch, {files: [files[i]]}));
+          apiAttachments.push(apiAddAttachment(dispatch, { files: [files[i]] }));
         }
 
         apiCall = Promise.all(apiAttachments).then(data => {
@@ -362,7 +364,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
       case WidgetTypeEnum.Banner:
         file = newWidget.value?.image ?? '';
         if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
+          const response = await apiAddAttachment(dispatch, { files: [file] });
           body = {
             fullName: dataProfile?.fullName,
             description: dataProfile?.description,
@@ -393,7 +395,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
       case WidgetTypeEnum.PDF:
         file = newWidget.value?.files ? newWidget.value?.files[0] : '';
         if (file) {
-          const response = await apiAddAttachment(dispatch, {files: [file]});
+          const response = await apiAddAttachment(dispatch, { files: [file] });
 
           body = {
             caption: newWidget.value?.caption,
@@ -538,7 +540,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
         prevWidgets.map(widget => {
           if (widget.idEditor === id) {
             widgetId = widget.id;
-            return {...widget, width: newWidth};
+            return { ...widget, width: newWidth };
           }
           return widget;
         }),
@@ -546,7 +548,7 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
 
       if (widgetId) {
         dispatch(setSubmitLoading(true));
-        apiChangeWidthWidget(dispatch, {id: widgetId, width: newWidth})
+        apiChangeWidthWidget(dispatch, { id: widgetId, width: newWidth })
           .then(() => {
             fetchData(false);
           })
@@ -629,25 +631,12 @@ const WidgetViewer: React.FC<IWidgetViewer> = ({
                 <div>
                   <div
                     className={'absolute left-0 right-0 bottom-2 py-2 z-30 '}>
-                    {/* <div className={'px-6 mb-4'}>
-                      <Button
-                        size={'md'}
-                        className={'w-full h-8'}
-                        title={'Go Pro'}
-                        onClick={() => (window.location.href = '/')}
-                        icon={
-                          <SvgSparkle
-                            width={20}
-                            height={20}
-                            className={'stroke-primary-content'}
-                          />
-                        }
-                      />
-                    </div> */}
-                    <p className="text-sm font-medium text-center">
-                      <a href="/" className="text-black-500 hover:underline">
-                        Try Twillink—it&apos;s free!
-                      </a>
+                    <p className={'text-sm font-medium text-center px-5'}>
+                      <Link href="/" className="text-black-500 hover:underline">
+                        <RainbowButton>
+                          Try Twillink—it&apos;s free!
+                        </RainbowButton>
+                      </Link>
                     </p>
                   </div>
                 </div>

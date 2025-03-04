@@ -1,7 +1,7 @@
 'use client';
 
 import WidgetEditor from '@/components/WidgetEditor';
-import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
+import { IItemWidgetType } from '@/libs/types/IItemWidgetType';
 import {
   useCallback,
   useContext,
@@ -10,17 +10,21 @@ import {
   useRef,
   useState,
 } from 'react';
-import {useAppDispatch, useAppSelector} from '@/libs/hooks/useReduxHook';
-import {setWidgetData} from '@/libs/store/features/myWidgetSlice';
-import {apiGetWidgetData} from '@/libs/api';
-import {formatWidgetData} from '@/utils/formatWidgetData';
+import { useAppDispatch, useAppSelector } from '@/libs/hooks/useReduxHook';
+import { setWidgetData } from '@/libs/store/features/myWidgetSlice';
+import { apiGetWidgetData } from '@/libs/api';
+import { formatWidgetData } from '@/utils/formatWidgetData';
 import {
   PreviewContext,
   PreviewTypeEnum,
 } from '@/libs/providers/PreviewProvider';
-import {GradientDiv} from '@/components/GradientDiv';
-import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
-import {IWigetProfile} from '@/libs/types/IWigetProfile';
+import { GradientDiv } from '@/components/GradientDiv';
+import { IAddWidgetSocial } from '@/libs/types/IAddWidgetData';
+import { IWigetProfile } from '@/libs/types/IWigetProfile';
+import { RainbowButton } from '@/components/Button/RainbowButton';
+import Link from 'next/link';
+import Button from '@/components/Button';
+import SvgSparkle from '@/assets/svgComponents/SvgSparkle';
 
 const Page = () => {
   const dispatch = useAppDispatch();
@@ -33,7 +37,7 @@ const Page = () => {
     username: '',
     email: '',
   });
-  const {preview, isMobileScreen} = useContext(PreviewContext);
+  const { preview, isMobileScreen } = useContext(PreviewContext);
 
   const isDesktop = useMemo(
     () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
@@ -55,7 +59,7 @@ const Page = () => {
 
           setDataWidget([...formattedData]);
           setDataSocial([...social]);
-          setDataProfile({...profile});
+          setDataProfile({ ...profile });
           localStorage.setItem('username', String(profile.username));
         })
         .catch()
@@ -107,14 +111,26 @@ const Page = () => {
               dataSocial={dataSocial}
               dataProfile={dataProfile}
             />
-            <div
+
+            {/* <div
               className={
-                'sticky bg-base-100 bottom-0 py-3 z-30 cursor-pointer'
+                'sticky bg-base-100 bottom-0 px-100 py-2 z-20 cursor-pointer'
               }>
-              <p className={'text-sm font-medium text-center'}>
-                Try Twillink—it&apos;s free!
-              </p>
-            </div>
+              <div className={'px-6 mb-4'}>
+                <Button
+                  size={'md'}
+                  className={'w-full h-8'}
+                  title={'Go Pro'}
+                  icon={
+                    <SvgSparkle
+                      width={20}
+                      height={20}
+                      className={'stroke-primary-content'}
+                    />
+                  }
+                />
+              </div>
+            </div> */}
           </div>
         </div>
       )}

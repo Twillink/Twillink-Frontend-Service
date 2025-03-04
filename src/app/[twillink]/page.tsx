@@ -22,6 +22,9 @@ import {IAddWidgetSocial} from '@/libs/types/IAddWidgetData';
 import {IWigetProfile} from '@/libs/types/IWigetProfile';
 import {useParams} from 'next/navigation';
 import useIsDesktop from './checkDesktop';
+import { Rainbow } from 'lucide-react';
+import { RainbowButton } from '@/components/Button/RainbowButton';
+import Link from 'next/link';
 
 const Page = () => {
   const dispatch = useAppDispatch();
@@ -97,11 +100,13 @@ const Page = () => {
               dataSocial={dataSocial}
               dataProfile={dataProfile}
             />
-            <div className={'sticky bg-base-100 bottom-0 py-2 z-30 '}>
+            <div className={'sticky bg-base-100 bottom-0 py-2 z-30 px-2'}>
               <p className={'text-sm font-medium text-center'}>
-                <a href="/" className="text-black-500 hover:underline">
+                <Link href="/" className="text-black-500 hover:underline">
+                  <RainbowButton>
                   Try Twillink—it&apos;s free!
-                </a>
+                  </RainbowButton>
+                </Link>
               </p>
             </div>
           </div>

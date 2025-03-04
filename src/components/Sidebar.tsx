@@ -31,7 +31,14 @@ const Sidebar: React.FC<ISidebar> = ({menus = []}) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleClick = (path: string) => () => router.push(path);
+  const handleClick = (path: string) => () => {
+    if(path === "/admin")
+    {
+      window.location.href = path
+    }else{
+      router.push(path)
+    }
+  };
 
   return (
     <div className="drawer-side z-50">

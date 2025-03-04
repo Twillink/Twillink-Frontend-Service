@@ -106,7 +106,7 @@ const Home = () => {
     <div className="w-full bg-white p-10 rounded-3xl">
       <div className="flex items-center justify-between mb-6">
         <div className="flex space-x-4">
-          {['Webinar', 'Class', 'Consult'].map((tab) => (
+          {['Webinar', 'Class'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}

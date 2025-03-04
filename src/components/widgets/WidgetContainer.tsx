@@ -1,10 +1,10 @@
 'use client';
 
-import React, {useContext, useMemo, useState} from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import WidgetLink from '@/components/widgets/WidgetLink';
 import WidgetText from '@/components/widgets/WidgetText';
-import {WidgetTypeEnum} from '@/libs/types/WidgetTypeEnum';
-import {IItemWidgetType} from '@/libs/types/IItemWidgetType';
+import { WidgetTypeEnum } from '@/libs/types/WidgetTypeEnum';
+import { IItemWidgetType } from '@/libs/types/IItemWidgetType';
 import WidgetFrameEditor from './WidgetFrameEditor';
 import WidgetImage from './WidgetImage';
 import WidgetVideo from './WIdgetVideo';
@@ -40,53 +40,77 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
 
-  const {preview, isMobileScreen} = useContext(PreviewContext);
+  const { preview, isMobileScreen } = useContext(PreviewContext);
 
   const isDesktop = useMemo(
     () => preview === PreviewTypeEnum.DESKTOP && !isMobileScreen,
     [preview, isMobileScreen],
   );
 
+  const widgetWidth = useMemo(() => {
+    if (isDesktop) {
+      return values.width === '100%' ? '50%' : '25%';
+    }
+    return values.width;
+  }, [values?.width, isDesktop]);
+
   const renderWidget = () => {
     switch (values.type) {
       case WidgetTypeEnum.Link:
         return (
-          <WidgetLink
-            url={values.value?.url || '#'}
-            text={values.value?.title || ''}
-            image={values.value?.image}
-            urlThumbnail={values.value?.urlThumbnail}
-            isFullWidth={values.width === '100%'}
-          />
+          <div className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}>
+
+            <WidgetLink
+              url={values.value?.url || '#'}
+              text={values.value?.title || ''}
+              image={values.value?.image}
+              urlThumbnail={values.value?.urlThumbnail}
+              isFullWidth={values.width === '100%'}
+            />
+          </div>
         );
       case WidgetTypeEnum.Text:
-        return <WidgetText text={values.value?.text || ''} />;
+        return (
+          <div className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}>
+
+            <WidgetText text={values.value?.text || ''} />
+          </div>
+        );
       case WidgetTypeEnum.Image:
         return (
-          <WidgetImage
-            text={values.value?.caption || ''}
-            url={values.value?.url || '#'}
-            image={values.value?.image}
-          />
+          <div className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}>
+
+            <WidgetImage
+              text={values.value?.caption || ''}
+              url={values.value?.url || '#'}
+              image={values.value?.image}
+            />
+          </div>
         );
       case WidgetTypeEnum.Video:
         return (
-          <WidgetVideo
-            text={values.value?.caption || ''}
-            url={values.value?.url || '#'}
-            image={values.value?.image}
-            urlThumbnail={values.value?.urlThumbnail}
-          />
+          <div className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}>
+
+            <WidgetVideo
+              text={values.value?.caption || ''}
+              url={values.value?.url || '#'}
+              image={values.value?.image}
+              urlThumbnail={values.value?.urlThumbnail}
+            />
+          </div>
         );
       case WidgetTypeEnum.Blog:
         return (
-          <WidgetBlog
-            title={values.value?.title || ''}
-            content={values.value?.contents ?? ''}
-            url={values.value?.url || '#'}
-            image={values.value?.image}
-            isFullWidth={values.width === '100%'}
-          />
+          <div className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}>
+
+            <WidgetBlog
+              title={values.value?.title || ''}
+              content={values.value?.contents ?? ''}
+              url={values.value?.url || '#'}
+              image={values.value?.image}
+              isFullWidth={values.width === '100%'}
+            />
+          </div>
         );
 
       case WidgetTypeEnum.Carousel:
@@ -96,40 +120,50 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
           ) || [];
 
         return (
-          <WidgetCarousel
-            text={values.value?.caption || ''}
-            url={values.value?.url || '#'}
-            images={values.value?.images}
-            attachmentIds={attachmentIds}
-          />
+          <div className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}>
+
+            <WidgetCarousel
+              text={values.value?.caption || ''}
+              url={values.value?.url || '#'}
+              images={values.value?.images}
+              attachmentIds={attachmentIds}
+            />
+          </div>
         );
 
       case WidgetTypeEnum.Map:
         return (
-          <WidgetMap
-            caption={values.value?.caption || ''}
-            latitude={values.value?.latitude || 0}
-            longitude={values.value?.longitude || 0}
-          />
+          <div className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}>
+
+            <WidgetMap
+              caption={values.value?.caption || ''}
+              latitude={values.value?.latitude || 0}
+              longitude={values.value?.longitude || 0}
+            />
+          </div>
         );
       case WidgetTypeEnum.PDF:
         return (
-          <WidgetPdf
-            text={values.value?.caption || ''}
-            url={values.value?.url || ''}
-            urlThumbnail={values.value?.urlThumbnail || ''}
-            isFullWidth={values.width === '100%'}
-          />
+          <div className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}>
+            <WidgetPdf
+              text={values.value?.caption || ''}
+              url={values.value?.url || ''}
+              urlThumbnail={values.value?.urlThumbnail || ''}
+              isFullWidth={values.width === '100%'}
+            />
+          </div>
         );
 
       case WidgetTypeEnum.Webinar:
         return (
-          <WidgetWebinar
-            title={values.value?.title || ''}
-            urlWebinar={values.value?.urlWebinar || ''}
-            urlThumbnail={values.value?.urlThumbnail || undefined}
-            isFullWidth={values.width === '100%'}
-          />
+          <div className={`relative flex z-[2] align-middle  items-center justify-center p-[6px] ${isDesktop ? 'h-[260px] lg:h-[280px] xl:h-[300px]' : 'h-[300px]'} cursor-move`}>
+            <WidgetWebinar
+              title={values.value?.title || ''}
+              urlWebinar={values.value?.urlWebinar || ''}
+              urlThumbnail={values.value?.urlThumbnail || undefined}
+              isFullWidth={values.width === '100%'}
+            />
+          </div>
         );
 
       default:
@@ -145,23 +179,6 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
     setIsMenuVisible(false);
   };
 
-  const widgetWidth = useMemo(() => {
-    // if (isDesktop) {
-    //   return values.width === '100%' ? '50%' : '25%';
-    // }
-    if (isDesktop) {
-      if (values.width === '100%') {
-        return 'col-span-2';
-      } else {
-        return '';
-      }
-    } else {
-      return values.width === '100%' ? 'w-full' : 'w-1/2';
-    }
-
-    return values.width;
-  }, [values?.width, isDesktop]);
-
   return (
     <div
       id={values.idEditor}
@@ -169,8 +186,7 @@ const WidgetContainer: React.FC<IWidgetContainer> = ({
       onDragStart={handleDrag}
       onDrop={handleDrop}
       onDragOver={ev => ev.preventDefault()}
-      className={`relative flex z-[2] align-middle   items-center justify-center p-[6px] ${widgetWidth} ${isDesktop ? 'h-32 lg:h-36 xl:h-40' : 'h-32'} cursor-move`}
-      // style={{width: widgetWidth}}
+      style={{ width: !isDesktop ? widgetWidth : "", padding:1 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}>
       <WidgetFrameEditor

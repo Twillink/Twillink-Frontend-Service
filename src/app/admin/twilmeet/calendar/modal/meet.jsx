@@ -13,7 +13,7 @@ export default function CreateMeetLinkModal({ isOpen, onClose }) {
 
   const createMeetLink = async () => {
     window.open(
-      'https://twillink.com/room?id='+ meetingLink,
+      'https://twillink.com/room?id=' + meetingLink,
       '_blank',
     );
   };
@@ -31,7 +31,7 @@ export default function CreateMeetLinkModal({ isOpen, onClose }) {
 
   useEffect(() => {
     openStatus();
-    }, []);
+  }, []);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-[99999]">
@@ -48,13 +48,21 @@ export default function CreateMeetLinkModal({ isOpen, onClose }) {
         </p>
 
         {/* Meeting Link */}
-        <div className="mb-4">
+        <div className="row flex items-center gap-2 mb-4">
           <input
             type="text"
-            value={'twillink.com/room?id='+ meetingLink}
+            value={'twillink.com/room?id=' + meetingLink}
             readOnly
             className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4 py-2 text-sm"
           />
+          <button
+            onClick={() => {
+              alert('Link copied to clipboard!');
+              navigator.clipboard.writeText(`https://twillink.com/room?id=${meetingLink}`)
+            }}
+            className="p-1 focus:bg-gray-300 cursor-pointer bg-gray-300 rounded-md text-center text-white">
+            📋
+          </button>
         </div>
 
         <div className="flex justify-between">
