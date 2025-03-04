@@ -36,18 +36,15 @@ const Modal = ({isOpen, onClose, event, registered}) => {
               {registered.length} registered
             </span>
           </div>
-          <div className="text-gray-700 text-sm">
-            <h3 className="font-bold mb-2 overflow-x-auto">Description</h3>
-            <p>{event.desc}</p>
-            <div className="row flex items-center gap-2 mt-10">
+          <div className="row flex items-center gap-2 mt-10">
               <div
                 onClick={() =>
                   window.open(
-                    `https://twillink.com/room?id=${event.id}`,
+                    'https://twillink.com/room?id=88266820518',
                     '_blank',
                   )
                 }
-                className="flex-grow p-3 focus:bg-lime-600 cursor-pointer bg-lime-600 rounded-md text-center text-white font-bold">
+                className="flex-grow p-3 focus:bg-black cursor-pointer bg-black rounded-md text-center text-white font-bold">
                 Open Webinar
               </div>
               <button
@@ -55,11 +52,10 @@ const Modal = ({isOpen, onClose, event, registered}) => {
                   alert('Link copied to clipboard!');
                   navigator.clipboard.writeText(`https://twillink.com/room?id=${event.id}`)
                 }}
-                className="p-3 focus:bg-blue-500 cursor-pointer bg-blue-500 rounded-md text-center text-white">
+                className="p-3 focus:bg-gray-500 cursor-pointer bg-gray-500 rounded-md text-center text-white">
                 📋
               </button>
             </div>
-          </div>
         </div>
       </div>
     </div>
