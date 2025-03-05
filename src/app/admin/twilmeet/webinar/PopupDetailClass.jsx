@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 
-const Modal = ({ isOpen, onClose, event, registered }) => {
+const Modal = ({ isOpen, onClose, event, registered, nonregistered }) => {
   if (!isOpen) return null;
 
   const [activeTab, setActiveTab] = useState('Description');
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999] p-2">
-      <div className="bg-white rounded-3xl shadow-lg max-w-md w-full">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999] px-2 py-2">
+      <div className="bg-white rounded-3xl shadow-lg max-w-md w-full overflow-auto">
         <button
           onClick={onClose}
           className="absolute text-gray-500 hover:text-gray-800 bg-gray-300 w-8 h-8 rounded-full m-2"
@@ -40,12 +40,12 @@ const Modal = ({ isOpen, onClose, event, registered }) => {
             </span>
           </div>
           <div className="text-gray-700 text-sm text-center">
-            {['Description', 'Class'].map((tab) => (
+            {['Description', 'Class','Member', 'Need approval'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-2 rounded-full text-h3 font-light transition-colors duration-200 relative
-                ${activeTab === tab ? ' text-gray-600' : 'text-gray-200'}`}
+                ${activeTab === tab ? 'font-sm text-gray-600' : 'text-gray-400'}`}
               >
                 {tab}
               </button>
@@ -65,14 +65,75 @@ const Modal = ({ isOpen, onClose, event, registered }) => {
                     </p>
                     <div className="grid grid-cols-2">
                       <div className="text-left col-span-1 text-[12px] font-light">
-                        Saturday, December 26th, 2024
+                        {event.date}
                       </div>
                       <div className=" col-span-1 text-right text-[12px] font-light">
-                        14:00 - 16:00
+                        {event.time}
                       </div>
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+            {activeTab === 'Member' && (
+              <div className="max-h-32 overflow-y-auto">
+                {registered.map((data, idx) => (
+                  <div
+                    key={idx}
+                    className="grid grid-cols-1 bg-gray-200 m-2 p-2 rounded-lg   overflow-auto"
+                  >
+                    <div className="grid grid-cols-2">
+                      <div className=" col-span-1 text-right text-[12px] font-light">
+                        <p className="w-full text-left font-normal text-[14px]">
+                          {data.email}
+                        </p>
+                        <div className="text-left col-span-1 text-[12px] font-light">
+                          {data.nameUser} {data.lastUser}
+                        </div>
+                      </div>
+                      <div className=" col-span-1 text-right text-[12px] font-light">
+                        <button className="px-2 py-1 border-1 border-red-500 bg-white text-black rounded-md">
+                          ❌
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {registered.length <= 0 &&
+                  <div className='m-4'>Empty</div>
+                }
+              </div>
+            )}
+            {activeTab === 'Need approval' && (
+              <div className="max-h-32 overflow-y-auto">
+                {nonregistered.map((data, idx) => (
+                  <div
+                    key={idx}
+                    className="grid grid-cols-1 bg-gray-200 m-2 p-2 rounded-lg   overflow-auto"
+                  >
+                    <div className="grid grid-cols-2">
+                      <div className=" col-span-1 text-right text-[12px] font-light">
+                        <p className="w-full text-left font-normal text-[14px]">
+                          {data.email}
+                        </p>
+                        <div className="text-left col-span-1 text-[12px] font-light">
+                          {data.nameUser} {data.lastUser}
+                        </div>
+                      </div>
+                      <div className=" col-span-1 text-right text-[12px] font-light">
+                        <button className="px-2 py-1 border-1 border-red-500 bg-white text-black rounded-md">
+                          ❌
+                        </button>
+                        <button className="px-2 py-1 border-2 border-blue-500 bg-white text-black rounded-md mx-1">
+                          ✅
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {nonregistered.length <= 0 &&
+                  <div className='m-4'>Empty</div>
+                }
               </div>
             )}
             <div className="row flex items-center gap-2 mt-10">

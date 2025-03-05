@@ -52,7 +52,10 @@ const EventCard = ({ event, onClick }) => (
           ))}
         </div> */}
         <span className="text-xs text-gray-500">
-          {event.member.length} registered
+          {event.member.length} Registered
+        </span>
+        <span className="text-xs text-gray-500">
+          {event.nonMember.length} Need approval
         </span>
       </div>
     </div>
@@ -129,6 +132,7 @@ const Home = () => {
               <Modal
                 event={event.infoItem}
                 registered={event.member}
+                nonregistered={event.nonMember}
                 isOpen={isModalOpen === event}
                 onClose={() => setIsModalOpen(false)}
               />
@@ -141,18 +145,7 @@ const Home = () => {
               <Modal2
                 event={event.infoItem}
                 registered={event.member}
-                isOpen={isModalOpen === event}
-                onClose={() => setIsModalOpen(false)}
-              />
-            </React.Fragment>
-          ))}
-          {activeTab === 'Consult' &&
-          consultData.map((event) => (
-            <React.Fragment key={event.id}>
-              <EventCard event={event} onClick={() => setIsModalOpen(event)} />
-              <Modal2
-                event={event.infoItem}
-                registered={event.member}
+                nonregistered={event.nonMember}
                 isOpen={isModalOpen === event}
                 onClose={() => setIsModalOpen(false)}
               />
