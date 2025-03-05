@@ -212,10 +212,10 @@ const CreateWebinarForm = ({isOpen, onClose}) => {
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[99999] rounded-3xl">
       <div
-        className={`w-full ${!formData.isClass === true ? ' max-w-3xl' : ' max-w-5xl'} p-6 bg-white rounded-3xl shadow-3xl space-y-4 max-h-screen`}>
+        className={`overflow-auto w-full ${!formData.isClass === true ? ' max-w-3xl' : ' max-w-5xl'} p-6 bg-white rounded-3xl shadow-3xl space-y-4 max-h-screen`}>
         <h2 className="text-2xl font-semibold text-gray-700">Create Webinar</h2>
 
-        <div
+        <div  
           className={`grid ${!formData.isClass === true ? 'grid-cols-2' : 'grid-cols-3'} gap-4`}>
           {/* Title and Description */}
           <div className="col-span-1">

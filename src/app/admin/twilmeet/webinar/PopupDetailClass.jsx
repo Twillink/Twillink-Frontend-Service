@@ -6,7 +6,7 @@ const Modal = ({ isOpen, onClose, event, registered }) => {
   const [activeTab, setActiveTab] = useState('Description');
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999]">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999] p-2">
       <div className="bg-white rounded-3xl shadow-lg max-w-md w-full">
         <button
           onClick={onClose}
@@ -17,7 +17,7 @@ const Modal = ({ isOpen, onClose, event, registered }) => {
         <img
           src={event.thumbnail}
           alt="Modal Cover"
-          className="rounded-t-lg w-full h-40 object-cover mb-1"
+          className="rounded-t-3xl w-full h-40 object-cover mb-1"
         />
         <div className="p-5">
           <h2 className="text-xl font-bold mb-2">{event.title}</h2>
@@ -27,14 +27,14 @@ const Modal = ({ isOpen, onClose, event, registered }) => {
           </div>
           <div className="flex -space-x-2 mb-4 items-center">
             {/* Displaying avatars of registered users */}
-            {registered.map((data, idx) => (
+            {/* {registered.map((data, idx) => (
               <img
                 key={idx}
                 src={data.photo}
                 alt="User"
                 className="w-8 h-8 rounded-full border-2 border-white"
               />
-            ))}
+            ))} */}
             <span className="text-sm text-gray-500 pl-3">
               {registered.length} registered
             </span>

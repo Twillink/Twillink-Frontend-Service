@@ -10,7 +10,7 @@ import Modal2 from './PopupDetailClass';
 
 const EventCard = ({ event, onClick }) => (
   <div
-    className="bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer m-5"
+    className="bg-white shadow-lg rounded-lg overflow-hidden cursor-pointer m-1"
     onClick={onClick}
   >
     <div className="relative w-full h-40">
@@ -18,15 +18,15 @@ const EventCard = ({ event, onClick }) => (
         src={event.infoItem.thumbnail}
         alt={event.infoItem.title}
         fill
-        className="object-cover"
+        className="w-full h-40"
       />
     </div>
     <div className="p-4">
-      <div className="font-semibold text-gray-900 text-sm my-5">
+      <div className="font-semibold text-gray-900 text-sm my-2">
         {event.infoItem.title}
       </div>
-      <div className="text-gray-500 text-xs flex justify-between mb-4">
-        <span className="flex w-20 items-center">
+      <div className="text-gray-500 text-xs flex justify-between mb-2">
+        <span className="flex w-30 items-center">
           <Calendar width={20} className="pr-2" />
           {event.infoItem.date}
         </span>
@@ -39,7 +39,7 @@ const EventCard = ({ event, onClick }) => (
         {event.infoItem.desc}
       </div>
       <div className="flex items-center gap-3">
-        <div className="flex -space-x-2">
+        {/* <div className="flex -space-x-2">
           {event.member.map((src, idx) => (
             <Image
               key={idx}
@@ -50,7 +50,7 @@ const EventCard = ({ event, onClick }) => (
               className="rounded-full border border-white"
             />
           ))}
-        </div>
+        </div> */}
         <span className="text-xs text-gray-500">
           {event.member.length} registered
         </span>
@@ -85,7 +85,6 @@ const Home = () => {
         const data = await response.json();
         const uid = localStorage.getItem('user');
         const filtering = data.data.filter((data)=>  data.owner === JSON.parse(uid).id);
-        console.log(filtering)
         setWebinarData(filtering.filter((data) => data.infoItem.type === 'Webinar'));
         setClassData(filtering.filter((data) => data.infoItem.type === 'Class'));
         setConsultData(filtering.filter((data) => data.infoItem.type === 'Consult'));
