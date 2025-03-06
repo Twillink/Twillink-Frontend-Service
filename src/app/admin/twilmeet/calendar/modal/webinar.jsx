@@ -51,6 +51,7 @@ const CreateWebinarForm = ({isOpen, onClose}) => {
 
   const [tags, setTags] = useState([]);
   const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleRemoveTag = tagToRemove => {
     setTags(tags.filter(tag => tag !== tagToRemove));
@@ -113,7 +114,7 @@ const CreateWebinarForm = ({isOpen, onClose}) => {
 
   const handleSubmit = async e => {
     const token = localStorage.getItem('authToken');
-
+    setIsLoading(true)
     try {
       let urlThumbnail =
         'https://marketplace.canva.com/EAFt0jGMiI0/1/0/1600w/canva-putih-dan-oranye-geometric-business-webinar-zoom-virtual-background-RD3_Ft3xv5A.jpg'; // Default thumbnail URL
@@ -152,11 +153,14 @@ const CreateWebinarForm = ({isOpen, onClose}) => {
 
       if (response.ok) {
         window.location.reload();
+        setIsLoading(false)
       } else {
         alert('Failed to create consultation');
+        setIsLoading(false)
       }
     } catch (error) {
       console.error('Error:', error);
+      setIsLoading(false)
     }
   };
 
@@ -658,8 +662,12 @@ const CreateWebinarForm = ({isOpen, onClose}) => {
           </button>
           <button
             onClick={handleSubmit}
-            className="py-2 px-4 bg-gray-600 text-white rounded-lg shadow hover:bg-white-500">
-            Publish
+            className={`py-2 px-4 rounded-lg shadow transition ${
+              isLoading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-gray-600 hover:bg-gray-700 text-white"
+            }`}>
+            {isLoading ? "Publishing..." : "Publish"}
           </button>
         </div>
       </div>
