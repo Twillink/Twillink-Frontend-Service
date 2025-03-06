@@ -113,7 +113,7 @@ const Home = () => {
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`px-4 py-2 rounded-full text-h3 font-light transition-colors duration-200 relative
-                ${activeTab === tab ? ' text-gray-600' : 'text-gray-200'}`}
+                ${activeTab === tab ? ' text-gray-600' : 'text-gray-400'}`}
             >
               {tab}
               {activeTab === tab && (

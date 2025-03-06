@@ -36,7 +36,6 @@ const PreJoin = ({ meetingId }) => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.data)
         setdata(data.data)
       } else {
         alert('Failed to create consultation');

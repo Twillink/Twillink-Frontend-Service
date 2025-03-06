@@ -1,9 +1,86 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Modal = ({ isOpen, onClose, event, registered, nonregistered }) => {
   if (!isOpen) return null;
 
   const [activeTab, setActiveTab] = useState('Description');
+  const [data, setdata] = useState(null);
+  const handleSubmit = async (meetingId) => {
+    const token = localStorage.getItem('authToken');
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/Twilmeet/Approval/${meetingId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        handleSubmititem()
+      } else {
+        alert('Failed to create consultation');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const handleDecline = async (meetingId) => {
+    const token = localStorage.getItem('authToken');
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/Twilmeet/Decline/${meetingId}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        const data = await response.json();
+        handleSubmititem()
+      } else {
+        alert('Failed to create consultation');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const handleSubmititem = async () => {
+    const token = localStorage.getItem('authToken');
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/Twilmeet/${event.id}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setdata(data)
+      } else {
+        alert('Failed to create consultation');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    handleSubmititem();
+  }, []);
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-[9999] px-2 py-2">
@@ -36,11 +113,11 @@ const Modal = ({ isOpen, onClose, event, registered, nonregistered }) => {
               />
             ))} */}
             <span className="text-sm text-gray-500 pl-3">
-              {registered.length} registered
+              {data?.member.length} registered
             </span>
           </div>
           <div className="text-gray-700 text-sm text-center">
-            {['Description', 'Class','Member', 'Need approval'].map((tab) => (
+            {['Description', 'Class', 'Member', 'Need approval'].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -77,7 +154,7 @@ const Modal = ({ isOpen, onClose, event, registered, nonregistered }) => {
             )}
             {activeTab === 'Member' && (
               <div className="max-h-32 overflow-y-auto">
-                {registered.map((data, idx) => (
+                {data.member.map((data, idx) => (
                   <div
                     key={idx}
                     className="grid grid-cols-1 bg-gray-200 m-2 p-2 rounded-lg   overflow-auto"
@@ -92,21 +169,21 @@ const Modal = ({ isOpen, onClose, event, registered, nonregistered }) => {
                         </div>
                       </div>
                       <div className=" col-span-1 text-right text-[12px] font-light">
-                        <button className="px-2 py-1 border-1 border-red-500 bg-white text-black rounded-md">
+                        <button onClick={()=> handleDecline(data.id)} className="px-2 py-1 border-1 border-red-500 bg-white text-black rounded-md">
                           ❌
                         </button>
                       </div>
                     </div>
                   </div>
                 ))}
-                {registered.length <= 0 &&
+                {data.member.length <= 0 &&
                   <div className='m-4'>Empty</div>
                 }
               </div>
             )}
             {activeTab === 'Need approval' && (
               <div className="max-h-32 overflow-y-auto">
-                {nonregistered.map((data, idx) => (
+                {data.nonMember.map((data, idx) => (
                   <div
                     key={idx}
                     className="grid grid-cols-1 bg-gray-200 m-2 p-2 rounded-lg   overflow-auto"
@@ -121,22 +198,22 @@ const Modal = ({ isOpen, onClose, event, registered, nonregistered }) => {
                         </div>
                       </div>
                       <div className=" col-span-1 text-right text-[12px] font-light">
-                        <button className="px-2 py-1 border-1 border-red-500 bg-white text-black rounded-md">
+                        <button onClick={()=> handleDecline(data.id)} className="px-2 py-1 border-1 border-red-500 bg-white text-black rounded-md">
                           ❌
                         </button>
-                        <button className="px-2 py-1 border-2 border-blue-500 bg-white text-black rounded-md mx-1">
+                        <button onClick={()=> handleSubmit(data.id)} className="px-2 py-1 border-2 border-blue-500 bg-white text-black rounded-md mx-1">
                           ✅
                         </button>
                       </div>
                     </div>
                   </div>
                 ))}
-                {nonregistered.length <= 0 &&
+                {data.nonMember.length <= 0 &&
                   <div className='m-4'>Empty</div>
                 }
               </div>
             )}
-            <div className="row flex items-center gap-2 mt-10">
+            {/* <div className="row flex items-center gap-2 mt-10">
               <div
                 onClick={() =>
                   window.open(
@@ -155,7 +232,7 @@ const Modal = ({ isOpen, onClose, event, registered, nonregistered }) => {
                 className="p-3 focus:bg-gray-500 cursor-pointer bg-gray-500 rounded-md text-center text-white">
                 📋
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
